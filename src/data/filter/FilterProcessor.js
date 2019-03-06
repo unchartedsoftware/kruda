@@ -55,8 +55,6 @@ export class FilterProcessor {
                 }
             }
         }
-
-        console.log(config);
     }
 
     _generateResultWriter(description, indices, baseRow) {
