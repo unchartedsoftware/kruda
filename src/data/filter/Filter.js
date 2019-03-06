@@ -24,6 +24,10 @@ import {Pointer} from '../../core/Pointer';
 import * as Types from '../../core/Types';
 import FilterWorker from 'worker-loader!./Filter.worker';
 
+/**
+ * Default, immutable object, representing a result index with the row index in it.
+ * @type {Object}
+ */
 const kRowIndexResult = {
     type: Types.Uint32.name,
     size: Types.Uint32.byteSize,
@@ -31,11 +35,25 @@ const kRowIndexResult = {
 };
 Object.freeze(kRowIndexResult);
 
+/**
+ * Class to create and run filters on tables.
+ * @class Filter
+ */
 export class Filter {
+    /**
+     * Returns an object that can be added to the `resultDescription` array to include the index of the resulting rows
+     * @return {Object}
+     */
     static get rowIndexResult() {
         return kRowIndexResult;
     }
 
+    /**
+     * Creates a Filter instance bound to the specified table.
+     * @param {Table} table - The table this filter will be bound to.
+     * @param {number=} workerCount - The number of workers to spawn, should be the same as physical cores in the system, defaults to 4.
+     * @param {Heap=} heap - The heap to use to allocate the filter results memory, defaults to using the same heap where the table is allocated.
+     */
     constructor(table, workerCount = 4, heap = table.memory.heap) {
         this.mTable = table;
         this.mHeap = heap;
@@ -56,14 +74,27 @@ export class Filter {
         }
     }
 
+    /**
+     * The size, in bytes, of a results row.
+     * @return {number}
+     */
     get resultRowSize() {
         return this.mResultRowSize;
     }
 
+    /**
+     * An array of objects describing the desired fields in the filter's result.
+     * WARNING: Do not modify this array, assign a brand new array instead.
+     * @return {Object[]}
+     */
     get resultDescription() {
         return this.mResultDescription;
     }
 
+    /**
+     * Sets an array ob objects describing the desired fields in the filter's result.
+     * @param {Object[]} value - The new object array.
+     */
     set resultDescription(value) {
         this.mResultDescription = value;
         this.mResultRowSize = 0;
@@ -72,7 +103,14 @@ export class Filter {
         }
     }
 
-    resultForColumn(columnName = null) {
+    /**
+     * Utility function to create an object describing a result field for the column with the specified name.
+     * If the `columnName` parameter is omitted or is set to `null`, an object that adds the index of the resulting row
+     * will be returned.
+     * @param {string|null=} columnName - The name of the column for which to create a result field object. Defaults to `null`.
+     * @return {Object}
+     */
+    resultFieldForColumn(columnName = null) {
         if (columnName === null) {
             return kRowIndexResult;
         }
@@ -85,6 +123,63 @@ export class Filter {
         };
     }
 
+    /**
+     * Runs this filter with the specified set of rules.
+     * Rules are an array of arrays containing objects describing the rules for this filter. Each object has the following structure:
+     * {
+     *     name: string - The name of the column this rule applies to
+     *     value: * - The value to compare the column's values with
+     *     operation: string - Which operation to perform, must be one of the following: "equal", "notEqual", "lessThan", "moreThan" or "contains"
+     * }
+     *
+     * Rule objects within the same array are treated as `AND`ed and separate rule arrays are `OR`ed.
+     * Here's an example of a valid `rules` array:
+     *
+     ```
+     [
+         [
+                {
+                    name: 'Origin_airport',
+                    value: 'SEA',
+                    operation: 'equal',
+                },
+                {
+                    name: 'Destination_airport',
+                    value: 'LAX',
+                    operation: 'notEqual',
+                },
+         ],
+         [
+                {
+                    name: 'Origin_airport',
+                    value: 'MCO',
+                    operation: 'equal',
+                },
+                {
+                    name: 'Passengers',
+                    value: 180,
+                    operation: 'moreThan',
+                },
+         ],
+     ]
+     ```
+     *
+     * In the example above, the filter requires that in the results:
+     * {
+     *     The value of column `Origin_airport` is equal to `SEA`
+     *     AND
+     *     The value of column `Destination_airport` is not equal to `LAX`
+     * }
+     * OR
+     * {
+     *     The value of column `Origin_airport` is equal to `MCO`
+     *     AND
+     *     The value of column `Passengers` is more than 180
+     * }
+     *
+     * @param {Array<Object[]>} rules - The rules to run this filter with.
+     * @return {Promise<{memory: MemoryBlock, count: number}>}
+     */
     run(rules) {
         const promises = [];
         const resultMemory = this._allocateResultMemory();
@@ -126,6 +221,11 @@ export class Filter {
         });
     }
 
+    /**
+     * Utility function to allocate the memory needed to store the maximum number of results.
+     * @return {MemoryBlock}
+     * @private
+     */
     _allocateResultMemory() {
         return this.mHeap.malloc(this.mResultRowSize * this.mTable.rowCount);
     }

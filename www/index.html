@@ -37,13 +37,13 @@
 
         /* specify the result description. WARNING: This interface may change in the near future */
         filter.resultDescription = [
-            filter.resultForColumn(null), // result row index, useful to retrieve rows from the table
-            filter.resultForColumn('Origin_airport'), // include column `Origin_airport` in the results
-            filter.resultForColumn('Destination_airport'), // include column `Destination_airport` in the results
-            filter.resultForColumn('Origin_city'), // ...
-            filter.resultForColumn('Destination_city'),
-            filter.resultForColumn('Passengers'),
-            filter.resultForColumn('Fly_date'),
+            filter.resultFieldForColumn(null), // result row index, useful to retrieve rows from the table
+            filter.resultFieldForColumn('Origin_airport'), // include column `Origin_airport` in the results
+            filter.resultFieldForColumn('Destination_airport'), // include column `Destination_airport` in the results
+            filter.resultFieldForColumn('Origin_city'), // ...
+            filter.resultFieldForColumn('Destination_city'),
+            filter.resultFieldForColumn('Passengers'),
+            filter.resultFieldForColumn('Fly_date'),
         ];
 
         /* create the rules to be applied with the filter */
