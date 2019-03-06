@@ -327,7 +327,7 @@ export class Heap {
         Atomics.notify(this.mInt32View, 2, 1);
         /// #endif
 
-        memory.destroy();
+        memory._destroy();
     }
 
     /**

@@ -26,43 +26,72 @@
  * @class MemoryBlock
  */
 export class MemoryBlock {
+    /**
+     * Instantiates a memory block in the specified heap, at the memory address and the specified size.
+     * Memory blocks can easily be recreated in web workers.
+     * @param {Heap} heap - The heap which will contain the memory.
+     * @param {number} address - The byte address of the beginning of the memory.
+     * @param {number} size - The size, in bytes, of this memory block.
+     */
     constructor(heap, address, size) {
         this.mHeap = heap;
         this.mOffset = address;
         this.mSize = size;
         this.mDataView = new DataView(this.mHeap.buffer, this.mOffset, this.mSize);
-        this.mFloat32View = new Float32Array(this.mHeap.buffer, this.mOffset, this.mSize >> 2);
     }
 
+    /**
+     * The byte address of this memory block in its heap.
+     * @return {number}
+     */
     get address() {
         return this.mOffset;
     }
 
+    /**
+     * The heap this memory block belongs to.
+     * @return {Heap}
+     */
     get heap() {
         return this.mHeap;
     }
 
+    /**
+     * The ArrayBuffer this memory is tied to.
+     * @return {ArrayBuffer|SharedArrayBuffer}
+     */
     get buffer() {
         return this.mHeap.buffer;
     }
 
+    /**
+     * The size, in bytes, of this memory block.
+     * @return {number}
+     */
     get size() {
         return this.mSize;
     }
 
+    /**
+     * A DataView instance bound to the memory accessible by this memory block.
+     * @return {DataView}
+     */
     get dataView() {
         return this.mDataView;
     }
 
-    get float32View() {
-        return this.mFloat32View;
-    }
-
+    /**
+     * Frees this memory block, this function just calls `free` on the heap.
+     */
     free() {
         this.mHeap.free(this);
     }
 
-    destroy() {
+    /**
+     * Makes sure this memory block is not usable anymore. Automatically called by the heap when this memory block is freed.
+     * @private
+     */
+    _destroy() {
         this.mHeap = null;
         this.mOffset = -1;
         this.mSize = 0;
