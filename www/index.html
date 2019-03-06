@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>kruda.js</title>
+    <script type='text/javascript' src='kruda.browser.js'></script>
+    <style>
+        table,
+        td {
+            border: 1px solid #333;
+        }
+
+        thead,
+        tfoot {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<script>
+    /**
+     * Waits for the specified number of milliseconds. (useful when used with `await`)
+     */
+    function wait(time) {
+        return new Promise(resolve => {
+            setTimeout(resolve, time);
+        });
+    }
+
+    /**
+     * Runs a simple, hardcoded filter on the specified table and displays the results.
+     */
+    async function runFilter(table) {
+        /* create a new filter bound to the table */
+        const filter = new kruda.Filter(table);
+
+        /* specify the result description. WARNING: This interface may change in the near future */
+        filter.resultDescription = [
+            filter.resultForColumn(null), // result row index, useful to retrieve rows from the table
+            filter.resultForColumn('Origin_airport'), // include column `Origin_airport` in the results
+            filter.resultForColumn('Destination_airport'), // include column `Destination_airport` in the results
+            filter.resultForColumn('Origin_city'), // ...
+            filter.resultForColumn('Destination_city'),
+            filter.resultForColumn('Passengers'),
+            filter.resultForColumn('Fly_date'),
+        ];
+
+        /* create the rules to be applied with the filter */
+        const filterRules = [ // must be an array of arrays
+            [ // each inner array represents an list of rules to be and'ed..
+                {
+                    name: 'Origin_airport',
+                    value: 'SEA',
+                    operation: 'equal',
+                },
+                {
+                    name: 'Passengers',
+                    value: 110,
+                    operation: 'equal',
+                },
+                {
+                    name: 'Destination_airport',
+                    value: 'LAX',
+                    operation: 'notEqual',
+                },
+            ],
+            [ // inner arrays are or'd
+                {
+                    name: 'Origin_airport',
+                    value: 'MCO',
+                    operation: 'equal',
+                },
+                {
+                    name: 'Passengers',
+                    value: 200,
+                    operation: 'lessThan',
+                },
+                {
+                    name: 'Passengers',
+                    value: 180,
+                    operation: 'moreThan',
+                },
+                {
+                    name: 'Fly_date',
+                    value: '2001',
+                    operation: 'contains',
+                },
+            ],
+        ];
+
+        const start = new Date();
+        /* run the filter with the rules */
+        const result = await filter.run(filterRules);
+        const end = new Date();
+        document.body.innerText += `Filter took ${end - start}ms\n`;
+        document.body.innerText += `Results: ${result.count}\n`;
+
+        /* get a data view from the resulting memory */
+        const view = result.memory.dataView;
+        const getters = [];
+        let columnOffset = 0;
+
+        /* create an HTML string to render the resulting table */
+        let tableStr = '<table>';
+
+        /* add the table header and create getters for each of the column's values */
+        tableStr += '<thead><tr>';
+        filter.resultDescription.forEach(result => {
+            /* WARNING - The following code will be replaced for friendlier methods in the future */
+            /* get the type of the value */
+            const type = kruda.Types.typeByName(result.type);
+            /* save its byte offset */
+            const getterOffset = columnOffset;
+            /* advance the byte offset (for the next column) */
+            columnOffset += result.size;
+            /* push a function that gets the value of the type at the specified offset */
+            getters.push(offset => type.get(view, offset + getterOffset));
+
+            /* write the table header's column */
+            tableStr += `<th>${result.column ? result.column : 'Index'}</th>`;
+        });
+        tableStr += '</tr></thead>';
+
+        /* add the table's body using the getters created above */
+        tableStr += '<tbody>';
+        /* iterate through the results, up to a maximum of 1000 */
+        for (let i = 0, n = Math.min(result.count, 1000); i < n; ++i) {
+            tableStr += '<tr>';
+            /* iterate through all the getters */
+            for (let ii = 0; ii < getters.length; ++ii) {
+                /* append the value of the column, using the getter */
+                tableStr += `<td>${getters[ii](i * filter.resultRowSize)}</td>`;
+            }
+            tableStr += '</tr>';
+        }
+        tableStr += '</tbody>';
+        tableStr += '</table>';
+
+        document.body.innerHTML += tableStr;
+    }
+
+    /**
+     * Displays a button to select a local file and then loads it.
+     */
+    async function loadFromFile() {
+        /* display a input form to select a local file */
+        const fileInput = document.createElement('input');
+        fileInput.setAttribute('type', 'file');
+        fileInput.setAttribute('name', 'dataFile');
+        document.body.appendChild(fileInput);
+        fileInput.addEventListener('change', async e => {
+            /* once a file has been selected... */
+            e.preventDefault();
+            document.body.innerText = 'Allocating heap...\n';
+            await wait(100);
+            let start = new Date();
+            /* allocate the heap to use with kruda */
+            const heap = new kruda.Heap(kruda.Heap.maxHeapSize);
+            let end = new Date();
+            document.body.innerText += `Heap allocated, took: ${end - start}ms\n`;
+
+            document.body.innerText += 'Loading data...\n';
+            await wait(100);
+            start = new Date();
+            /* load the specified file */
+            const data = await kruda.DSBINLoader.loadFromFile(fileInput.files[0], heap);
+            end = new Date();
+            document.body.innerText += `Loading took ${end - start}ms\n`;
+            await wait(100);
+
+            /* create a table from the loaded data */
+            const table = new kruda.Table(data);
+
+            /* run the filter */
+            await runFilter(table);
+        });
+    }
+
+    /**
+     * Loads a file from the specified URL and runs a filter on it.
+     */
+    async function loadFromURL(url) {
+        document.body.innerText = 'Allocating heap...\n';
+        await wait(100);
+        let start = new Date();
+        /* allocate the heap to use with kruda */
+        const heap = new kruda.Heap(kruda.Heap.maxHeapSize);
+        let end = new Date();
+        document.body.innerText += `Heap allocated, took: ${end - start}ms\n`;
+
+        document.body.innerText += 'Loading data...\n';
+        await wait(100);
+        start = new Date();
+        /* load the data from the specified URL */
+        const data = await kruda.DSBINLoader.loadFromURL(url, heap);
+        end = new Date();
+        document.body.innerText += `Loading took ${end - start}ms\n`;
+        await wait(100);
+
+        /* create a table from the loaded data */
+        const table = new kruda.Table(data);
+
+        /* run the filter */
+        await runFilter(table);
+    }
+
+    const triggerLoadFromURL = true; // switch to `false` to load from a local file.
+    if (triggerLoadFromURL) {
+        /**
+         * Trigger loading a DSBIN file from a URL
+         */
+        document.addEventListener('DOMContentLoaded', async () => loadFromURL('./data/flight_routes.beans'));
+    } else {
+        /**
+         * Trigger loading a local DSBIN file
+         */
+        document.addEventListener('DOMContentLoaded', async () => loadFromFile());
+    }
+</script>
+</body>
+</html>
