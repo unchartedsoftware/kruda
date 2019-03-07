@@ -25,7 +25,15 @@ import * as Types from '../core/Types';
 import {Pointer} from '../core/Pointer';
 import {Row} from './Row';
 
+/**
+ * Class that represents a table in binary memory.
+ * @class Table
+ */
 export class Table {
+    /**
+     * Creates an instance that reads its contents from the specified memory block.
+     * @param {MemoryBlock} layout - A MemoryBlock containing a binary representation of the layout and data of this table.
+     */
     constructor(layout) {
         this.mMemory = layout;
         this.mHeader = null;
@@ -48,22 +56,44 @@ export class Table {
         this.mDataOffset = headerSize + 4;
     }
 
+    /**
+     * The header of this table. Contains column names, order in memory, original order and type information.
+     * @return {object}
+     */
     get header() {
         return this.mHeader;
     }
 
+    /**
+     * The total number of rows in this table.
+     * @return {number}
+     */
     get rowCount() {
         return this.mHeader.count;
     }
 
+    /**
+     * The memory block that contains this table's layout and data.
+     * @return {MemoryBlock}
+     */
     get memory() {
         return this.mMemory;
     }
 
+    /**
+     * The offset, in bytes, from the beginning of this table to the row data.
+     * @return {number}
+     */
     get dataOffset() {
         return this.mDataOffset;
     }
 
+    /**
+     * Gets a new Row instance pointing at the row at the specified index.
+     * NOTE: The returned row can be moved to point to a different row by changing its `index` property.
+     * @param {number} index - The index of the row to get the data from.
+     * @return {Row}
+     */
     getRow(index) {
         return new Row(this, index);
     }
