@@ -1,5 +1,5 @@
 // Rules reference: http://eslint.org/docs/rules/
-{
+module.exports = {
   "extends": [],
   "env": {
     "browser": true,
