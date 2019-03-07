@@ -19,7 +19,7 @@ This is a derivative work of [BigDataParser](https://github.com/darionco/BigData
 
 ### Debugging
 Unfortunately many error checks must be disabled for the sake of performance, `if` statements are very expensive!  
-You can re-enable them by changing the flad `DEBUG` in the `webpack.config.js` file:
+You can re-enable them by changing the flag `DEBUG` in the `webpack.config.js` file:
 ```
 {
     test: /\.js$/,
