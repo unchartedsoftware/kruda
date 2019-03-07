@@ -39,8 +39,8 @@ export class Pointer {
     /**
      * Constructor
      * @param {Heap|MemoryBlock} memory - The memory to which this Pointer will be bound to.
-     * @param {number} address - The address of this pointer relative to the memory it is bound to.
-     * @param {Type} type=Uint8 - The type of this pointer, defaults to Uint8.
+     * @param {number=} address - The address of this pointer relative to the memory it is bound to.
+     * @param {Type=} type - The type of this pointer, defaults to Uint8.
      */
     constructor(memory, address = 0, type = Types.Uint8) {
         this.mMemory = memory;
