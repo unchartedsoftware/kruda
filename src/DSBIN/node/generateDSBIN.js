@@ -191,6 +191,7 @@ async function main(argv) {
 
     const rowsBuffer = Buffer.alloc(rowSize * rowCount);
     const rowBuffer = Buffer.alloc(rowSize);
+    let sourceRowIndex = 0;
     let offset = 0;
     let add;
     let rowOffset;
@@ -211,7 +212,7 @@ async function main(argv) {
                     }
                 } else {
                     if (isNaN(data[column])) {
-                        console.log(`\nSKIPPING ROW (${rowCount / rowSize}): column[${column}] type[${columns[column].type}] value[${data[column]}]`);
+                        // console.log(`\nSKIPPING ROW (${sourceRowIndex}): column[${column}] type[${columns[column].type}] value[${data[column]}]`);
                         add = false;
                     } else {
                         value = parseFloat(data[column]);
@@ -226,6 +227,7 @@ async function main(argv) {
                 offset += rowSize;
                 ++rowCount;
             }
+            ++sourceRowIndex;
         }
         progressBar.update(bytesRead);
     });
