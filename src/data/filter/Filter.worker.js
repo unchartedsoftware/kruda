@@ -22,9 +22,18 @@
  */
 import {FilterProcessor} from './FilterProcessor';
 
-
+/**
+ * Variable that holds a FilterProcessor instance for each thread.
+ * IMPORTANT: It is understood that in packaged (using WebPack) JavaScript, global means that a variable
+ * @type {FilterProcessor|null}
+ * @global
+ */
 let gProcessor = null;
 
+/**
+ * Sends an error signal back to this worker's "owner"
+ * @param {string} reason - The reason for this error to be triggered
+ */
 function sendError(reason) {
     global.postMessage({
         type: 'error',
@@ -32,6 +41,10 @@ function sendError(reason) {
     });
 }
 
+/**
+ * Sends a success signal to this worker's "owner"
+ * @param {*=} data - Data to be sent with the message. Defaults to `null`
+ */
 function sendSuccess(data = null) {
     global.postMessage({
         type: 'success',
@@ -39,6 +52,10 @@ function sendSuccess(data = null) {
     });
 }
 
+/**
+ * Message event handler for messages sent from this worker's  "owner"
+ * @param {Event} e - The event containing the message.
+ */
 global.onmessage = function filterWorkerOnMessage(e) {
     const message = e.data;
     switch (message.type) {
