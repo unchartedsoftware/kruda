@@ -23,12 +23,34 @@
 
 import DSBINLoaderWorker from 'worker-loader!./DSBINLoader.worker';
 
+/**
+ * Minimum number of chunks needed in a file to multi-thread the process.
+ * @type {number}
+ */
 const kMinChunksForThreading = 11;
+
+/**
+ * Minimum number of web workers.
+ * @type {number}
+ */
 const kMinWorkerCount = 1;
+
+/**
+ * Maximum number of web workers.
+ * @type {number}
+ */
 const kMaxWorkerCount = 4;
 
-
+/**
+ * Multi-threaded DSBIN file loader.
+ */
 export class DSBINLoader {
+    /**
+     * Loads a DSBIN from a local file.
+     * @param {File} file - The local file to load.
+     * @param {Heap} heap - The heap where the file will be loaded.
+     * @return {Promise<MemoryBlock>}
+     */
     static loadFromFile(file, heap) {
         return new Promise(resolve => {
             const header = file.slice(0, 8);
@@ -86,6 +108,12 @@ export class DSBINLoader {
         });
     }
 
+    /**
+     * Loads a DSBIN from a URL.
+     * @param {string} url - The URL from which the DSBIN should be loaded.
+     * @param {Heap} heap - The heap where the file will be loaded.
+     * @return {Promise<MemoryBlock>}
+     */
     static loadFromURL(url, heap) {
         return new Promise(resolve => {
             fetch(url).then(async response => {
@@ -231,6 +259,14 @@ export class DSBINLoader {
         });
     }
 
+    /**
+     * Schedules workers to load a set of DSBIN chunks into memory.
+     * @param {number} chunkCount - The number of chunks to load.
+     * @param {Array} chunks - An array of chunks to load.
+     * @param {ArrayBufferLike} uncompressed - Memory where to write the uncompressed chunks.
+     * @return {Promise<any>}
+     * @private
+     */
     static _scheduleBlobLoadingWorkers(chunkCount, chunks, uncompressed) {
         const threadableChunks = chunkCount - kMinChunksForThreading + kMaxWorkerCount;
         const workerCount = Math.min(kMaxWorkerCount, Math.max(kMinWorkerCount, threadableChunks));
