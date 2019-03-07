@@ -2478,7 +2478,7 @@ last allocated memory block.</p>
 
   <p>This class represents a position in a memory block.</p>
 
-    <div class='pre p1 fill-light mt0'>new Pointer(memory: (<a href="#heap">Heap</a> | <a href="#memoryblock">MemoryBlock</a>), address: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, type: <a href="#type">Type</a>)</div>
+    <div class='pre p1 fill-light mt0'>new Pointer(memory: (<a href="#heap">Heap</a> | <a href="#memoryblock">MemoryBlock</a>), address: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, type: <a href="#type">Type</a>?)</div>
   
   
 
@@ -2504,7 +2504,7 @@ last allocated memory block.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>address</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            <span class='code bold'>address</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
             = <code>0</code>)</code>
 	    The address of this pointer relative to the memory it is bound to.
 
@@ -2514,9 +2514,9 @@ last allocated memory block.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>type</span> <code class='quiet'>(<a href="#type">Type</a>
+            <span class='code bold'>type</span> <code class='quiet'>(<a href="#type">Type</a>?
             = <code>Types.Uint8</code>)</code>
-	    =Uint8 - The type of this pointer, defaults to Uint8.
+	    The type of this pointer, defaults to Uint8.
 
           </div>
           
@@ -3461,7 +3461,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    =0 - The offset with respect to the pointer, in bytes, of the value to read.
+	    The offset with respect to the pointer, in bytes, of the value to read.
 
           </div>
           
@@ -3531,7 +3531,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    =0 - The offset with respect to the pointer, in bytes, of the value to read.
+	    The offset with respect to the pointer, in bytes, of the value to read.
 
           </div>
           
@@ -3601,7 +3601,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    =0 - The offset with respect to the pointer, in bytes, of the value to read.
+	    The offset with respect to the pointer, in bytes, of the value to read.
 
           </div>
           
@@ -3671,7 +3671,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    =0 - The offset with respect to the pointer, in bytes, of the value to read.
+	    The offset with respect to the pointer, in bytes, of the value to read.
 
           </div>
           
@@ -3741,7 +3741,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    =0 - The offset with respect to the pointer, in bytes, of the value to read.
+	    The offset with respect to the pointer, in bytes, of the value to read.
 
           </div>
           
@@ -3811,7 +3811,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    =0 - The offset with respect to the pointer, in bytes, of the value to read.
+	    The offset with respect to the pointer, in bytes, of the value to read.
 
           </div>
           
@@ -3881,7 +3881,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    =0 - The offset with respect to the pointer, in bytes, of the value to read.
+	    The offset with respect to the pointer, in bytes, of the value to read.
 
           </div>
           
