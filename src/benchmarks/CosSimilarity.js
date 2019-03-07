@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2019 Uncharted Software Inc.
  * http://www.uncharted.software/
  *
