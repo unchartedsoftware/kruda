@@ -190,7 +190,7 @@ export class Pointer {
 
     /**
      * Utility function to read an Int8 at the specified offset.
-     * @param {number} offset=0 - The offset with respect to the pointer, in bytes, of the value to read.
+     * @param {number} offset - The offset with respect to the pointer, in bytes, of the value to read.
      * @return {number}
      */
     getInt8(offset = 0) {
@@ -205,7 +205,7 @@ export class Pointer {
 
     /**
      * Utility function to read an Int16 at the specified offset.
-     * @param {number} offset=0 - The offset with respect to the pointer, in bytes, of the value to read.
+     * @param {number} offset - The offset with respect to the pointer, in bytes, of the value to read.
      * @return {number}
      */
     getInt16(offset = 0) {
@@ -220,7 +220,7 @@ export class Pointer {
 
     /**
      * Utility function to read an Int32 at the specified offset.
-     * @param {number} offset=0 - The offset with respect to the pointer, in bytes, of the value to read.
+     * @param {number} offset - The offset with respect to the pointer, in bytes, of the value to read.
      * @return {number}
      */
     getInt32(offset = 0) {
@@ -235,7 +235,7 @@ export class Pointer {
 
     /**
      * Utility function to read a Uint8 at the specified offset.
-     * @param {number} offset=0 - The offset with respect to the pointer, in bytes, of the value to read.
+     * @param {number} offset - The offset with respect to the pointer, in bytes, of the value to read.
      * @return {number}
      */
     getUint8(offset = 0) {
@@ -250,7 +250,7 @@ export class Pointer {
 
     /**
      * Utility function to read a Uint16 at the specified offset.
-     * @param {number} offset=0 - The offset with respect to the pointer, in bytes, of the value to read.
+     * @param {number} offset - The offset with respect to the pointer, in bytes, of the value to read.
      * @return {number}
      */
     getUint16(offset = 0) {
@@ -265,7 +265,7 @@ export class Pointer {
 
     /**
      * Utility function to read a Uint32 at the specified offset.
-     * @param {number} offset=0 - The offset with respect to the pointer, in bytes, of the value to read.
+     * @param {number} offset - The offset with respect to the pointer, in bytes, of the value to read.
      * @return {number}
      */
     getUint32(offset = 0) {
@@ -280,7 +280,7 @@ export class Pointer {
 
     /**
      * Utility function to read a Float32 at the specified offset.
-     * @param {number} offset=0 - The offset with respect to the pointer, in bytes, of the value to read.
+     * @param {number} offset - The offset with respect to the pointer, in bytes, of the value to read.
      * @return {number}
      */
     getFloat32(offset = 0) {
