@@ -26,7 +26,21 @@ import {Table} from '../Table';
 import {ByteString} from '../ByteString';
 import * as Types from '../../core/Types';
 
+/**
+ * Class to process filters on Tables.
+ * This class is meant to be used by filter workers, but it is safe to use on the main thread as well.
+ * @class FilterProcessor
+ */
 export class FilterProcessor {
+    /**
+     * Creates a new instance and reconstructs the Heap, Memory Object and Table specified in the config object.
+     * NOTE: Heap, MemoryBlock and Table classes are thread safe.
+     * @param {{
+     * heapBuffer: ArrayBufferLike,
+     * tableAddress: number,
+     * tableSize: number
+     * }} config - Configuration object.
+     */
     constructor(config) {
         this.mHeap = new Heap(config.heapBuffer);
         this.mTableMemory = new MemoryBlock(this.mHeap, config.tableAddress, config.tableSize);
@@ -34,6 +48,17 @@ export class FilterProcessor {
         this.mRow = this.mTable.getRow();
     }
 
+    /**
+     * Processes the rules in batches the size configures in the config object
+     * @param {{
+     * rules: Array,
+     * indicesAddress: number,
+     * rowBatchSize: number,
+     * resultAddress: number,
+     * resultSize: number,
+     * resultDescription: Array
+     * }} config - Configuration object.
+     */
     process(config) {
         const indices = new Uint32Array(this.mHeap.buffer, config.indicesAddress, 2);
         const batchSize = config.rowBatchSize;
@@ -57,6 +82,17 @@ export class FilterProcessor {
         }
     }
 
+    /**
+     * Generates a function that writes the row values, as specified in the `description` array, to the specified data view.
+     * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method, Row
+     * instances are simply pointers to a position in the table that are shifted as they change row. This function takes
+     * advantage of such behaviour to improve performance.
+     * @param {Array} description - Result description object.
+     * @param {Uint32Array} indices - The indices array to count processed rows and results. Must be backed by a SharedArrayBuffer
+     * @param {Row} baseRow - The base row that will be used to iterate through the table.
+     * @return {function(row:Row, view:DataView):void}
+     * @private
+     */
     _generateResultWriter(description, indices, baseRow) {
         const writers = [];
         let resultSize = 0;
@@ -87,6 +123,14 @@ export class FilterProcessor {
         };
     }
 
+    /**
+     * Generates a function that tests the specified rule sets against the specified row.
+     * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
+     * @param {Array} rules - An array of rule sets to test against.
+     * @param {Row} row - The row instance that will be used to iterate through the table.
+     * @return {function():boolean}
+     * @private
+     */
     _generateFilterTester(rules, row) {
         if (!rules || !rules.length) {
             return function filterTesterEmpty() {
@@ -110,6 +154,14 @@ export class FilterProcessor {
         };
     }
 
+    /**
+     * Generates a function that tests the specified rule set against the specified row.
+     * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
+     * @param {Array} rule - The rule set to test.
+     * @param {Row} row - The row instance that will be used to iterate through the table.
+     * @return {function():boolean}
+     * @private
+     */
     _generateRuleTester(rule, row) {
         const testers = [];
         const testersLength = rule.length;
@@ -127,6 +179,14 @@ export class FilterProcessor {
         };
     }
 
+    /**
+     * Generate a function that tests the specified field in the specified row.
+     * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
+     * @param {Object} field - Object containing the field and parameters to test.
+     * @param {Row} row - The row instance that will be used to iterate through the table.
+     * @return {function():boolean|null}
+     * @private
+     */
     _generateFieldTester(field, row) {
         const column = this.mTable.header.columns[field.name];
         const getter = row.accessors[field.name].getter;
