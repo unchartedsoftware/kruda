@@ -226,6 +226,7 @@ export function typeByName(name) {
 
 /**
  * @name Int8
+ * @extends Type
  */
 class _Int8 extends Type {
     constructor() {
@@ -245,6 +246,7 @@ export const Int8 = new _Int8();
 
 /**
  * @name Int16
+ * @extends Type
  */
 class _Int16 extends Type {
     constructor() {
@@ -264,6 +266,7 @@ export const Int16 = new _Int16();
 
 /**
  * @name Int32
+ * @extends Type
  */
 class _Int32 extends Type {
     constructor() {
@@ -283,6 +286,7 @@ export const Int32 = new _Int32();
 
 /**
  * @name Uint8
+ * @extends Type
  */
 class _Uint8 extends Type {
     constructor() {
@@ -302,6 +306,7 @@ export const Uint8 = new _Uint8();
 
 /**
  * @name Uint16
+ * @extends Type
  */
 class _Uint16 extends Type {
     constructor() {
@@ -321,6 +326,7 @@ export const Uint16 = new _Uint16();
 
 /**
  * @name Uint32
+ * @extends Type
  */
 class _Uint32 extends Type {
     constructor() {
@@ -340,6 +346,7 @@ export const Uint32 = new _Uint32();
 
 /**
  * @name Float32
+ * @extends Type
  */
 class _Float32 extends Type {
     constructor() {
@@ -360,6 +367,7 @@ export const Float32 = new _Float32();
 /**
  * Void type (not to be confused with the `void` value.
  * @name Void
+ * @extends Type
  */
 class _Void extends Type {
     constructor() {

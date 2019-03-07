@@ -301,6 +301,7 @@ class ByteStringBuffer extends ByteStringBase {
 /**
  * ByteString type
  * @name ByteString
+ * @extends Type
  */
 class _ByteString extends Type {
     constructor() {
