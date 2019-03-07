@@ -29,7 +29,6 @@ import * as Types from '../../core/Types';
 /**
  * Class to process filters on Tables.
  * This class is meant to be used by filter workers, but it is safe to use on the main thread as well.
- * @class FilterProcessor
  */
 export class FilterProcessor {
     /**

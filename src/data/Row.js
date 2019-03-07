@@ -26,7 +26,6 @@ import {ByteString} from './ByteString';
 
 /**
  * Class to read and write values of a row in a Table.
- * @class Row
  */
 export class Row {
     /**

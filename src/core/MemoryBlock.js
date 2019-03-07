@@ -23,7 +23,6 @@
 
 /**
  * Class to encapsulate an ArrayBuffer with utility views to read/write data.
- * @class MemoryBlock
  */
 export class MemoryBlock {
     /**

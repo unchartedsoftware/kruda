@@ -20,34 +20,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 /**
  * name property symbol
  * @type {symbol}
+ * @private
  */
 const kName = Symbol('Type::name');
 
 /**
  * byteSize property symbol
  * @type {symbol}
+ * @private
  */
 const kByteSize = Symbol('Type::byteSize');
 
 /**
  * bitSize property symbol
  * @type {symbol}
+ * @private
  */
 const kBitSize = Symbol('Type::bitSize');
 
 /**
  * isPrimitive property symbol
  * @type {symbol}
+ * @private
  */
 const kIsPrimitive = Symbol('Type::isPrimitive');
 
 /**
  * Dictionary to keep track of registered types. Type names must be unique.
  * @type {object}
+ * @private
  */
 const kTypeMap = {};
 
@@ -221,7 +225,7 @@ export function typeByName(name) {
 }
 
 /**
- * Int8 type
+ * @name Int8
  */
 class _Int8 extends Type {
     constructor() {
@@ -240,7 +244,7 @@ class _Int8 extends Type {
 export const Int8 = new _Int8();
 
 /**
- * Int16 type
+ * @name Int16
  */
 class _Int16 extends Type {
     constructor() {
@@ -259,7 +263,7 @@ class _Int16 extends Type {
 export const Int16 = new _Int16();
 
 /**
- * Int32 type
+ * @name Int32
  */
 class _Int32 extends Type {
     constructor() {
@@ -278,7 +282,7 @@ class _Int32 extends Type {
 export const Int32 = new _Int32();
 
 /**
- * Uint8 type
+ * @name Uint8
  */
 class _Uint8 extends Type {
     constructor() {
@@ -297,7 +301,7 @@ class _Uint8 extends Type {
 export const Uint8 = new _Uint8();
 
 /**
- * Uint16 type
+ * @name Uint16
  */
 class _Uint16 extends Type {
     constructor() {
@@ -316,7 +320,7 @@ class _Uint16 extends Type {
 export const Uint16 = new _Uint16();
 
 /**
- * Uint32 type
+ * @name Uint32
  */
 class _Uint32 extends Type {
     constructor() {
@@ -335,7 +339,7 @@ class _Uint32 extends Type {
 export const Uint32 = new _Uint32();
 
 /**
- * Float32 type
+ * @name Float32
  */
 class _Float32 extends Type {
     constructor() {
@@ -355,6 +359,7 @@ export const Float32 = new _Float32();
 
 /**
  * Void type (not to be confused with the `void` value.
+ * @name Void
  */
 class _Void extends Type {
     constructor() {

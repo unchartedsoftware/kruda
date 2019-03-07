@@ -26,19 +26,19 @@ import {Pointer} from '../core/Pointer';
 /**
  * Constant variable, represents the character code of the uppercase letter `A`, used to convert string to lower case.
  * @type {number}
+ * @private
  */
 const kCodeA = ('A').charCodeAt(0);
 
 /**
  * Constant variable, represents the character code of the uppercase letter `Z`, used to convert string to lower case.
  * @type {number}
+ * @private
  */
 const kCodeZ = ('Z').charCodeAt(0);
 
 /**
  * Base class for all byte string classes. Cannot be used directly.
- * @class ByteString
- * @private
  */
 class ByteStringBase {
     /**
@@ -204,8 +204,6 @@ class ByteStringBase {
 /**
  * ByteString implementation using pointers. If the underlying pointer changes location the contents of this string
  * are automatically updated to reflect the data contained at the new location.
- * @class ByteStringPtr
- * @private
  */
 class ByteStringPtr extends ByteStringBase {
     /**
@@ -254,8 +252,6 @@ class ByteStringPtr extends ByteStringBase {
 /**
  * ByteString implementation using ArrayBuffers. This implementation is useful for quick off-heap strings. It also
  * guarantees that it will no change its contents without implicit user interaction.
- * @class ByteStringBuffer
- * @private
  */
 class ByteStringBuffer extends ByteStringBase {
     /**
@@ -304,6 +300,7 @@ class ByteStringBuffer extends ByteStringBase {
 
 /**
  * ByteString type
+ * @name ByteString
  */
 class _ByteString extends Type {
     constructor() {
@@ -333,6 +330,7 @@ class _ByteString extends Type {
      * @param {number=} arg2 - An offset, if needed for the resulting instance. Defaults to 0.
      * @param {number} size - The maximum size, if needed, of the resulting instance. Defaults to 256.
      * @return {ByteStringBase}
+     * @memberof ByteString
      */
     new(arg1, arg2 = 0, size = 256) {
         if (arg1 instanceof Pointer) {
@@ -349,6 +347,7 @@ class _ByteString extends Type {
      * @param {number=} offset - The offset, from the location of the pointer, to read the data from. Defaults to 0.
      * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
      * @return {ByteStringPtr}
+     * @memberof ByteString
      */
     fromPointer(pointer, offset = 0, size = 256) {
         return new ByteStringPtr(pointer, offset, size);
@@ -360,6 +359,7 @@ class _ByteString extends Type {
      * @param {number=} address - The offset, in bytes, within the buffer where the string resides. Defaults to 0.
      * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
      * @return {ByteStringBuffer}
+     * @memberof ByteString
      */
     fromBuffer(buffer, address = 0, size = 256) {
         return new ByteStringBuffer(buffer, address, size);
@@ -369,6 +369,7 @@ class _ByteString extends Type {
      * Creates a byte string from a JS string.
      * @param {string} str - The string to copy during creation.
      * @return {ByteStringBuffer}
+     * @memberof ByteString
      */
     fromString(str) {
         const length = Math.min(str.length, 255);

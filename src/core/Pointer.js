@@ -25,7 +25,6 @@ import * as Types from './Types';
 
 /**
  * This class represents a position in a memory block.
- * @class Pointer
  */
 export class Pointer {
     /**

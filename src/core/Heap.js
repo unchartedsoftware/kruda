@@ -25,30 +25,35 @@ import {MemoryBlock} from './MemoryBlock';
 /**
  * Utility constant for the size of 1KB
  * @type {number}
+ * @private
  */
 const kSizeOf1KB = 1024;
 
 /**
  * Utility constant for the size of 1MB
  * @type {number}
+ * @private
  */
 const kSizeOf1MB = kSizeOf1KB * 1024;
 
 /**
  * Utility constant for the size of 1GB
  * @type {number}
+ * @private
  */
 const kSizeOf1GB = kSizeOf1MB * 1024;
 
 /**
  * Heap's header size
  * @type {number}
+ * @private
  */
 const kHeaderSize = 16;
 
 /**
  * Flag used to mark memory blocks ready to be recycled
  * @type {number}
+ * @private
  */
 const kFreeFlag = 0x1;
 
@@ -56,12 +61,14 @@ const kFreeFlag = 0x1;
  * Max memory heap size in bytes.
  * ArrayBuffer can allocate up to 2GB (early 2019) but asm.js fails to link to 2GB but succeeds with 2GB - 16MB
  * @type {number}
+ * @private
  */
 const kMaxHeapSize = kSizeOf1GB * 2 - kSizeOf1MB * 16;
 
 /**
  * The max allocatable memory size, equal to the max size of the heap minus 4 bytes for padding.
  * @type {number}
+ * @private
  */
 const kMaxAllocSize = kMaxHeapSize - 4;
 
@@ -131,7 +138,7 @@ export class Heap {
             this.mBuffer = new ArrayBuffer(buffer);
             /// #endif
 
-            /**
+            /*
              * Header structure
              * 0 {byte} - null
              * 1 {byte} - reserved
@@ -224,7 +231,7 @@ export class Heap {
      * @return {MemoryBlock}
      */
     malloc(size) {
-        /**
+        /*
          * Memory layout:
          * 4|n {byte} - allocated memory
          * 4|n + 1 {uint32} - allocated memory

@@ -27,7 +27,6 @@ import {Row} from './Row';
 
 /**
  * Class that represents a table in binary memory.
- * @class Table
  */
 export class Table {
     /**

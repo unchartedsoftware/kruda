@@ -27,6 +27,7 @@ import FilterWorker from 'worker-loader!./Filter.worker';
 /**
  * Default, immutable object, representing a result index with the row index in it.
  * @type {Object}
+ * @private
  */
 const kRowIndexResult = {
     type: Types.Uint32.name,
@@ -37,7 +38,6 @@ Object.freeze(kRowIndexResult);
 
 /**
  * Class to create and run filters on tables.
- * @class Filter
  */
 export class Filter {
     /**

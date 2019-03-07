@@ -26,18 +26,21 @@ import DSBINLoaderWorker from 'worker-loader!./DSBINLoader.worker';
 /**
  * Minimum number of chunks needed in a file to multi-thread the process.
  * @type {number}
+ * @private
  */
 const kMinChunksForThreading = 11;
 
 /**
  * Minimum number of web workers.
  * @type {number}
+ * @private
  */
 const kMinWorkerCount = 1;
 
 /**
  * Maximum number of web workers.
  * @type {number}
+ * @private
  */
 const kMaxWorkerCount = 4;
 
