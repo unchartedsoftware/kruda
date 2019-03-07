@@ -24,19 +24,38 @@
 import pako from 'pako';
 import c from 'pako/lib/zlib/constants';
 
+/**
+ * Utility class to inflate zlib compressed ArrayBuffers into a custom ArrayBuffer, could be a SharedArrayBuffer.
+ */
 export class DSBINInflate extends pako.Inflate {
+    /**
+     * Inflates the `inputBuffer` data into the `outputBuffer` optionally a final `size` can be specified.
+     * @param {Uint8Array} inputBuffer - The compressed data.
+     * @param {Uint8Array} outputBuffer - Buffer where the uncompressed data will be written.
+     * @param {number=} size - The expected final size of the uncompressed data. Defaults to the full size of `outputBuffer`
+     * @return {number}
+     */
     static inflate(inputBuffer, outputBuffer, size = outputBuffer.length) {
         const instance = new DSBINInflate(outputBuffer, size);
         instance.push(inputBuffer);
         return instance.result;
     }
 
+    /**
+     * Constructs an instance of the class.
+     * @param {Uint8Array} outputBuffer - Buffer where the uncompressed data will be written.
+     * @param {number=} size - The expected final size of the uncompressed data. Defaults to the full size of `outputBuffer`
+     */
     constructor(outputBuffer, size = outputBuffer.length) {
         super();
         this.strm.output = outputBuffer;
         this.strm.avail_out = size; // eslint-disable-line
     }
 
+    /**
+     * Method called when decompression is completed.
+     * @param {number} status - The status of the system.
+     */
     onEnd(status) {
         if (status === c.Z_OK) {
             this.result = this.chunks[0];
