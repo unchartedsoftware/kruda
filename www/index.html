@@ -33,7 +33,7 @@
      */
     async function runFilter(table) {
         /* create a new filter bound to the table */
-        const filter = new kruda.Filter(table);
+        const filter = new kruda.Filter(table, /* 4 */ /* number of threads to spawn, defaults to 4 */);
 
         /* specify the result description. WARNING: This interface may change in the near future */
         filter.resultDescription = [
@@ -210,7 +210,7 @@
         /**
          * Trigger loading a DSBIN file from a URL
          */
-        document.addEventListener('DOMContentLoaded', async () => loadFromURL('./data/flight_routes.beans'));
+        document.addEventListener('DOMContentLoaded', async () => loadFromURL('./data/flight_routes.ds.bin'));
     } else {
         /**
          * Trigger loading a local DSBIN file
