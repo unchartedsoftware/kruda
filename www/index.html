@@ -33,7 +33,7 @@
      */
     async function runFilter(table) {
         /* create a new filter bound to the table */
-        const filter = new kruda.Filter(table, 6/* 4 */ /* number of threads to spawn, defaults to 4 */);
+        const filter = new kruda.Filter(table, /* 4 */ /* number of threads to spawn, defaults to 4 */);
 
         /* specify the result description. WARNING: This interface may change in the near future */
         filter.resultDescription = [
@@ -48,6 +48,45 @@
 
         /* create the rules to be applied with the filter */
         const filterRules = [ // must be an array of arrays
+            [ // each inner array represents an list of rules to be and'ed..
+                {
+                    name: 'Origin_airport',
+                    value: 'SEA',
+                    operation: 'equal',
+                },
+                {
+                    name: 'Passengers',
+                    value: 110,
+                    operation: 'equal',
+                },
+                {
+                    name: 'Destination_airport',
+                    value: 'LAX',
+                    operation: 'notEqual',
+                },
+            ],
+            [ // inner arrays are or'd
+                {
+                    name: 'Origin_airport',
+                    value: 'MCO',
+                    operation: 'equal',
+                },
+                {
+                    name: 'Passengers',
+                    value: 200,
+                    operation: 'lessThan',
+                },
+                {
+                    name: 'Passengers',
+                    value: 180,
+                    operation: 'moreThan',
+                },
+                {
+                    name: 'Fly_date',
+                    value: '2001',
+                    operation: 'contains',
+                },
+            ],
         ];
 
         const start = new Date();
