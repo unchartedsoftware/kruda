@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import DSBINLoaderWorker from 'worker-loader!./DSBINLoader.worker';
+import DSBINLoaderWorker from 'web-worker:./DSBINLoader.worker';
 
 /**
  * Minimum number of chunks needed in a file to multi-thread the process.

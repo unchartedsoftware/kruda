@@ -68,10 +68,14 @@ export class Type {
      * @static
      */
     static sizeOf(t) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (!this.isType(t)) {
             throw `ERROR: Cannot get the size of non-type-descriptor object ${t}`;
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return t.byteSize;
     }
@@ -94,10 +98,14 @@ export class Type {
      * @static
      */
     static isPrimitive(t) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (!this.isType(t)) {
             throw `ERROR: Cannot non-type-descriptor object is a primitive type ${t}`;
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return t[kIsPrimitive];
     }
@@ -123,10 +131,14 @@ export class Type {
      * @param {number} bitSize - Size in bits of this type, must be x8 bigger than `byteSize`
      */
     constructor(name, byteSize = 0, bitSize = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (bitSize / byteSize !== 8) {
             throw 'ERROR: Inconsistent byteSize and bitSize';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
 
         if (kTypeMap.hasOwnProperty(name)) {

@@ -79,11 +79,14 @@ export class Pointer {
      * @param {number} value - The new address.
      */
     set address(value) {
-        /// #if DEBUG
-        const newOffset = this.mOffset + value;
-        if (newOffset < 0 || newOffset >= this.mMemory.size) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (value < 0 || value >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         this.mOffset = value;
     }
@@ -101,10 +104,14 @@ export class Pointer {
      * @param {Type} value - The new type of this pointer.
      */
     set type(value) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (!Types.isPrimitiveType(value)) {
             throw 'ERROR: Pointers can only address primitive values';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         this.mType = value;
     }
@@ -131,10 +138,14 @@ export class Pointer {
      * @return {number}
      */
     castValue(type) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (!Types.isPrimitiveType(type)) {
             throw 'ERROR: Pointers can only be casted to primitive values';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return type.get(this.mView, this.mOffset);
     }
@@ -145,11 +156,15 @@ export class Pointer {
      * @param {number} offset - How many places should the pointer move.
      */
     move(offset) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset * this.mType.byteSize;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         this.mOffset = this.mOffset + offset * this.mType.byteSize;
     }
@@ -180,10 +195,14 @@ export class Pointer {
      * @return {number}
      */
     castValueAt(offset, type) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (!Types.isPrimitiveType(type)) {
             throw 'ERROR: Pointers can only be casted to primitive values';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return type.get(this.mView, this.mOffset + offset);
     }
@@ -194,11 +213,15 @@ export class Pointer {
      * @return {number}
      */
     getInt8(offset = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mView.getInt8(this.mOffset + offset);
     }
@@ -209,11 +232,15 @@ export class Pointer {
      * @return {number}
      */
     getInt16(offset = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mView.getInt16(this.mOffset + offset, true);
     }
@@ -224,11 +251,15 @@ export class Pointer {
      * @return {number}
      */
     getInt32(offset = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mView.getInt32(this.mOffset + offset, true);
     }
@@ -239,11 +270,15 @@ export class Pointer {
      * @return {number}
      */
     getUint8(offset = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mView.getUint8(this.mOffset + offset);
     }
@@ -254,11 +289,15 @@ export class Pointer {
      * @return {number}
      */
     getUint16(offset = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mView.getUint16(this.mOffset + offset, true);
     }
@@ -269,11 +308,15 @@ export class Pointer {
      * @return {number}
      */
     getUint32(offset = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mView.getUint32(this.mOffset + offset, true);
     }
@@ -284,11 +327,15 @@ export class Pointer {
      * @return {number}
      */
     getFloat32(offset = 0) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         const newOffset = this.mOffset + offset;
         if (newOffset < 0 || newOffset >= this.mMemory.size) {
             throw 'ERROR: New pointer address would be out of bounds';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mView.getFloat32(this.mOffset + offset, true);
     }

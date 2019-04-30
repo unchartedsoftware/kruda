@@ -112,12 +112,22 @@ export class Heap {
     }
 
     /**
+     * Convenience property that return the max usable size of a heap allocated with the max heap size.
+     * @returns {number}
+     */
+    static get maxAllocSize() {
+        return kMaxAllocSize;
+    }
+
+    /**
      * Constructor
      * @param {ArrayBuffer|SharedArrayBuffer|number} buffer - The buffer to use or the size in bytes to allocate.
      */
     constructor(buffer) {
         if (typeof buffer === 'number') {
-            /// #if DEBUG
+            /// #if !_DEBUG
+            /*
+            /// #endif
             if (buffer % 4) {
                 throw 'ERROR: Heap size must be a multiple of 4';
             }
@@ -130,13 +140,11 @@ export class Heap {
                     throw 'ERROR: Heap size must be a multiple of 16MB, when over 16MB';
                 }
             }
+            /// #if !_DEBUG
+             */
             /// #endif
 
-            /// #if USE_SHARED_MEMORY
             this.mBuffer = new SharedArrayBuffer(buffer);
-            /// #else
-            this.mBuffer = new ArrayBuffer(buffer);
-            /// #endif
 
             /*
              * Header structure
@@ -183,10 +191,14 @@ export class Heap {
      * @return {number}
      */
     get size() {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (!this.mBuffer) {
             throw 'ERROR: Heap buffer not yet initialized';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         return this.mBuffer.byteLength;
     }
@@ -197,11 +209,7 @@ export class Heap {
      * @return {number}
      */
     get usedMemory() {
-        /// #if USE_SHARED_MEMORY
         return Atomics.load(this.mUint32View, 1);
-        /// #else
-        return this.mUint32View[1]; // eslint-disable-line
-        /// #endif
     }
 
     /**
@@ -217,11 +225,7 @@ export class Heap {
      * @return {number}
      */
     get allocOffset() {
-        /// #if USE_SHARED_MEMORY
         return Atomics.load(this.mUint32View, 1);
-        /// #else
-        return this.mUint32View[1]; // eslint-disable-line
-        /// #endif
     }
 
     /**
@@ -237,13 +241,16 @@ export class Heap {
          * 4|n + 1 {uint32} - allocated memory
          */
         const blockSize = ((size + 3) | 3) + 1;
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (blockSize - 4 > kMaxAllocSize) {
             throw `ERROR: Heap allocations cannot be bigger than ${kMaxAllocSize} bytes`;
         }
+        /// #if !_DEBUG
+         */
         /// #endif
 
-        /// #if USE_SHARED_MEMORY
         let lockState = 1;
         while (lockState) {
             lockState = Atomics.compareExchange(this.mInt32View, 2, 0, 1);
@@ -251,29 +258,24 @@ export class Heap {
                 Atomics.wait(this.mInt32View, 2, 1);
             }
         }
-        /// #endif
 
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (blockSize > this.freeMemory) {
-            /// #if USE_SHARED_MEMORY
             Atomics.store(this.mInt32View, 2, 0);
             Atomics.notify(this.mInt32View, 2, 1);
-            /// #endif
             throw `ERROR: Not enough memory in the heap to allocate the requested memory size (${size} bytes)`;
         }
+        /// #if !_DEBUG
+         */
         /// #endif
 
         let address;
-        /// #if USE_SHARED_MEMORY
         address = Atomics.add(this.mUint32View, 1, blockSize);
         Atomics.store(this.mInt32View, 2, 0);
         Atomics.notify(this.mInt32View, 2, 1);
         Atomics.store(this.mUint32View, ((address + blockSize) >> 2) - 1, address);
-        /// #else
-        address = this.mUint32View[1];
-        this.mUint32View[1] += blockSize;
-        this.mUint32View[((address + blockSize) >> 2) - 1] = address;
-        /// #endif
 
         return new MemoryBlock(this, address, blockSize - 4);
     }
@@ -299,7 +301,6 @@ export class Heap {
         const paddingAddress = memory.address + memory.size;
         const endAddress = paddingAddress + 4;
 
-        /// #if USE_SHARED_MEMORY
         let lockState = 1;
         while (lockState) {
             lockState = Atomics.compareExchange(this.mInt32View, 2, 0, 1);
@@ -307,32 +308,25 @@ export class Heap {
                 Atomics.wait(this.mInt32View, 2, 1);
             }
         }
-        /// #endif
 
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (this._isMarkedFree(paddingAddress)) {
             throw 'ERROR: Trying to free a memory block that has already been freed';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
 
-        /// #if USE_SHARED_MEMORY
         Atomics.or(this.mUint32View, paddingAddress >> 2, kFreeFlag);
-        /// #else
-        this.mUint32View[paddingAddress >> 2] |= kFreeFlag;
-        /// #endif
 
         if (this.allocOffset === endAddress) {
-            /// #if USE_SHARED_MEMORY
             Atomics.store(this.mUint32View, 1, this._findNewAllocOffset(memory.address));
-            /// #else
-            this.mUint32View[1] = this._findNewAllocOffset(memory.address);
-            /// #endif
         }
 
-        /// #if USE_SHARED_MEMORY
         Atomics.store(this.mInt32View, 2, 0);
         Atomics.notify(this.mInt32View, 2, 1);
-        /// #endif
 
         memory._destroy();
     }
@@ -344,11 +338,7 @@ export class Heap {
      * @private
      */
     _isMarkedFree(offset) {
-        /// #if USE_SHARED_MEMORY
         return Atomics.load(this.mUint32View, offset >> 2) & kFreeFlag;
-        /// #else
-        return this.mUint32View[offset >> 2] & kFreeFlag; // eslint-disable-line
-        /// #endif
     }
 
     /**
@@ -358,11 +348,7 @@ export class Heap {
      * @private
      */
     _readPadding(offset) {
-        /// #if USE_SHARED_MEMORY
         return Atomics.load(this.mUint32View, offset >> 2) ^ kFreeFlag;
-        /// #else
-        return this.mUint32View[offset >> 2] ^ kFreeFlag; // eslint-disable-line
-        /// #endif
     }
 
     /**

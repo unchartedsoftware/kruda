@@ -77,21 +77,21 @@ function loadBuffer(compressedBuffer, uncompressed, offset, size) {
  * @return {Promise<void>}
  * @memberof DSBINLoaderWorker
  */
-global.onmessage = async function DSBINLoaderWorkerOnMessage(e) {
+self.onmessage = async function DSBINLoaderWorkerOnMessage(e) {
     const message = e.data;
 
     if (message.type === 'loadBlobs') {
         await loadFromBlobs(message.indices, message.chunks, message.uncompressed);
-        global.postMessage({
+        self.postMessage({
             type: 'success',
         });
     } else if (message.type === 'loadBuffer') {
         loadBuffer(message.buffer, message.uncompressed, message.uncompressedOffset, message.uncompressedSize);
-        global.postMessage({
+        self.postMessage({
             type: 'success',
         });
     } else if (message.type === 'close') {
-        global.postMessage({
+        self.postMessage({
             type: 'success',
         });
         close();

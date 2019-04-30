@@ -46,13 +46,17 @@ class ByteStringBase {
      * @param {number} size - The maximum size of this string.
      */
     constructor(size = 256) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (size > 256) {
             throw 'ERROR: ByteString instances can hold a maximum of 255 characters (+1 byte to hold their length)';
         }
         if (size % 4) {
             throw 'ERROR: ByteString size must be a multiple of 4';
         }
+        /// #if !_DEBUG
+         */
         /// #endif
 
         this.mSize = size;
@@ -313,10 +317,14 @@ class _ByteString extends Type {
     }
 
     set(view, value, offset) {
-        /// #if DEBUG
+        /// #if !_DEBUG
+        /*
+        /// #endif
         if (!(value instanceof ByteStringBase) && typeof value !== 'string' && !(value instanceof String)) {
             throw `ERROR: Cannot set the value of ByteStringType to an instance of ${typeof value}`;
         }
+        /// #if !_DEBUG
+         */
         /// #endif
         view.setUint8(offset, Math.min(value.length, 255));
         for (let i = 0; i < 255 && i < value.length; ++i) {

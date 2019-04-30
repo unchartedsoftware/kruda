@@ -22,7 +22,7 @@
  */
 import {Pointer} from '../../core/Pointer';
 import * as Types from '../../core/Types';
-import FilterWorker from 'worker-loader!./Filter.worker';
+import FilterWorker from 'web-worker:./Filter.worker';
 
 /**
  * Default, immutable object, representing a result index with the row index in it.
