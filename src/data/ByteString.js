@@ -313,7 +313,8 @@ class _ByteString extends Type {
     }
 
     get(view, offset) {
-        return new ByteStringBuffer(view.buffer, view.byteOffset + offset, view.getUint8(offset) + 1);
+        const size = (view.getUint8(offset) + 4) & ~0x03;
+        return new ByteStringBuffer(view.buffer, view.byteOffset + offset, size);
     }
 
     set(view, value, offset) {
@@ -382,7 +383,8 @@ class _ByteString extends Type {
      */
     fromString(str) {
         const length = Math.min(str.length, 255);
-        const view = new Uint8Array(length + 1);
+        const size = (length + 4) & ~0x03;
+        const view = new Uint8Array(size);
         view[0] = length;
         for (let i = 0; i < length; ++i) {
             view[i + 1] = str.charCodeAt(i);
