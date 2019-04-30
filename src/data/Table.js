@@ -32,13 +32,10 @@ export class Table {
     /**
      * Creates an instance that reads its contents from the specified memory block.
      * @param {MemoryBlock} layout - A MemoryBlock containing a binary representation of the layout and data of this table.
+     * @return {Table}
      */
-    constructor(layout) {
-        this.mMemory = layout;
-        this.mHeader = null;
-        this.mDataOffset = 0;
-
-        const pointer = new Pointer(this.mMemory, 0, Types.Void);
+    static fromMemoryLayout(layout) {
+        const pointer = new Pointer(layout, 0, Types.Void);
         const headerSize = pointer.castValue(Types.Uint32);
 
         let nb;
@@ -48,11 +45,22 @@ export class Table {
             }
         }
 
-        const headerBytes = new Uint8Array(this.mMemory.buffer, this.mMemory.address + 4, headerSize - nb);
+        const headerBytes = new Uint8Array(layout.buffer, layout.address + 4, headerSize - nb);
         const headerString = String.fromCharCode.apply(null, headerBytes);
 
-        this.mHeader = JSON.parse(headerString);
-        this.mDataOffset = headerSize + 4;
+        return new Table(layout, JSON.parse(headerString), headerSize + 4);
+    }
+
+    /**
+     * Table constructor.
+     * @param {MemoryBlock} memory - The MemoryBlock containing the table's data
+     * @param {Object} header - A table header descriptor
+     * @param {number=} offset - The offset at which the data is within the MemoryBlock
+     */
+    constructor(memory, header, offset = 0) {
+        this.mMemory = memory;
+        this.mHeader = header;
+        this.mDataOffset = offset;
     }
 
     /**

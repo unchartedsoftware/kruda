@@ -131,7 +131,7 @@
             await wait(100);
 
             /* create a table from the loaded data */
-            const table = new kruda.Table(data);
+            const table = kruda.Table.fromMemoryLayout(data);
 
             /* run the filter */
             await runFilter(table);
@@ -160,7 +160,7 @@
         await wait(100);
 
         /* create a table from the loaded data */
-        const table = new kruda.Table(data);
+        const table = kruda.Table.fromMemoryLayout(data);
 
         /* run the filter */
         await runFilter(table);

@@ -43,7 +43,7 @@ export class FilterProcessor {
     constructor(config) {
         this.mHeap = new Heap(config.heapBuffer);
         this.mTableMemory = new MemoryBlock(this.mHeap, config.tableAddress, config.tableSize);
-        this.mTable = new Table(this.mTableMemory);
+        this.mTable = Table.fromMemoryLayout(this.mTableMemory);
         this.mRow = this.mTable.getRow();
     }
 
