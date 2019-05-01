@@ -23,6 +23,8 @@
 import {Pointer} from '../../core/Pointer';
 import * as Types from '../../core/Types';
 import FilterWorker from 'web-worker:./Filter.worker';
+import {coreCount} from '../../core/CoreCount';
+import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
 
 /**
  * Default, immutable object, representing a result index with the row index in it.
@@ -51,27 +53,26 @@ export class Filter {
     /**
      * Creates a Filter instance bound to the specified table.
      * @param {Table} table - The table this filter will be bound to.
-     * @param {number=} workerCount - The number of workers to spawn, should be the same as physical cores in the system, defaults to 4.
+     * @param {number=} workerCount - The number of workers to spawn, should be the same as physical cores in the system, defaults to automatically detected.
      * @param {Heap=} heap - The heap to use to allocate the filter results memory, defaults to using the same heap where the table is allocated.
      */
-    constructor(table, workerCount = 4, heap = table.memory.heap) {
+    constructor(table, workerCount = -1, heap = table.memory.heap) {
         this.mTable = table;
         this.mHeap = heap;
         this.mResultDescription = [ kRowIndexResult ];
         this.mResultRowSize = kRowIndexResult.size;
         this.mMemory = null;
-        this.mWorkers = [];
+        this.mWorkerPool = null;
 
-        for (let i = 0; i < workerCount; ++i) {
-            const worker = new FilterWorker();
-            this.mWorkers.push(worker);
-            worker.postMessage({
-                type: 'initialize',
-                heapBuffer: this.mTable.memory.heap.buffer,
-                tableAddress: this.mTable.memory.address,
-                tableSize: this.mTable.memory.size,
-            });
-        }
+        this.mInitialized = new Promise(resolve => {
+            if (workerCount < 1 || isNaN(workerCount)) {
+                coreCount().then(({estimatedPhysicalCores}) => {
+                    this._initializeThreads(estimatedPhysicalCores).then(resolve);
+                });
+            } else {
+                this._initializeThreads(Math.max(1, workerCount)).then(resolve);
+            }
+        });
     }
 
     /**
@@ -178,39 +179,25 @@ export class Filter {
      * }
      *
      * @param {Array<Object[]>} rules - The rules to run this filter with.
-     * @return {Promise<{memory: MemoryBlock, count: number}>}
+     * @return {{memory: MemoryBlock, count: number}}
      */
-    run(rules) {
+    async run(rules) {
+        await this.mInitialized;
         const promises = [];
         const resultMemory = this._allocateResultMemory();
         const indices = this.mHeap.malloc(8);
-        for (let i = 0; i < this.mWorkers.length; ++i) {
-            const worker = this.mWorkers[i];
-            const promise = new Promise((resolve, reject) => {
-                worker.onmessage = e => {
-                    const message = e.data;
-                    worker.onmessage = null;
-                    if (message.type === 'success') {
-                        resolve();
-                    } else if (message.type === 'error') {
-                        reject(message.reason);
-                    } else {
-                        reject(`ERROR: Unrecognized worker message [${message.type}]`);
-                    }
-                };
-                worker.postMessage({
-                    type: 'processFilters',
-                    rules: rules,
-                    resultDescription: this.mResultDescription,
-                    resultAddress: resultMemory.address,
-                    resultSize: resultMemory.size,
-                    indicesAddress: indices.address,
-                    rowBatchSize: 1024,
-                });
+        for (let i = 0; i < this.mWorkerPool.workerCount; ++i) {
+            const promise = this.mWorkerPool.scheduleTask('processFilters', {
+                rules: rules,
+                resultDescription: this.mResultDescription,
+                resultAddress: resultMemory.address,
+                resultSize: resultMemory.size,
+                indicesAddress: indices.address,
+                rowBatchSize: 1024,
             });
             promises.push(promise);
         }
-        return Promise.all(promises).then(() => {
+        return await Promise.all(promises).then(() => {
             const indicesPtr = new Pointer(indices, 0, Types.Uint32);
             const resultCount = indicesPtr.getValueAt(1);
             indices.free();
@@ -228,5 +215,29 @@ export class Filter {
      */
     _allocateResultMemory() {
         return this.mHeap.malloc(this.mResultRowSize * this.mTable.rowCount);
+    }
+
+    /**
+     * Utility function to initialize the threads used for processing the filter.
+     * @param {number} count - The number of threads to initialize.
+     * @private
+     */
+    async _initializeThreads(count) {
+        if (this.mWorkerPool) {
+            this.mWorkerPool.killWorkers();
+        } else {
+            this.mWorkerPool = new WorkerPool();
+        }
+
+        for (let i = 0; i < count; ++i) {
+            this.mWorkerPool.addWorker(new FilterWorker(), {
+                type: 'initialize',
+                options: {
+                    heapBuffer: this.mTable.memory.heap.buffer,
+                    tableAddress: this.mTable.memory.address,
+                    tableSize: this.mTable.memory.size,
+                },
+            });
+        }
     }
 }

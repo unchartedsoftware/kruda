@@ -22,6 +22,7 @@
  */
 
 import DSBINLoaderWorker from 'web-worker:./DSBINLoader.worker';
+import {coreCount} from '../core/CoreCount';
 
 /**
  * Minimum number of chunks needed in a file to multi-thread the process.
@@ -38,13 +39,6 @@ const kMinChunksForThreading = 11;
 const kMinWorkerCount = 1;
 
 /**
- * Maximum number of web workers.
- * @type {number}
- * @private
- */
-const kMaxWorkerCount = 4;
-
-/**
  * Multi-threaded DSBIN file loader.
  */
 export class DSBINLoader {
@@ -54,7 +48,7 @@ export class DSBINLoader {
      * @param {Heap} heap - The heap where the file will be loaded.
      * @return {Promise<MemoryBlock>}
      */
-    static loadFromFile(file, heap) {
+    static async loadFromFile(file, heap) {
         return new Promise(resolve => {
             const header = file.slice(0, 8);
             const reader = new FileReader();
@@ -117,149 +111,148 @@ export class DSBINLoader {
      * @param {Heap} heap - The heap where the file will be loaded.
      * @return {Promise<MemoryBlock>}
      */
-    static loadFromURL(url, heap) {
-        return new Promise(resolve => {
-            fetch(url).then(async response => {
-                const reader = response.body.getReader();
-                const sizesBuffer = new ArrayBuffer(8);
-                const sizesView = new DataView(sizesBuffer);
+    static async loadFromURL(url, heap) {
+        const response = await fetch(url);
+        const reader = response.body.getReader();
+        const sizesBuffer = new ArrayBuffer(8);
+        const sizesView = new DataView(sizesBuffer);
 
-                let bufferOffset = 0;
-                let targetRead = 8;
-                let read = 0;
-                let offset;
-                let received;
+        let bufferOffset = 0;
+        let targetRead = 8;
+        let read = 0;
+        let offset;
+        let received;
 
-                while (read < targetRead) {
-                    received = await reader.read();
-                    read += received.value.length;
-                    for (offset = 0; offset < received.value.length && bufferOffset < 8; ++offset) {
-                        sizesView.setUint8(bufferOffset++, received.value[offset]);
-                    }
-                }
+        while (read < targetRead) {
+            received = await reader.read();
+            read += received.value.length;
+            for (offset = 0; offset < received.value.length && bufferOffset < 8; ++offset) {
+                sizesView.setUint8(bufferOffset++, received.value[offset]);
+            }
+        }
 
-                const totalUncompressedSize = sizesView.getUint32(0, true);
-                const chunkCount = sizesView.getUint32(4, true);
-                const memory = heap.malloc(totalUncompressedSize);
-                const address = memory.address;
+        const totalUncompressedSize = sizesView.getUint32(0, true);
+        const chunkCount = sizesView.getUint32(4, true);
+        const memory = heap.malloc(totalUncompressedSize);
+        const address = memory.address;
 
-                const threadableChunks = chunkCount - kMinChunksForThreading + kMaxWorkerCount;
-                const workerCount = Math.min(kMaxWorkerCount, Math.max(kMinWorkerCount, threadableChunks));
-                const workers = [];
-                const workersPromises = [];
-                const workersAvailable = [];
-                let workersFull = Promise.resolve();
-                let workersFullResolve = null;
-                for (let i = 0; i < workerCount; ++i) {
-                    const worker = new DSBINLoaderWorker();
-                    workers.push(worker);
-                    workersPromises.push(Promise.resolve());
-                    workersAvailable.push(true);
-                }
+        const maxWorkerCount = (await coreCount()).estimatedPhysicalCores;
+        const threadableChunks = chunkCount - kMinChunksForThreading + maxWorkerCount;
+        const workerCount = Math.min(maxWorkerCount, Math.max(kMinWorkerCount, threadableChunks));
+        const workers = [];
+        const workersPromises = [];
+        const workersAvailable = [];
+        let workersFull = Promise.resolve();
+        let workersFullResolve = null;
+        for (let i = 0; i < workerCount; ++i) {
+            const worker = new DSBINLoaderWorker();
+            workers.push(worker);
+            workersPromises.push(Promise.resolve());
+            workersAvailable.push(true);
+        }
 
-                const chunkMetaSize = chunkCount * 8;
-                const chunkMetaBuffer = new ArrayBuffer(chunkMetaSize);
-                const chunkMetaView = new DataView(chunkMetaBuffer);
+        const chunkMetaSize = chunkCount * 8;
+        const chunkMetaBuffer = new ArrayBuffer(chunkMetaSize);
+        const chunkMetaView = new DataView(chunkMetaBuffer);
 
-                targetRead = chunkMetaSize + 8;
-                bufferOffset = 0;
+        targetRead = chunkMetaSize + 8;
+        bufferOffset = 0;
 
-                for (; offset < received.value.length && bufferOffset < chunkMetaSize; ++offset) {
-                    chunkMetaView.setUint8(bufferOffset++, received.value[offset]);
-                }
+        for (; offset < received.value.length && bufferOffset < chunkMetaSize; ++offset) {
+            chunkMetaView.setUint8(bufferOffset++, received.value[offset]);
+        }
 
-                while (read < targetRead) {
-                    received = await reader.read();
-                    read += received.value.length;
-                    for (offset = 0; offset < received.value.length && bufferOffset < chunkMetaSize; ++offset) {
-                        chunkMetaView.setUint8(bufferOffset++, received.value[offset]);
-                    }
-                }
+        while (read < targetRead) {
+            received = await reader.read();
+            read += received.value.length;
+            for (offset = 0; offset < received.value.length && bufferOffset < chunkMetaSize; ++offset) {
+                chunkMetaView.setUint8(bufferOffset++, received.value[offset]);
+            }
+        }
 
-                let chunksUncompressedSize = 0;
-                let uncompressedSize;
-                let compressedSize;
-                let compressedBuffer;
-                let compressedView;
+        let chunksUncompressedSize = 0;
+        let uncompressedSize;
+        let compressedSize;
+        let compressedBuffer;
+        let compressedView;
 
-                for (let i = 0; i < chunkCount; ++i) {
-                    uncompressedSize = chunkMetaView.getUint32(i * 8, true);
-                    compressedSize = chunkMetaView.getUint32(i * 8 + 4, true);
-                    compressedBuffer = new ArrayBuffer(compressedSize);
-                    compressedView = new Uint8Array(compressedBuffer);
+        for (let i = 0; i < chunkCount; ++i) {
+            uncompressedSize = chunkMetaView.getUint32(i * 8, true);
+            compressedSize = chunkMetaView.getUint32(i * 8 + 4, true);
+            compressedBuffer = new ArrayBuffer(compressedSize);
+            compressedView = new Uint8Array(compressedBuffer);
 
-                    targetRead += compressedSize;
-                    bufferOffset = 0;
-                    for (; offset < received.value.length && bufferOffset < compressedSize; ++offset) {
+            targetRead += compressedSize;
+            bufferOffset = 0;
+            for (; offset < received.value.length && bufferOffset < compressedSize; ++offset) {
+                compressedView[bufferOffset++] = received.value[offset];
+            }
+
+            while (read < targetRead) {
+                received = await reader.read();
+                read += received.value.length;
+                if (read <= targetRead) {
+                    compressedView.set(received.value, bufferOffset);
+                    offset = received.value.length;
+                    bufferOffset += offset;
+                } else {
+                    for (offset = 0; offset < received.value.length && bufferOffset < compressedSize; ++offset) {
                         compressedView[bufferOffset++] = received.value[offset];
                     }
-
-                    while (read < targetRead) {
-                        received = await reader.read();
-                        read += received.value.length;
-                        if (read <= targetRead) {
-                            compressedView.set(received.value, bufferOffset);
-                            offset = received.value.length;
-                            bufferOffset += offset;
-                        } else {
-                            for (offset = 0; offset < received.value.length && bufferOffset < compressedSize; ++offset) {
-                                compressedView[bufferOffset++] = received.value[offset];
-                            }
-                        }
-                    }
-
-                    await workersFull;
-
-                    let scheduled = false;
-                    let available = false;
-                    for (let ii = 0; ii < workerCount; ++ii) {
-                        if (workersAvailable[ii]) {
-                            if (scheduled) {
-                                available = true;
-                            } else {
-                                const index = ii;
-                                workersAvailable[index] = false;
-                                workersPromises[index] = new Promise(resolve => { // eslint-disable-line
-                                    workers[index].onmessage = () => {
-                                        workers[index].onmessage = null;
-                                        workersAvailable[index] = true;
-                                        if (workersFullResolve) {
-                                            workersFullResolve();
-                                            workersFullResolve = null;
-                                        }
-                                        resolve();
-                                    };
-                                });
-
-                                workers[index].postMessage({
-                                    type: 'loadBuffer',
-                                    buffer: compressedBuffer,
-                                    uncompressed: memory.buffer,
-                                    uncompressedOffset: address + chunksUncompressedSize,
-                                    uncompressedSize: uncompressedSize,
-                                }, [ compressedBuffer ]);
-                                scheduled = true;
-                            }
-                        }
-                    }
-
-                    if (!available) {
-                        workersFull = new Promise(resolve => { // eslint-disable-line
-                            workersFullResolve = resolve;
-                        });
-                    }
-
-                    chunksUncompressedSize += uncompressedSize;
                 }
+            }
 
-                Promise.all(workersPromises).then(() => {
-                    for (let i = 0; i < workers.length; ++i) {
-                        workers[i].postMessage({ type: 'close' });
+            await workersFull;
+
+            let scheduled = false;
+            let available = false;
+            for (let ii = 0; ii < workerCount; ++ii) {
+                if (workersAvailable[ii]) {
+                    if (scheduled) {
+                        available = true;
+                    } else {
+                        const index = ii;
+                        workersAvailable[index] = false;
+                        workersPromises[index] = new Promise(resolve => { // eslint-disable-line
+                            workers[index].onmessage = () => {
+                                workers[index].onmessage = null;
+                                workersAvailable[index] = true;
+                                if (workersFullResolve) {
+                                    workersFullResolve();
+                                    workersFullResolve = null;
+                                }
+                                resolve();
+                            };
+                        });
+
+                        workers[index].postMessage({
+                            type: 'loadBuffer',
+                            buffer: compressedBuffer,
+                            uncompressed: memory.buffer,
+                            uncompressedOffset: address + chunksUncompressedSize,
+                            uncompressedSize: uncompressedSize,
+                        }, [ compressedBuffer ]);
+                        scheduled = true;
                     }
-                    resolve(memory);
+                }
+            }
+
+            if (!available) {
+                workersFull = new Promise(resolve => { // eslint-disable-line
+                    workersFullResolve = resolve;
                 });
-            });
+            }
+
+            chunksUncompressedSize += uncompressedSize;
+        }
+
+        await Promise.all(workersPromises).then(() => {
+            for (let i = 0; i < workers.length; ++i) {
+                workers[i].postMessage({ type: 'close' });
+            }
         });
+
+        return memory;
     }
 
     /**
@@ -267,41 +260,38 @@ export class DSBINLoader {
      * @param {number} chunkCount - The number of chunks to load.
      * @param {Array} chunks - An array of chunks to load.
      * @param {ArrayBufferLike} uncompressed - Memory where to write the uncompressed chunks.
-     * @return {Promise<any>}
      * @private
      */
-    static _scheduleBlobLoadingWorkers(chunkCount, chunks, uncompressed) {
-        const threadableChunks = chunkCount - kMinChunksForThreading + kMaxWorkerCount;
-        const workerCount = Math.min(kMaxWorkerCount, Math.max(kMinWorkerCount, threadableChunks));
+    static async _scheduleBlobLoadingWorkers(chunkCount, chunks, uncompressed) {
+        const maxWorkerCount = (await coreCount()).estimatedPhysicalCores;
+        const threadableChunks = chunkCount - kMinChunksForThreading + maxWorkerCount;
+        const workerCount = Math.min(maxWorkerCount, Math.max(kMinWorkerCount, threadableChunks));
         const indicesBuffer = new SharedArrayBuffer(8);
         const indices = new Uint32Array(indicesBuffer);
         const workers = [];
         indices[0] = 0;
         indices[1] = chunkCount;
-        return new Promise(resolve => {
-            const promises = [];
-            for (let i = 0; i < workerCount; ++i) {
-                const worker = new DSBINLoaderWorker();
-                workers.push(worker);
-                promises.push(new Promise(r => {
-                    worker.onmessage = () => {
-                        worker.onmessage = null;
-                        r();
-                    };
-                }));
-                worker.postMessage({
-                    type: 'loadBlobs',
-                    uncompressed,
-                    indices,
-                    chunks,
-                });
-            }
-            Promise.all(promises).then(() => {
-                for (let i = 0; i < workers.length; ++i) {
-                    workers[i].postMessage({ type: 'close' });
-                }
-                resolve();
+        const promises = [];
+        for (let i = 0; i < workerCount; ++i) {
+            const worker = new DSBINLoaderWorker();
+            workers.push(worker);
+            promises.push(new Promise(r => {
+                worker.onmessage = () => {
+                    worker.onmessage = null;
+                    r();
+                };
+            }));
+            worker.postMessage({
+                type: 'loadBlobs',
+                uncompressed,
+                indices,
+                chunks,
             });
+        }
+        await Promise.all(promises).then(() => {
+            for (let i = 0; i < workers.length; ++i) {
+                workers[i].postMessage({ type: 'close' });
+            }
         });
     }
 }

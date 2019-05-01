@@ -69,13 +69,14 @@ self.onmessage = function filterWorkerOnMessage(e) {
             if (gProcessor) {
                 sendError('ERROR: Worker is already initialized!');
             } else {
-                gProcessor = new FilterProcessor(message);
+                gProcessor = new FilterProcessor(message.options);
+                sendSuccess();
             }
             break;
 
         case 'processFilters':
             if (gProcessor) {
-                gProcessor.process(message);
+                gProcessor.process(message.options);
                 sendSuccess();
             } else {
                 sendError('ERROR: Filter.worker has not been initialized');
