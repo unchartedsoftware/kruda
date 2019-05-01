@@ -31,6 +31,8 @@
     "rollup-plugin-web-worker-loader": "^0.4.1"
   },
   "dependencies": {
-    "pako": "^1.0.8"
+    "dekkai": "^0.2.1",
+    "pako": "^1.0.8",
+    "webcpu": "^0.4.0"
   }
 }
