@@ -33,7 +33,7 @@
      */
     async function runFilter(table) {
         /* create a new filter bound to the table */
-        const filter = new kruda.Filter(table, /* 4 */ /* number of threads to spawn, defaults to 4 */);
+        const filter = new kruda.Filter(table, /* 4 */ /* number of threads to spawn, defaults to autodetect */);
 
         /* specify the result description. WARNING: This interface may change in the near future */
         filter.resultDescription = [
@@ -89,10 +89,10 @@
             ],
         ];
 
-        const start = new Date();
+        const start = performance.now();
         /* run the filter with the rules */
         const result = await filter.run(filterRules);
-        const end = new Date();
+        const end = performance.now();
         document.body.innerText += `Filter took ${end - start}ms\n`;
         document.body.innerText += `Results: ${result.count}\n`;
 
@@ -154,23 +154,33 @@
             e.preventDefault();
             document.body.innerText = 'Allocating heap...\n';
             await wait(100);
-            let start = new Date();
+            let start = performance.now();
             /* allocate the heap to use with kruda */
             const heap = new kruda.Heap(kruda.Heap.maxHeapSize);
-            let end = new Date();
+            let end = performance.now();
             document.body.innerText += `Heap allocated, took: ${end - start}ms\n`;
 
             document.body.innerText += 'Loading data...\n';
             await wait(100);
-            start = new Date();
+            start = performance.now();
+
             /* load the specified file */
-            const data = await kruda.DSBINLoader.loadFromFile(fileInput.files[0], heap);
-            end = new Date();
+            const file = fileInput.files[0];
+            let table;
+
+            /* if it's a CSV file */
+            if (file.type === 'text/csv') {
+                table = await kruda.tableFromLocalCSV(file, heap);
+                console.log(table);
+            } else { // else, assume it's a DS.BIN
+                const data = await kruda.DSBINLoader.loadFromFile(fileInput.files[0], heap);
+                /* create a table from the loaded data */
+                table = new kruda.Table(data);
+            }
+
+            end = performance.now();
             document.body.innerText += `Loading took ${end - start}ms\n`;
             await wait(100);
-
-            /* create a table from the loaded data */
-            const table = kruda.Table.fromMemoryLayout(data);
 
             /* run the filter */
             await runFilter(table);
@@ -183,29 +193,29 @@
     async function loadFromURL(url) {
         document.body.innerText = 'Allocating heap...\n';
         await wait(100);
-        let start = new Date();
+        let start = performance.now();
         /* allocate the heap to use with kruda */
         const heap = new kruda.Heap(kruda.Heap.maxHeapSize);
-        let end = new Date();
+        let end = performance.now();
         document.body.innerText += `Heap allocated, took: ${end - start}ms\n`;
 
         document.body.innerText += 'Loading data...\n';
         await wait(100);
-        start = new Date();
+        start = performance.now();
         /* load the data from the specified URL */
         const data = await kruda.DSBINLoader.loadFromURL(url, heap);
-        end = new Date();
+        end = performance.now();
         document.body.innerText += `Loading took ${end - start}ms\n`;
         await wait(100);
 
         /* create a table from the loaded data */
-        const table = kruda.Table.fromMemoryLayout(data);
+        const table = new kruda.Table(data);
 
         /* run the filter */
         await runFilter(table);
     }
 
-    const triggerLoadFromURL = true; // switch to `false` to load from a local file.
+    const triggerLoadFromURL = false; // switch to `false` to load from a local file.
     if (triggerLoadFromURL) {
         /**
          * Trigger loading a DSBIN file from a URL
@@ -217,6 +227,7 @@
          */
         document.addEventListener('DOMContentLoaded', async () => loadFromFile());
     }
+
 </script>
 </body>
 </html>
