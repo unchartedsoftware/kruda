@@ -1657,12 +1657,12 @@ defined@^1.0.0:
   resolved "https://registry.yarnpkg.com/defined/-/defined-1.0.0.tgz#c98d9bcef75674188e110969151199e39b1fa693"
   integrity sha1-yY2bzvdWdBiOEQlpFRGZ45sfppM=
 
-dekkai@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/dekkai/-/dekkai-0.2.1.tgz#f1c30be1246e268ccde1b9f10c50a684ebd3de9a"
-  integrity sha512-m0LrHlq6+HuFJJESrO+nG7JPd0n5wuTliH8dy2fFQCKdV7+Mj8GuLOi9Iejxu442MlZPsbreqlSNhQfs8U6VbQ==
+dekkai@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/dekkai/-/dekkai-0.3.3.tgz#df93a0221065a8427fbd66f7ff1e0b13f6f815b8"
+  integrity sha512-ux9scuDM8cp4doTZfVO3AOvIB0wAzp8NksbY131Cv8dV+md9LHRGuyOjQBnZPLfhfmEBYmcVl8rYVj/5uz1w2A==
   dependencies:
-    webcpu "^0.4.0"
+    webcpu "^0.4.1"
 
 delegates@^1.0.0:
   version "1.0.0"
@@ -4469,10 +4469,10 @@ rollup-plugin-url@^2.2.0:
     mkpath "^1.0.0"
     rollup-pluginutils "^2.3.3"
 
-rollup-plugin-web-worker-loader@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-web-worker-loader/-/rollup-plugin-web-worker-loader-0.4.1.tgz#b7a5a65714c2810c8dd4f836783ca881ff3f89fa"
-  integrity sha512-plMiiQn4VVIpIUnEB1ZgVbNMoYdt3Kc4ypMAFwBaRNtoqTC8MkbRYet/XyUTy2qOlI//ADLPhwQxsgzyOCkElg==
+rollup-plugin-web-worker-loader@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-web-worker-loader/-/rollup-plugin-web-worker-loader-0.5.0.tgz#52577ed63016cf4153522d1a3c25ab6519576bad"
+  integrity sha512-UA5o5jKQx0mrPfESwZPtk1SmaT0tMnloDyV/INPT2AmzcQM4D4wW+IueSwOtSN7ihiSfQHdlA4eoUOjBdRyFLA==
 
 rollup-pluginutils@^1.5.2:
   version "1.5.2"
@@ -5394,10 +5394,10 @@ vue-template-compiler@^2.5.16:
     de-indent "^1.0.2"
     he "^1.1.0"
 
-webcpu@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/webcpu/-/webcpu-0.4.0.tgz#525fb32bd9b4680b6fc1a739c2462381a1acbc85"
-  integrity sha512-QgYBlDRcc2w+DbvDsCngOXvX3ihfzZUssUiHl83iTr++i6DfRh2+uC857RU5R/L90hxBvps4UEqhKM0G8u/5kA==
+webcpu@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/webcpu/-/webcpu-0.4.1.tgz#08af488dbda2fb84c523fbe59f656615b9e64ede"
+  integrity sha512-F8dQEds5ES1hvzVX8OSlL61EV2ALr2QbQBJ2od2CP8RMdaBFtSf3p2btUG3JMZuCM9Vhc9IuCAm7DGcDeGLCtA==
 
 websocket-driver@>=0.5.1:
   version "0.7.0"

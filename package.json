@@ -28,11 +28,11 @@
     "rollup-plugin-live-server": "^1.0.1",
     "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-url": "^2.2.0",
-    "rollup-plugin-web-worker-loader": "^0.4.1"
+    "rollup-plugin-web-worker-loader": "^0.5.0"
   },
   "dependencies": {
-    "dekkai": "^0.2.1",
+    "dekkai": "^0.3.3",
     "pako": "^1.0.8",
-    "webcpu": "^0.4.0"
+    "webcpu": "^0.4.1"
   }
 }
