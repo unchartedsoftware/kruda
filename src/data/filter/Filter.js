@@ -117,9 +117,10 @@ export class Filter {
         }
 
         const columns = this.mTable.header.columns;
+        const names = this.mTable.header.names;
         return {
-            type: columns[columnName].type === 'string' ? 'ByteString' : columns[columnName].type,
-            size: columns[columnName].size,
+            type: columns[names[columnName]].type.name,
+            size: columns[names[columnName]].size,
             column: columnName,
         };
     }

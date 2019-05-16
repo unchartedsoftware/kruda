@@ -23,7 +23,8 @@
 
 import {WebCPU} from 'webcpu';
 
-const kCoreCount = WebCPU.detectCPU();
+const kIsWorker = (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope); // eslint-disable-line
+const kCoreCount = kIsWorker ? null : WebCPU.detectCPU();
 
 export async function coreCount() {
     return await kCoreCount;

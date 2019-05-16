@@ -21,8 +21,7 @@
  * SOFTWARE.
  */
 
-import * as Types from '../core/Types';
-import {Pointer} from '../core/Pointer';
+import {Header} from './Header';
 import {Row} from './Row';
 
 /**
@@ -30,37 +29,12 @@ import {Row} from './Row';
  */
 export class Table {
     /**
-     * Creates an instance that reads its contents from the specified memory block.
-     * @param {MemoryBlock} layout - A MemoryBlock containing a binary representation of the layout and data of this table.
-     * @return {Table}
-     */
-    static fromMemoryLayout(layout) {
-        const pointer = new Pointer(layout, 0, Types.Void);
-        const headerSize = pointer.castValue(Types.Uint32);
-
-        let nb;
-        for (nb = 0; nb < headerSize; ++nb) {
-            if (pointer.castValueAt(3 + headerSize - nb, Types.Uint8) !== 0) {
-                break;
-            }
-        }
-
-        const headerBytes = new Uint8Array(layout.buffer, layout.address + 4, headerSize - nb);
-        const headerString = String.fromCharCode.apply(null, headerBytes);
-
-        return new Table(layout, JSON.parse(headerString), headerSize + 4);
-    }
-
-    /**
      * Table constructor.
      * @param {MemoryBlock} memory - The MemoryBlock containing the table's data
-     * @param {Object} header - A table header descriptor
-     * @param {number=} offset - The offset at which the data is within the MemoryBlock
      */
-    constructor(memory, header, offset = 0) {
+    constructor(memory) {
         this.mMemory = memory;
-        this.mHeader = header;
-        this.mDataOffset = offset;
+        this.mHeader = new Header(this.mMemory);
     }
 
     /**
@@ -76,7 +50,7 @@ export class Table {
      * @return {number}
      */
     get rowCount() {
-        return this.mHeader.count;
+        return this.mHeader.rowCount;
     }
 
     /**
@@ -92,7 +66,7 @@ export class Table {
      * @return {number}
      */
     get dataOffset() {
-        return this.mDataOffset;
+        return this.mHeader.length;
     }
 
     /**

@@ -34,3 +34,5 @@ export {DSBINLoader} from './DSBIN/DSBINLoader';
 
 export {Table} from './data/Table';
 export {Filter} from './data/filter/Filter';
+
+export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';

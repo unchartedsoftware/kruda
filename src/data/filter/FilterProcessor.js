@@ -43,7 +43,7 @@ export class FilterProcessor {
     constructor(config) {
         this.mHeap = new Heap(config.heapBuffer);
         this.mTableMemory = new MemoryBlock(this.mHeap, config.tableAddress, config.tableSize);
-        this.mTable = Table.fromMemoryLayout(this.mTableMemory);
+        this.mTable = new Table(this.mTableMemory);
         this.mRow = this.mTable.getRow();
     }
 
@@ -187,7 +187,7 @@ export class FilterProcessor {
      * @private
      */
     _generateFieldTester(field, row) {
-        const column = this.mTable.header.columns[field.name];
+        const column = this.mTable.header.columns[this.mTable.header.names[field.name]];
         const getter = row.accessors[field.name].getter;
         switch (field.operation) {
             case 'contains': {
@@ -196,7 +196,7 @@ export class FilterProcessor {
             }
 
             case 'equal': {
-                if (column.type === 'string' || column.type === 'date') {
+                if (column.type === ByteString) {
                     const value = ByteString.fromString(field.value);
                     return function filterEquals() {
                         return getter().equalsCase(value);
@@ -209,7 +209,7 @@ export class FilterProcessor {
             }
 
             case 'notEqual': {
-                if (column.type === 'string' || column.type === 'date') {
+                if (column.type === ByteString) {
                     const value = ByteString.fromString(field.value);
                     return function filterEquals() {
                         return !getter().equalsCase(value);

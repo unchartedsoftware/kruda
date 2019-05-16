@@ -39,24 +39,23 @@ export class Row {
      */
     constructor(table, index = 0) {
         this.mTable = table;
-        this.mTableOffset = this.mTable.mDataOffset;
-        this.mSize = this.mTable.header.rowSize;
+        this.mTableOffset = this.mTable.dataOffset;
+        this.mSize = this.mTable.header.rowLength;
         this.mIndex = index;
         this.mPointer = new Pointer(this.mTable.memory, this.mTableOffset + this.mIndex * this.mSize, Types.Void);
         this.mAccessors = {};
         this.mFields = {};
 
-        this.mTable.header.order.forEach(column => {
-            const description = this.mTable.header.columns[column];
+        this.mTable.header.columns.forEach(column => {
             const accessor = {
                 column,
-                getter: this._createPropertyGetter(description, this.mPointer),
+                getter: this._createPropertyGetter(column, this.mPointer),
                 setter: () => {}, // not implemented yet
             };
 
-            this.mAccessors[column] = accessor;
+            this.mAccessors[column.name] = accessor;
 
-            Object.defineProperty(this.mFields, column, {
+            Object.defineProperty(this.mFields, column.name, {
                 get: accessor.getter,
                 set: accessor.setter,
             });
@@ -137,23 +136,21 @@ export class Row {
     /**
      * Creates a function that returns the contents of a column's field as specified by the `description` object.
      * NOTE: The returned functions make use of the row's internal pointer for efficiency.
-     * @param {{type:string, size:number, offset:number}} description - Descriptions of the column this field belongs to.
+     * @param {{type:number, size:number, offset:number}} description - Descriptions of the column this field belongs to.
      * @param {Pointer} pointer - The row's internal pointer.
      * @return {function():*}
      * @private
      */
     _createPropertyGetter(description, pointer) {
         const offset = description.offset;
-        const type = Types.typeByName(description.type);
-        if (type) {
-            return () => pointer.castValueAt(offset, type);
-        } else if (description.type === 'string') {
+        const type = description.type;
+        if (type === ByteString) {
             const string = ByteString.fromPointer(this.mPointer, description.offset, description.size);
             return function getColumnString() {
                 return string; // ByteString.fromBuffer(string.buffer, string.address, string.size);
             };
         }
 
-        return () => 'Type not implemented yet';
+        return () => pointer.castValueAt(offset, type);
     }
 }
