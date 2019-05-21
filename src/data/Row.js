@@ -25,7 +25,7 @@ import * as Types from '../core/Types';
 import {ByteString} from './ByteString';
 
 /**
- * Class to read and write values of a row in a Table.
+ * Class to read and write values of a row in a {@link Table}.
  */
 export class Row {
     /**

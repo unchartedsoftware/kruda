@@ -39,7 +39,7 @@ export class Table {
 
     /**
      * The header of this table. Contains column names, order in memory, original order and type information.
-     * @return {object}
+     * @return {Header}
      */
     get header() {
         return this.mHeader;

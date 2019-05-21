@@ -23,13 +23,25 @@
 import {Int32, Float32} from '../core/Types';
 import {ByteString} from './ByteString';
 
+/**
+ * Binary type map.
+ * @type {*[]}
+ */
 const kBinaryTypeMap = [
     ByteString, // 0
     Int32, // 1
     Float32, // 2
 ];
 
+/**
+ * Class that represents the header of a {@link Table}.
+ */
 export class Header {
+    /**
+     * Convenience function to build a binary buffer containing the header info from an object descriptor.
+     * @param {{}} header - Object describing the properties of the header
+     * @return {ArrayBuffer}
+     */
     static buildBinaryHeader(header) {
         const columnCount = header.columns.length;
         let columnNameLength = 0;
@@ -84,6 +96,10 @@ export class Header {
         return buffer;
     }
 
+    /**
+     * Constructs an instance of a Header by reading its properties from the begining of the specified memory block.
+     * @param {MemoryBlock} memory - The memory containing the table header. The table header must be at the beginning.
+     */
     constructor(memory) {
         const view = memory.dataView;
         let offset = 0;
@@ -125,30 +141,59 @@ export class Header {
         }
     }
 
+    /**
+     * The length, in bytes, of this header in memory.
+     * @return {number}
+     */
     get length() {
         return this.mLength;
     }
 
+    /**
+     * The number of columns described in the header.
+     * @return {number}
+     */
     get columnCount() {
         return this.mColumnCount;
     }
 
+    /**
+     * The number of rows that the table linked to this header should contain.
+     * @return {number}
+     */
     get rowCount() {
         return this.mRowCount;
     }
 
+    /**
+     * The normalized length, in bytes, of a single row in the table.
+     * @return {number}
+     */
     get rowLength() {
         return this.mRowLength;
     }
 
+    /**
+     * The length, in bytes, of the data contained in the table this header is describing.
+     * @return {number}
+     */
     get dataLength() {
         return this.mDataLength;
     }
 
+    /**
+     * An array containing objects describing each of the columns described in this header.
+     * @return {[{name: string, size: number, offset: number, type: Type}]}
+     */
     get columns() {
         return this.mColumns;
     }
 
+    /**
+     * Returns an object which contains the names of the columns described in this header as keys and the index of the
+     * column within the `columns` array as their value.
+     * @return {Object<string, number>}
+     */
     get names() {
         return this.mNames;
     }

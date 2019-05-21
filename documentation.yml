@@ -1,9 +1,23 @@
 toc:
-    - name: Core
-      description: Classes dedicated to memory access/management.
-    - Heap
-    - MemoryBlock
-    - Pointer
+    - name: Reading Data
+      description: Loading a data into a table.
+    - Table
+    - Header
+    - Row
+    - tableFromLocalCSV
+
+    - name: Manipulating Data
+      description: Filtering, aggregation, etc.
+    - Filter
+    - FilterProcessor
+    - FilterWorker
+
+    - name: Byte Strings
+      descripton: Working with binary strings in kruda.js
+    - ByteString
+    - ByteStringBase
+    - ByteStringPtr
+    - ByteStringBuffer
 
     - name: Types
       description: Type base class, utilities and primitive type definitions.
@@ -22,29 +36,17 @@ toc:
     - Float32
     - Void
 
-    - name: Byte Strings
-      descripton: Working with binary strings in kruda.js
-    - ByteString
-    - ByteStringBase
-    - ByteStringPtr
-    - ByteStringBuffer
+    - name: Core
+      description: Classes dedicated to memory access/management.
+    - Heap
+    - MemoryBlock
+    - Pointer
 
     - name: DSBIN
       description: DS BIN files utilities.
     - DSBINLoader
     - DSBINInflate
     - DSBINLoaderWorker
-
-    - name: Reading Data
-      description: Accessing and the data from a DSBIN.
-    - Table
-    - Row
-
-    - name: Manipulating Data
-      description: Filtering, aggregation, etc.
-    - Filter
-    - FilterProcessor
-    - FilterWorker
 
     - name: Misc
       description: Uncategorized or undocumented objects.

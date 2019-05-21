@@ -26,7 +26,7 @@ import {Header} from '../Header';
 import {Table} from '../Table';
 import dekkai from 'dekkai';
 /**
- * Creates an instance that reads its contents from the specified local CSV file.
+ * Creates a {@link Table} instance and fills its contents from the specified local CSV file.
  * @param {File} file - A file instance, representing the file to load.
  * @param {Heap} heap - The heap where the loaded table will be stored.
  * @return {Table}
