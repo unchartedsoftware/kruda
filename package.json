@@ -1,6 +1,6 @@
 {
-  "name": "kruda",
-  "version": "0.1.0",
+  "name": "@uncharted.software/kruda",
+  "version": "0.0.1",
   "description": "Close to the metal data processing",
   "entry": "src/index.js",
   "main": "dist/esm/kruda.js",
