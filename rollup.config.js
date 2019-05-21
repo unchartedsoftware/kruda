@@ -22,8 +22,8 @@ const config = {
         commonjs({ include: 'node_modules/**' }),
         eslint(),
         webWorkerLoader({
-            sourcemap: true,
-            inline: false,
+            sourcemap: isBrowser,
+            inline: !isBrowser,
             loadPath: 'dist/iife/',
         }),
         urlLoader({
