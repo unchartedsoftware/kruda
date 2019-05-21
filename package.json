@@ -1,9 +1,10 @@
 {
   "name": "kruda",
   "version": "0.0.1",
-  "description": "Close to the metal memory management",
-  "main": "src/index.js",
+  "description": "Close to the metal data processing",
   "entry": "src/index.js",
+  "main": "dist/esm/kruda.js",
+  "module": "dist/esm/kruda.js",
   "author": "Dario Segura",
   "license": "MIT",
   "keywords": [
