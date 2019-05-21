@@ -6,6 +6,12 @@
   "entry": "src/index.js",
   "author": "Dario Segura",
   "license": "MIT",
+  "keywords": [
+    "csv",
+    "data",
+    "browser",
+    "fast"
+  ],
   "scripts": {
     "build": "npm-run-all --parallel build:**",
     "build:dev": "rollup --config",
