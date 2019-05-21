@@ -18,7 +18,8 @@
     "build:dev": "rollup --config",
     "start": "cross-env TARGET='browser' rollup --config --watch",
     "watch": "rollup --config --watch",
-    "docs": "documentation build src/** -f html -c documentation.yml -o ./docs"
+    "docs": "documentation build src/** -f html -c documentation.yml -o ./docs",
+    "prepack": "npm-run-all build"
   },
   "devDependencies": {
     "cli-progress": "^2.1.1",
