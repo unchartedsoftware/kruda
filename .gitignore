@@ -2,6 +2,8 @@ node_modules
 .idea
 dist
 
+.DS_Store
+
 www/keys/*
 keys/*.p8
 server/*.pem
