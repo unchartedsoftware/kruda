@@ -127,6 +127,9 @@
         tableStr += '</table>';
 
         document.body.innerHTML += tableStr;
+
+        /* once we are done with the result, destroy it */
+        result.destroy();
     }
 
     /**
@@ -202,6 +205,9 @@
 
         /* run the filter */
         await runFilter(table);
+
+        /* once we are done with the table, destroy it */
+        table.destroy();
     }
 
     const triggerLoadFromURL = false; // switch to `false` to load from a local file.
