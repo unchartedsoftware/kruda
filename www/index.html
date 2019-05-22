@@ -93,6 +93,7 @@
         /* run the filter with the rules */
         const result = await filter.run(filterRules);
         const end = performance.now();
+        // console.log(result);
         document.body.innerText += `Filter took ${end - start}ms\n`;
         document.body.innerText += `Results: ${result.rowCount}\n`;
 
@@ -101,9 +102,9 @@
 
         /* add the table header and create getters for each of the column's values */
         tableStr += '<thead><tr>';
-        filter.resultDescription.forEach(description => {
+        result.header.columns.forEach(column => {
             /* write the table header's column */
-            tableStr += `<th>${description.column ? description.column : 'Index'}</th>`;
+            tableStr += `<th>${column.name ? column.name : 'Index'}</th>`;
         });
         tableStr += '</tr></thead>';
 
@@ -158,7 +159,7 @@
             /* if it's a CSV file */
             if (file.type === 'text/csv') {
                 table = await kruda.tableFromLocalCSV(file, heap);
-                console.log(table);
+                // console.log(table);
             } else { // else, assume it's a DS.BIN
                 const data = await kruda.DSBINLoader.loadFromFile(fileInput.files[0], heap);
                 /* create a table from the loaded data */
