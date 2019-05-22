@@ -239,6 +239,11 @@ export class Filter {
             const headerView = new Uint8Array(binaryHeader);
             resultView.set(headerView, resultMemory.address);
 
+            const finalMemorySize = this.mResultHeader.length + this.mResultHeader.dataLength;
+            if (finalMemorySize < resultMemory.size) {
+                resultMemory.heap.shrink(resultMemory, finalMemorySize);
+            }
+
             const resultTable = new Table(resultMemory);
 
             if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
