@@ -111,9 +111,10 @@
         /* add the table's body using the getters created above */
         tableStr += '<tbody>';
         /* iterate through the results, up to a maximum of 1000 */
-        let row;
-        for (let i = 0, n = Math.min(result.rowCount, 1000); i < n; ++i) {
-            row = result.getRow(i);
+        for (let row of result) {
+            if (row.index >= 1000) {
+                break;
+            }
             tableStr += '<tr>';
             /* iterate through all the getters */
             for (let ii = 0; ii < row.accessors.length; ++ii) {
