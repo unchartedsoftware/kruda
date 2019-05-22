@@ -10,7 +10,8 @@ const urlLoader = require('rollup-plugin-url');
 const commonjs = require('rollup-plugin-commonjs');
 const jscc = require('rollup-plugin-jscc');
 
-const JS_OUTPUT = `${packageJson.name}.js`;
+const moduleName = packageJson.name.split('/').pop();
+const JS_OUTPUT = `${moduleName}.js`;
 const isBrowser = (process.env.TARGET === 'browser');
 const outputName = JS_OUTPUT;
 
@@ -24,7 +25,7 @@ const config = {
         webWorkerLoader({
             sourcemap: isBrowser,
             inline: !isBrowser,
-            loadPath: 'dist/iife/@uncharted.software/',
+            loadPath: 'dist/iife/',
         }),
         urlLoader({
             limit: 1024 * 1024 * 1024, // 1GB - Basically unlimited
@@ -45,7 +46,7 @@ if (isBrowser) {
     config.output.push({
         file: path.resolve(__dirname, `dist/iife/${outputName}`),
         format: 'iife',
-        name: 'kruda',
+        name: moduleName,
         sourcemap: 'inline',
     });
 
@@ -80,14 +81,14 @@ if (isBrowser) {
     config.output.push({
         file: path.resolve(__dirname, `dist/umd/${outputName}`),
         format: 'umd',
-        name: 'kruda',
+        name: moduleName,
         sourcemap: true,
     });
 
     config.output.push({
         file: path.resolve(__dirname, `dist/iife/${outputName}`),
         format: 'iife',
-        name: 'kruda',
+        name: moduleName,
         sourcemap: true,
     });
 }
