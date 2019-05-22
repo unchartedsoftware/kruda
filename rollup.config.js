@@ -35,7 +35,7 @@ const config = {
             prefixes: '/// ',
             sourcemap: false,
             values: {
-                _DEBUG: true,
+                _DEBUG: false,
             },
         }),
     ],
