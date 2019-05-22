@@ -117,6 +117,15 @@ export class ProxyRow {
      * @param {number} value - The new index.
      */
     set index(value) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (!value >= this.mTable.rowCount) {
+            throw 'ERROR: Index out of bounds!';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
         this.mIndexRow.index = value;
         this.mSourceRow.index = this.mIndexRow.accessors[0].getter();
     }

@@ -87,6 +87,15 @@ export class Table {
      * @return {Row}
      */
     getRow(index, row = new Row(this, index)) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (!index >= this.rowCount) {
+            throw 'ERROR: Index out of bounds!';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
         row.index = index;
         return row;
     }

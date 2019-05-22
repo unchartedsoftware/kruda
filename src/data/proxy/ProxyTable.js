@@ -131,6 +131,15 @@ export class ProxyTable {
      * @return {ProxyRow}
      */
     getRow(index, row = new ProxyRow(this, index)) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (!index >= this.rowCount) {
+            throw 'ERROR: Index out of bounds!';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
         row.index = index;
         return row;
     }

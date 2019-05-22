@@ -137,6 +137,15 @@ export class Row {
      * @param {number} value - The new index.
      */
     set index(value) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (!value >= this.mTable.rowCount) {
+            throw 'ERROR: Index out of bounds!';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
         this.mIndex = value;
         this.mPointer.address = this.mTableOffset + this.mIndex * this.mSize;
     }

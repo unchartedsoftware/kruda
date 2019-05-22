@@ -309,9 +309,15 @@ export class Filter {
             };
 
             const type = kBinaryTypeMap.indexOf(Types.typeByName(resultDescription[i].type));
+            /// #if !_DEBUG
+            /*
+            /// #endif
             if (type === -1) {
                 throw `ERROR: Unsupported type (${resultDescription[i].type})`;
             }
+            /// #if !_DEBUG
+             */
+            /// #endif
 
             column.type = type;
 
