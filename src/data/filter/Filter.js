@@ -25,6 +25,8 @@ import * as Types from '../../core/Types';
 import FilterWorker from 'web-worker:./Filter.worker';
 import {coreCount} from '../../core/CoreCount';
 import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
+import {Header, kBinaryTypeMap} from '../Header';
+import {Table} from '../Table';
 
 /**
  * Default, immutable object, representing a result index with the row index in it.
@@ -64,6 +66,8 @@ export class Filter {
         this.mMemory = null;
         this.mWorkerPool = null;
 
+        this.mResultHeader = this._buildResultHeader(this.mResultDescription);
+
         this.mInitialized = new Promise(resolve => {
             if (workerCount < 1 || isNaN(workerCount)) {
                 coreCount().then(({estimatedPhysicalCores}) => {
@@ -97,11 +101,14 @@ export class Filter {
      * @param {Object[]} value - The new object array.
      */
     set resultDescription(value) {
-        this.mResultDescription = value;
+        this.mResultDescription = [...value];
+
         this.mResultRowSize = 0;
         for (let i = 0; i < this.mResultDescription.length; ++i) {
             this.mResultRowSize += this.mResultDescription[i].size;
         }
+
+        this.mResultHeader = this._buildResultHeader(this.mResultDescription);
     }
 
     /**
@@ -122,6 +129,26 @@ export class Filter {
             type: columns[names[columnName]].type.name,
             size: columns[names[columnName]].size,
             column: columnName,
+        };
+    }
+
+    /**
+     * Utility function to create an object describing a result field for the column with the specified index.
+     * If the `columnIndex` parameter is omitted or is set to `null`, an object that adds the index of the resulting row
+     * will be returned.
+     * @param {number|null=} columnIndex - The index of the column for which to create a result field object. Defaults to `null`.
+     * @return {Object}
+     */
+    resultFieldForColumnIndex(columnIndex = null) {
+        if (columnIndex === null) {
+            return kRowIndexResult;
+        }
+
+        const columns = this.mTable.header.columns;
+        return {
+            type: columns[columnIndex].type.name,
+            size: columns[columnIndex].size,
+            column: columns[columnIndex].name,
         };
     }
 
@@ -180,7 +207,7 @@ export class Filter {
      * }
      *
      * @param {Array<Object[]>} rules - The rules to run this filter with.
-     * @return {{memory: MemoryBlock, count: number}}
+     * @return {Table}
      */
     async run(rules) {
         await this.mInitialized;
@@ -191,7 +218,7 @@ export class Filter {
             const promise = this.mWorkerPool.scheduleTask('processFilters', {
                 rules: rules,
                 resultDescription: this.mResultDescription,
-                resultAddress: resultMemory.address,
+                resultAddress: resultMemory.address + this.mResultHeader.length,
                 resultSize: resultMemory.size,
                 indicesAddress: indices.address,
                 rowBatchSize: 1024,
@@ -202,10 +229,17 @@ export class Filter {
             const indicesPtr = new Pointer(indices, 0, Types.Uint32);
             const resultCount = indicesPtr.getValueAt(1);
             indices.free();
-            return {
-                memory: resultMemory,
-                count: resultCount,
-            };
+
+            this.mResultHeader.rowCount = resultCount;
+            this.mResultHeader.dataLength = this.mResultRowSize * resultCount;
+
+            const binaryHeader = Header.buildBinaryHeader(this.mResultHeader);
+            const resultView = new Uint8Array(resultMemory.buffer);
+            const headerView = new Uint8Array(binaryHeader);
+            resultView.set(headerView, resultMemory.address);
+
+
+            return new Table(resultMemory);
         });
     }
 
@@ -215,7 +249,9 @@ export class Filter {
      * @private
      */
     _allocateResultMemory() {
-        return this.mHeap.malloc(this.mResultRowSize * this.mTable.rowCount);
+        const maxDataLength = this.mResultRowSize * this.mTable.rowCount;
+        const headerLength = this.mResultHeader.length;
+        return this.mHeap.malloc(maxDataLength + headerLength);
     }
 
     /**
@@ -240,5 +276,46 @@ export class Filter {
                 },
             });
         }
+    }
+
+    /**
+     * Utility function to build a preliminary version of the result table's header.
+     * @param {Object[]} resultDescription - The result description used to generate the filter result.
+     * @return {{rowLength: number, columns: Array, dataLength: number, length: number, rowCount: number}}
+     * @private
+     */
+    _buildResultHeader(resultDescription) {
+        const header = {
+            length: 0,
+            columns: [],
+            dataLength: 0,
+            rowCount: 0,
+            rowLength: this.mResultRowSize,
+        };
+
+        let offset = 0;
+        let columnNameLength = 0;
+        for (let i = 0; i < resultDescription.length; ++i) {
+            const column = {
+                length: resultDescription[i].size,
+                offset: offset,
+                name: resultDescription[i].column || '',
+            };
+
+            const type = kBinaryTypeMap.indexOf(Types.typeByName(resultDescription[i].type));
+            if (type === -1) {
+                throw `ERROR: Unsupported type (${resultDescription[i].type})`;
+            }
+
+            column.type = type;
+
+            header.columns.push(column);
+            offset += resultDescription[i].size;
+            columnNameLength += Math.min(255, column.name.length) + 1;
+        }
+
+        header.length = 12 * header.columns.length + columnNameLength + 20;
+
+        return header;
     }
 }
