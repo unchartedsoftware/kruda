@@ -115,7 +115,7 @@ export class Row {
     /**
      * The internal pointer this row uses to access its memory. Changing the location of this pointer will result in
      * the contents of the row being updated.
-     * WARNING: Setting the address of this pointer to a memory address taht does not represent the beginning of a
+     * WARNING: Setting the address of this pointer to a memory address that does not represent the beginning of a
      * row in a table will result in undefined behaviour.
      * @return {Pointer}
      */
