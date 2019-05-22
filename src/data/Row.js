@@ -43,7 +43,7 @@ export class Row {
         this.mSize = this.mTable.header.rowLength;
         this.mIndex = index;
         this.mPointer = new Pointer(this.mTable.memory, this.mTableOffset + this.mIndex * this.mSize, Types.Void);
-        this.mAccessors = {};
+        this.mAccessors = [];
         this.mFields = {};
 
         this.mTable.header.columns.forEach(column => {
@@ -53,7 +53,7 @@ export class Row {
                 setter: () => {}, // not implemented yet
             };
 
-            this.mAccessors[column.name] = accessor;
+            this.mAccessors.push(accessor);
 
             Object.defineProperty(this.mFields, column.name, {
                 get: accessor.getter,
@@ -80,16 +80,24 @@ export class Row {
 
     /**
      * An array containing the names of the columns in the table this row belongs to.
-     * @return {Array}
+     * @return {{name: string, size: number, offset: number, type: Type}[]}
      */
     get columns() {
-        return this.mTable.header.orderOriginal;
+        return this.mTable.header.columns;
     }
 
     /**
-     * An object containing accessor objects ({{column:string, getter:function():*, setter:null}}) for the fields in
-     * this row.
-     * @return {object}
+     * An object containing the column names as keys and their index in the table's header as their value.
+     * @return {Object<string, number>}
+     */
+    get names() {
+        return this.mTable.header.names;
+    }
+
+    /**
+     * An array, ordeed by the order in which each field appears in the table's header, containing accessor objects for
+     * the fields in this row.
+     * @return {{column:string, getter:function():*, setter:null}[]}
      */
     get accessors() {
         return this.mAccessors;

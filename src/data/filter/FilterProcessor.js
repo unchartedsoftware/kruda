@@ -99,7 +99,7 @@ export class FilterProcessor {
             const type = Types.typeByName(description[i].type);
             const fieldOffset = resultSize;
             if (description[i].column) {
-                const getter = baseRow.accessors[description[i].column].getter;
+                const getter = baseRow.accessors[baseRow.names[description[i].column]].getter;
                 writers.push(function resultWriterField(row, offset, view) {
                     type.set(view, getter(), offset + fieldOffset);
                 });
@@ -187,8 +187,8 @@ export class FilterProcessor {
      * @private
      */
     _generateFieldTester(field, row) {
-        const column = this.mTable.header.columns[this.mTable.header.names[field.name]];
-        const getter = row.accessors[field.name].getter;
+        const column = this.mTable.header.columns[row.names[field.name]];
+        const getter = row.accessors[row.names[field.name]].getter;
         switch (field.operation) {
             case 'contains': {
                 const value = ByteString.fromString(field.value);
