@@ -20,8 +20,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Type} from '../core/Types';
-import {Pointer} from '../core/Pointer';
+import {Type} from '../../core/Types';
+import {Pointer} from '../../core/Pointer';
 
 /**
  * Constant variable, represents the character code of the uppercase letter `A`, used to convert string to lower case.

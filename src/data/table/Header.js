@@ -20,8 +20,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Int32, Float32, Uint32} from '../core/Types';
-import {ByteString} from './ByteString';
+import {Int32, Float32, Uint32} from '../../core/Types';
+import {ByteString} from '../types/ByteString';
 
 /**
  * Binary type map.

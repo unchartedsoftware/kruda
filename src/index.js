@@ -28,11 +28,11 @@ export {Heap} from './core/Heap';
 export {MemoryBlock} from './core/MemoryBlock';
 export {Pointer} from './core/Pointer';
 
-export {ByteString} from './data/ByteString';
+export {ByteString} from './data/types/ByteString';
 
 export {DSBINLoader} from './DSBIN/DSBINLoader';
 
-export {Table} from './data/Table';
+export {Table} from './data/table/Table';
 export {Filter} from './data/filter/Filter';
 
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';

@@ -22,8 +22,8 @@
  */
 
 import {coreCount} from '../../core/CoreCount';
-import {Header} from '../Header';
-import {Table} from '../Table';
+import {Header} from '../table/Header';
+import {Table} from '../table/Table';
 import dekkai from 'dekkai';
 /**
  * Creates a {@link Table} instance and fills its contents from the specified local CSV file.

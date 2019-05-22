@@ -20,9 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Pointer} from '../core/Pointer';
-import * as Types from '../core/Types';
-import {ByteString} from './ByteString';
+import {Pointer} from '../../core/Pointer';
+import * as Types from '../../core/Types';
+import {ByteString} from '../types/ByteString';
 
 /**
  * Class to read and write values of a row in a {@link Table}.

@@ -22,8 +22,8 @@
  */
 import {Heap} from '../../core/Heap';
 import {MemoryBlock} from '../../core/MemoryBlock';
-import {Table} from '../Table';
-import {ByteString} from '../ByteString';
+import {Table} from '../table/Table';
+import {ByteString} from '../types/ByteString';
 import * as Types from '../../core/Types';
 
 /**

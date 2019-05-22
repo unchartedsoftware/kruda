@@ -25,8 +25,8 @@ import * as Types from '../../core/Types';
 import FilterWorker from 'web-worker:./Filter.worker';
 import {coreCount} from '../../core/CoreCount';
 import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
-import {Header, kBinaryTypeMap} from '../Header';
-import {Table} from '../Table';
+import {Header, kBinaryTypeMap} from '../table/Header';
+import {Table} from '../table/Table';
 
 /**
  * Default, immutable object, representing a result index with the row index in it.
