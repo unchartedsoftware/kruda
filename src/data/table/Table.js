@@ -38,6 +38,16 @@ export class Table {
     }
 
     /**
+     * Destroys this table instance and frees the memory associated with it. This method must be called when the memory
+     * associated to this table is no longer needed to avoid memory leaks in kruda's internal memory management system.
+     */
+    destroy() {
+        this.mMemory.free();
+        delete this.mMemory;
+        delete this.mHeader;
+    }
+
+    /**
      * The header of this table. Contains column names, order in memory, original order and type information.
      * @return {Header}
      */

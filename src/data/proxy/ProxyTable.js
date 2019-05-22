@@ -39,6 +39,19 @@ export class ProxyTable {
     }
 
     /**
+     * Destroys this table instance and frees the memory associated with it. This method must be called when the memory
+     * associated to this table is no longer needed to avoid memory leaks in kruda's internal memory management system.
+     * WARNING: While this method destroys its index table, it does not destroy its source table.
+     * DEV NOTE: Implementing a reference counting system could make it more intuitive and allow users to leave memory
+     * management to kruda (although retaining and releasing instances would still be the user's responsibility).
+     */
+    destroy() {
+        this.mIndexTable.destroy();
+        delete this.mSourceTable;
+        delete this.mIndexTable;
+    }
+
+    /**
      * The table containing the indices to access the data from the source table.
      * @return {Table}
      */
