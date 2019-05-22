@@ -24,7 +24,7 @@ const config = {
         webWorkerLoader({
             sourcemap: isBrowser,
             inline: !isBrowser,
-            loadPath: 'dist/iife/',
+            loadPath: 'dist/iife/@uncharted.software/',
         }),
         urlLoader({
             limit: 1024 * 1024 * 1024, // 1GB - Basically unlimited
@@ -45,7 +45,7 @@ if (isBrowser) {
     config.output.push({
         file: path.resolve(__dirname, `dist/iife/${outputName}`),
         format: 'iife',
-        name: packageJson.name,
+        name: 'kruda',
         sourcemap: 'inline',
     });
 
@@ -80,14 +80,14 @@ if (isBrowser) {
     config.output.push({
         file: path.resolve(__dirname, `dist/umd/${outputName}`),
         format: 'umd',
-        name: packageJson.name,
+        name: 'kruda',
         sourcemap: true,
     });
 
     config.output.push({
         file: path.resolve(__dirname, `dist/iife/${outputName}`),
         format: 'iife',
-        name: packageJson.name,
+        name: 'kruda',
         sourcemap: true,
     });
 }
