@@ -20,17 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Int32, Float32} from '../core/Types';
+import {Int32, Float32, Uint32} from '../core/Types';
 import {ByteString} from './ByteString';
 
 /**
  * Binary type map.
  * @type {*[]}
  */
-const kBinaryTypeMap = [
+export const kBinaryTypeMap = [
     ByteString, // 0
     Int32, // 1
     Float32, // 2
+    Uint32, // 3
 ];
 
 /**
