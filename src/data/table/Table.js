@@ -73,9 +73,49 @@ export class Table {
      * Gets a new Row instance pointing at the row at the specified index.
      * NOTE: The returned row can be moved to point to a different row by changing its `index` property.
      * @param {number} index - The index of the row to get the data from.
+     * @param {Row=} row - An optional row, belonging to this table, to reuse. Useful to reduce garbage collection.
      * @return {Row}
      */
-    getRow(index) {
-        return new Row(this, index);
+    getRow(index, row = new Row(this, index)) {
+        row.index = index;
+        return row;
+    }
+
+    /**
+     * Iterates through all the rows in this table and invokes the provided callback `itr` on each iteration.
+     * WARNING: This function is designed to avoid garbage collection and improve performance so the row passed to the
+     * `itr` callback is reused, the row cannot be stored as its contents will change. If you need to store unique rows
+     * consider using the `getRow` method.
+     * @param {function(row:Row, i:number):void} itr - Callback function to invoke for each row in this table.
+     */
+    forEach(itr) {
+        const row = new Row(this, 0);
+        itr(row, 0);
+        for (let i = 1, n = this.rowCount; i < n; ++i) {
+            row.index = i;
+            itr(row, i);
+        }
+    }
+
+    /**
+     * Iterable protocol implementation: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterable
+     * WARNING: This function is designed to avoid garbage collection and improve performance so the row passed to the
+     * `itr` callback is reused, the row cannot be stored as its contents will change. If you need to store unique rows
+     * consider using the `getRow` method.
+     * @return {Iterator}
+     */
+    [Symbol.iterator]() {
+        return {
+            i: 0,
+            n: this.rowCount,
+            row: new Row(this, 0),
+            next() {
+                if (this.i < this.n) {
+                    this.row.index = this.i++;
+                    return { value: this.row, done: false };
+                }
+                return { value: undefined, done: true };
+            },
+        };
     }
 }
