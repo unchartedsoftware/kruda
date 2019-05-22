@@ -48,7 +48,7 @@
 
         /* create the rules to be applied with the filter */
         const filterRules = [ // must be an array of arrays
-            [ // each inner array represents an list of rules to be and'ed..
+            [ // each inner array represents a list of rules to be and'ed..
                 {
                     name: 'Origin_airport',
                     value: 'SEA',
@@ -94,43 +94,30 @@
         const result = await filter.run(filterRules);
         const end = performance.now();
         document.body.innerText += `Filter took ${end - start}ms\n`;
-        document.body.innerText += `Results: ${result.count}\n`;
-
-        /* get a data view from the resulting memory */
-        const view = result.memory.dataView;
-        const getters = [];
-        let columnOffset = 0;
+        document.body.innerText += `Results: ${result.rowCount}\n`;
 
         /* create an HTML string to render the resulting table */
         let tableStr = '<table>';
 
         /* add the table header and create getters for each of the column's values */
         tableStr += '<thead><tr>';
-        filter.resultDescription.forEach(result => {
-            /* WARNING - The following code will be replaced for friendlier methods in the future */
-            /* get the type of the value */
-            const type = kruda.Types.typeByName(result.type);
-            /* save its byte offset */
-            const getterOffset = columnOffset;
-            /* advance the byte offset (for the next column) */
-            columnOffset += result.size;
-            /* push a function that gets the value of the type at the specified offset */
-            getters.push(offset => type.get(view, offset + getterOffset));
-
+        filter.resultDescription.forEach(description => {
             /* write the table header's column */
-            tableStr += `<th>${result.column ? result.column : 'Index'}</th>`;
+            tableStr += `<th>${description.column ? description.column : 'Index'}</th>`;
         });
         tableStr += '</tr></thead>';
 
         /* add the table's body using the getters created above */
         tableStr += '<tbody>';
         /* iterate through the results, up to a maximum of 1000 */
-        for (let i = 0, n = Math.min(result.count, 1000); i < n; ++i) {
+        let row;
+        for (let i = 0, n = Math.min(result.rowCount, 1000); i < n; ++i) {
+            row = result.getRow(i);
             tableStr += '<tr>';
             /* iterate through all the getters */
-            for (let ii = 0; ii < getters.length; ++ii) {
+            for (let ii = 0; ii < row.accessors.length; ++ii) {
                 /* append the value of the column, using the getter */
-                tableStr += `<td>${getters[ii](i * filter.resultRowSize)}</td>`;
+                tableStr += `<td>${row.accessors[ii].getter()}</td>`;
             }
             tableStr += '</tr>';
         }
