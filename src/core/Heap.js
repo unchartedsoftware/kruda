@@ -273,9 +273,10 @@ export class Heap {
 
         let address;
         address = Atomics.add(this.mUint32View, 1, blockSize);
+        Atomics.store(this.mUint32View, ((address + blockSize) >> 2) - 1, address);
+
         Atomics.store(this.mInt32View, 2, 0);
         Atomics.notify(this.mInt32View, 2, 1);
-        Atomics.store(this.mUint32View, ((address + blockSize) >> 2) - 1, address);
 
         return new MemoryBlock(this, address, blockSize - 4);
     }
@@ -332,6 +333,60 @@ export class Heap {
     }
 
     /**
+     * Shrinks the specified memory block to the specified size.
+     * @param {MemoryBlock} memory - The memory block to shrink.
+     * @param {number} size - The new memory size for the block, must be smaller than the its current size.
+     */
+    shrink(memory, size) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (size >= memory.size) {
+            throw 'ERROR: The new memory size must be smaller than the current size';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+
+        const paddingAddress = memory.address + memory.size;
+        const newSize = ((size + 3) | 3) + 1;
+        const endAddress = paddingAddress + 4;
+
+        if (newSize < memory.size) {
+            let lockState = 1;
+            while (lockState) {
+                lockState = Atomics.compareExchange(this.mInt32View, 2, 0, 1);
+                if (lockState) {
+                    Atomics.wait(this.mInt32View, 2, 1);
+                }
+            }
+
+            /// #if !_DEBUG
+            /*
+            /// #endif
+            if (this._isMarkedFree(paddingAddress)) {
+                throw 'ERROR: Trying to shrink a memory block that has already been freed';
+            }
+            /// #if !_DEBUG
+             */
+            /// #endif
+
+            Atomics.store(this.mUint32View, ((memory.address + newSize) >> 2) - 1, memory.address);
+            Atomics.store(this.mUint32View, paddingAddress >> 2, memory.address + newSize);
+            Atomics.or(this.mUint32View, paddingAddress >> 2, kFreeFlag);
+
+            memory._setSize(size);
+
+            if (this.allocOffset === endAddress) {
+                Atomics.store(this.mUint32View, 1, this._findNewAllocOffset(memory.address));
+            }
+
+            Atomics.store(this.mInt32View, 2, 0);
+            Atomics.notify(this.mInt32View, 2, 1);
+        }
+    }
+
+    /**
      * Checks if the padding at the specified offset is marked as free.
      * @param {number} offset - The offset of the memory block padding.
      * @return {number}
@@ -353,7 +408,7 @@ export class Heap {
 
     /**
      * Finds how much memory can be reclaimed by recursively checking all memory blocks that are marked "free" from
-     * the tom of the stack.
+     * the top of the stack.
      * @param {number} offset - Offset of the end of the memory block to check.
      * @return {number}
      * @private

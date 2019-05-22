@@ -96,4 +96,24 @@ export class MemoryBlock {
         this.mSize = 0;
         this.mDataView = null;
     }
+
+    /**
+     * Sets the size of the memory.
+     * WARNING: The new size must be smaller than the previous size.
+     * @param {number} size - The new size for this memory.
+     * @private
+     */
+    _setSize(size) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (size > this.mSize) {
+            throw 'ERROR: The memory size can only be changed to be smaller than what it was originally.';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+        this.mSize = size;
+        this.mDataView = new DataView(this.mHeap.buffer, this.mOffset, this.mSize);
+    }
 }
