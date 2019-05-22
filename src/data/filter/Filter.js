@@ -27,6 +27,7 @@ import {coreCount} from '../../core/CoreCount';
 import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
 import {Header, kBinaryTypeMap} from '../table/Header';
 import {Table} from '../table/Table';
+import {ProxyTable} from '../proxy/ProxyTable';
 
 /**
  * Default, immutable object, representing a result index with the row index in it.
@@ -238,8 +239,13 @@ export class Filter {
             const headerView = new Uint8Array(binaryHeader);
             resultView.set(headerView, resultMemory.address);
 
+            const resultTable = new Table(resultMemory);
 
-            return new Table(resultMemory);
+            if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
+                return new ProxyTable(this.mTable, resultTable);
+            }
+
+            return resultTable;
         });
     }
 
