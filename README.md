@@ -14,7 +14,7 @@ npm install @uncharted.software/kruda
 ```
 ### Usage
 - `www/index.html` has a working example you can look at.
-- Look at the [documentation](https://unchartedsoftware.github.io/kruda.js/) 
+- Look at the [documentation](https://unchartedsoftware.github.io/kruda/) 
 
 ### Running the example.
 - Run `yarn install`
