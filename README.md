@@ -4,6 +4,17 @@ This is a derivative work of [BigDataParser](https://github.com/darionco/BigData
   
 **WARNING:** This is pre-release software under active development.
 
+### Installation
+```
+yarn add @uncharted.software/kruda
+```
+or
+```
+npm install @uncharted.software/kruda
+```
+### Usage
+- `www/index.html` has a working example you can look at.
+- Look at the [documentation](https://unchartedsoftware.github.io/kruda.js/) 
 
 ### Running the example.
 - Run `yarn install`
@@ -33,23 +44,15 @@ This is a derivative work of [BigDataParser](https://github.com/darionco/BigData
     - Filtering all ~3.6 million rows with the rules above takes ~115ms
     - Filtering all ~3.6 million rows with a filter that returns every single row takes ~462ms  
 
-### Usage
-- `www/index.html` has a working example you can look at.
-- Look at the [documentation](https://unchartedsoftware.github.io/kruda.js/) 
-
 ### Debugging
 Unfortunately many error checks must be disabled for the sake of performance, `if` statements are very expensive!  
-You can re-enable them by changing the flag `DEBUG` in the `webpack.config.js` file:
+You can re-enable them by changing the flag `_DEBUG` in the `rollup.config.js` file:
 ```
-{
-    test: /\.js$/,
-    loader: 'ifdef-loader',
-    options: {
-        DEBUG: false, // <<<<<< CHANGE THIS LINE TO `true`
-        PRODUCTION: isProduction,
-        USE_SHARED_MEMORY: true,
-        BROWSER: isBrowser,
+jscc({
+    prefixes: '/// ',
+    sourcemap: false,
+    values: {
+        _DEBUG: false, // <<<<<< CHANGE THIS LINE TO `true`
     },
-    exclude: /node_modules/,
-},
+}),
 ``` 
