@@ -1,9 +1,11 @@
 toc:
     - name: Reading Data
       description: Loading a data into a table.
-    - Table
     - Header
+    - Table
     - Row
+    - ProxyTable
+    - ProxyRow
     - tableFromLocalCSV
 
     - name: Manipulating Data
