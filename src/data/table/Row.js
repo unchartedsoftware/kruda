@@ -26,17 +26,16 @@ import {ByteString} from '../types/ByteString';
 
 /**
  * Class to read and write values of a row in a {@link Table}.
+ * Constructs an instance of a row in the given table at the specified index.
+ * Each Row instance automatically adds new properties with the names of the columns to its `fields` object for
+ * easy access.
+ * WARNING: String returned by a row will mutate when the row's address changes, if strings with constant values are
+ * needed, either copy of the string or create a JS string from it by calling `toString` on it.
+ * @class Row
+ * @param {Table} table - The table this row belongs to.
+ * @param {number=} index - the row index at which this instance will read data. Defaults to 0.
  */
 export class Row {
-    /**
-     * Constructs an instance of a row in the given table at the specified index.
-     * Each Row instance automatically adds new properties with the names of the columns to its `fields` object for
-     * easy access.
-     * WARNING: String returned by a row will mutate when the row's address changes, if strings with constant values are
-     * needed, either copy of the string or create a JS string from it by calling `toString` on it.
-     * @param {Table} table - The table this row belongs to.
-     * @param {number=} index - the row index at which this instance will read data. Defaults to 0.
-     */
     constructor(table, index = 0) {
         this.mTable = table;
         this.mTableOffset = this.mTable.dataOffset;
@@ -64,7 +63,7 @@ export class Row {
 
     /**
      * The size, in bytes, of a row in the table.
-     * @return {number}
+     * @type {number}
      */
     get size() {
         return this.mSize;
@@ -72,7 +71,7 @@ export class Row {
 
     /**
      * The table this row belongs to.
-     * @return {Table}
+     * @type {Table}
      */
     get table() {
         return this.mTable;
@@ -80,7 +79,7 @@ export class Row {
 
     /**
      * An array containing the names of the columns in the table this row belongs to.
-     * @return {{name: string, size: number, offset: number, type: Type}[]}
+     * @type {Array<{name: string, size: number, offset: number, type: Type}>}
      */
     get columns() {
         return this.mTable.header.columns;
@@ -88,7 +87,7 @@ export class Row {
 
     /**
      * An object containing the column names as keys and their index in the table's header as their value.
-     * @return {Object<string, number>}
+     * @type {Object<string, number>}
      */
     get names() {
         return this.mTable.header.names;
@@ -97,7 +96,7 @@ export class Row {
     /**
      * An array, ordeed by the order in which each field appears in the table's header, containing accessor objects for
      * the fields in this row.
-     * @return {{column:string, getter:function():*, setter:null}[]}
+     * @type {Array<{column:string, getter:function():*, setter:null}>}
      */
     get accessors() {
         return this.mAccessors;
@@ -106,7 +105,7 @@ export class Row {
     /**
      * An object containing properties to get and set the values for the fields in this row based on their column names.
      * NOTE: Setting values is not implemented yet.
-     * @return {object}
+     * @type {object}
      */
     get fields() {
         return this.mFields;
@@ -117,7 +116,7 @@ export class Row {
      * the contents of the row being updated.
      * WARNING: Setting the address of this pointer to a memory address that does not represent the beginning of a
      * row in a table will result in undefined behaviour.
-     * @return {Pointer}
+     * @type {Pointer}
      */
     get pointer() {
         return this.mPointer;
@@ -125,17 +124,13 @@ export class Row {
 
     /**
      * The row index this instance is currently pointing at.
-     * @return {number}
+     * Does not take into consideration the internal pointer address
+     * to calculate the new row address so it's safe to use to reset the internal pointer address.
+     * @type {number}
      */
     get index() {
         return this.mIndex;
     }
-
-    /**
-     * Sets the row index this row should be pointing at. Does not take into consideration the internal pointer address
-     * to calculate the new row address so it's safe to use to reset the internal pointer address.
-     * @param {number} value - The new index.
-     */
     set index(value) {
         /// #if !_DEBUG
         /*

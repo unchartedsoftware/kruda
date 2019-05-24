@@ -26,13 +26,11 @@ import {ProxyRow} from './ProxyRow';
 /**
  * Class that fetches the data from a source table based on the index numbers of another table, usually resulting from
  * a filter operation.
+ * @class ProxyTable
+ * @param {Table} sourceTable - The table from which the values will be read.
+ * @param {Table} indexTable - The table containing the indices to fetch.
  */
 export class ProxyTable {
-    /**
-     * ProxyTable constructor.
-     * @param {Table} sourceTable - The table from which the values will be read.
-     * @param {Table} indexTable - The table containing the indices to fetch.
-     */
     constructor(sourceTable, indexTable) {
         this.mSourceTable = sourceTable;
         this.mIndexTable = indexTable;
@@ -53,7 +51,7 @@ export class ProxyTable {
 
     /**
      * The table containing the indices to access the data from the source table.
-     * @return {Table}
+     * @type {Table}
      */
     get indexTable() {
         return this.mIndexTable;
@@ -61,7 +59,7 @@ export class ProxyTable {
 
     /**
      * The table which will be proxied using the indices in the index table.
-     * @return {Table}
+     * @type {Table}
      */
     get sourceTable() {
         return this.mSourceTable;
@@ -69,7 +67,7 @@ export class ProxyTable {
 
     /**
      * The header of the source data table. Contains column names, order in memory, original order and type information.
-     * @return {Header}
+     * @type {Header}
      */
     get header() {
         return this.mSourceTable.header;
@@ -77,7 +75,7 @@ export class ProxyTable {
 
     /**
      * The header of the index data table. Contains column names, order in memory, original order and type information.
-     * @return {Header}
+     * @type {Header}
      */
     get indexTableHeader() {
         return this.mSourceTable.header;
@@ -85,7 +83,7 @@ export class ProxyTable {
 
     /**
      * The total number of rows in this table.
-     * @return {number}
+     * @type {number}
      */
     get rowCount() {
         return this.mIndexTable.rowCount;
@@ -93,7 +91,7 @@ export class ProxyTable {
 
     /**
      * The memory block that contains the index table's layout and data.
-     * @return {MemoryBlock}
+     * @type {MemoryBlock}
      */
     get memory() {
         return this.mIndexTable.memory;
@@ -101,7 +99,7 @@ export class ProxyTable {
 
     /**
      * The memory block that contains the source data table's layout and data.
-     * @return {MemoryBlock}
+     * @type {MemoryBlock}
      */
     get sourceTableMemory() {
         return this.mSourceTable.memory;
@@ -109,7 +107,7 @@ export class ProxyTable {
 
     /**
      * The offset, in bytes, from the beginning of the index table to the row data.
-     * @return {number}
+     * @type {number}
      */
     get dataOffset() {
         return this.mIndexTable.length;
@@ -117,7 +115,7 @@ export class ProxyTable {
 
     /**
      * The offset, in bytes, from the beginning of the source data table to the row data.
-     * @return {number}
+     * @type {number}
      */
     get sourceTableDataOffset() {
         return this.mIndexTable.length;
@@ -160,7 +158,7 @@ export class ProxyTable {
         }
     }
 
-    /**
+    /*
      * Iterable protocol implementation: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterable
      * WARNING: This function is designed to avoid garbage collection and improve performance so the row passed to the
      * `itr` callback is reused, the row cannot be stored as its contents will change. If you need to store unique rows

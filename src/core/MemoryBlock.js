@@ -23,15 +23,14 @@
 
 /**
  * Class to encapsulate an ArrayBuffer with utility views to read/write data.
+ * Instantiates a memory block in the specified heap, at the memory address and the specified size.
+ * Memory blocks can easily be recreated in web workers.
+ * @class MemoryBlock
+ * @param {Heap} heap - The heap which will contain the memory.
+ * @param {number} address - The byte address of the beginning of the memory.
+ * @param {number} size - The size, in bytes, of this memory block.
  */
 export class MemoryBlock {
-    /**
-     * Instantiates a memory block in the specified heap, at the memory address and the specified size.
-     * Memory blocks can easily be recreated in web workers.
-     * @param {Heap} heap - The heap which will contain the memory.
-     * @param {number} address - The byte address of the beginning of the memory.
-     * @param {number} size - The size, in bytes, of this memory block.
-     */
     constructor(heap, address, size) {
         this.mHeap = heap;
         this.mOffset = address;
@@ -41,7 +40,7 @@ export class MemoryBlock {
 
     /**
      * The byte address of this memory block in its heap.
-     * @return {number}
+     * @type {number}
      */
     get address() {
         return this.mOffset;
@@ -49,7 +48,7 @@ export class MemoryBlock {
 
     /**
      * The heap this memory block belongs to.
-     * @return {Heap}
+     * @type {Heap}
      */
     get heap() {
         return this.mHeap;
@@ -57,7 +56,7 @@ export class MemoryBlock {
 
     /**
      * The ArrayBuffer this memory is tied to.
-     * @return {ArrayBuffer|SharedArrayBuffer}
+     * @type {ArrayBuffer|SharedArrayBuffer}
      */
     get buffer() {
         return this.mHeap.buffer;
@@ -65,7 +64,7 @@ export class MemoryBlock {
 
     /**
      * The size, in bytes, of this memory block.
-     * @return {number}
+     * @type {number}
      */
     get size() {
         return this.mSize;
@@ -73,7 +72,7 @@ export class MemoryBlock {
 
     /**
      * A DataView instance bound to the memory accessible by this memory block.
-     * @return {DataView}
+     * @type {DataView}
      */
     get dataView() {
         return this.mDataView;

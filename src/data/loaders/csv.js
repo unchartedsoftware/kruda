@@ -57,6 +57,11 @@ export async function tableFromLocalCSV(file, heap) {
     return new Table(memory);
 }
 
+/**
+ * Creates a {@link Table} instance and fills its contents from the specified remote CSV file.
+ * @param {string} url - The URL from which the CSV file will be loaded.
+ * @return {Promise<Table>}
+ */
 export async function tableFromRemoteCSV(url) {
 
 }

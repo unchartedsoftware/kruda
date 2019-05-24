@@ -77,52 +77,10 @@ const kMaxAllocSize = kMaxHeapSize - 4;
  * Lightweight Heap class used to very naively allocate memory within an ArrayBuffer. Thread safe.
  * Uses a stack approach to memory allocation/deallocation, only when the last memory block in the stack is freed
  * the allocatable memory increases.
+ * @class Heap
+ * @param {ArrayBuffer|SharedArrayBuffer|number} buffer - The buffer to use or the size in bytes to allocate.
  */
 export class Heap {
-    /**
-     * Convenience property that returns the size in bytes of 1KB.
-     * @return {number}
-     */
-    static get sizeOf1KB() {
-        return kSizeOf1KB;
-    }
-
-    /**
-     * Convenience property that returns the size in bytes of 1MB.
-     * @return {number}
-     */
-    static get sizeOf1MB() {
-        return kSizeOf1MB;
-    }
-
-    /**
-     * Convenience property that returns the size in bytes of 1GB.
-     * @return {number}
-     */
-    static get sizeOf1GB() {
-        return kSizeOf1GB;
-    }
-
-    /**
-     * Convenience property that returns the max size of the heap.
-     * @return {number}
-     */
-    static get maxHeapSize() {
-        return kMaxHeapSize;
-    }
-
-    /**
-     * Convenience property that return the max usable size of a heap allocated with the max heap size.
-     * @returns {number}
-     */
-    static get maxAllocSize() {
-        return kMaxAllocSize;
-    }
-
-    /**
-     * Constructor
-     * @param {ArrayBuffer|SharedArrayBuffer|number} buffer - The buffer to use or the size in bytes to allocate.
-     */
     constructor(buffer) {
         if (typeof buffer === 'number') {
             /// #if !_DEBUG
@@ -171,8 +129,48 @@ export class Heap {
     }
 
     /**
+     * Convenience property that returns the size in bytes of 1KB.
+     * @type {number}
+     */
+    static get sizeOf1KB() {
+        return kSizeOf1KB;
+    }
+
+    /**
+     * Convenience property that returns the size in bytes of 1MB.
+     * @type {number}
+     */
+    static get sizeOf1MB() {
+        return kSizeOf1MB;
+    }
+
+    /**
+     * Convenience property that returns the size in bytes of 1GB.
+     * @type {number}
+     */
+    static get sizeOf1GB() {
+        return kSizeOf1GB;
+    }
+
+    /**
+     * Convenience property that returns the max size of the heap.
+     * @type {number}
+     */
+    static get maxHeapSize() {
+        return kMaxHeapSize;
+    }
+
+    /**
+     * Convenience property that return the max usable size of a heap allocated with the max heap size.
+     * @type {number}
+     */
+    static get maxAllocSize() {
+        return kMaxAllocSize;
+    }
+
+    /**
      * The memory buffer managed by this heap.
-     * @return {ArrayBuffer|SharedArrayBuffer}
+     * @type {ArrayBuffer|SharedArrayBuffer}
      */
     get buffer() {
         return this.mBuffer;
@@ -180,7 +178,7 @@ export class Heap {
 
     /**
      * DataView of the memory buffer.
-     * @return {DataView}
+     * @type {DataView}
      */
     get dataView() {
         return this.mDataView;
@@ -188,7 +186,7 @@ export class Heap {
 
     /**
      * The size, in bytes, of this heap.
-     * @return {number}
+     * @type {number}
      */
     get size() {
         /// #if !_DEBUG
@@ -206,7 +204,7 @@ export class Heap {
     /**
      * Total memory used.
      * Freeing a memory block doesn not guarantee that this number will increase.
-     * @return {number}
+     * @type {number}
      */
     get usedMemory() {
         return Atomics.load(this.mUint32View, 1);
@@ -214,7 +212,7 @@ export class Heap {
 
     /**
      * Total usable memory in the heap.
-     * @return {number}
+     * @type {number}
      */
     get freeMemory() {
         return this.mBuffer.byteLength - this.usedMemory;
@@ -222,7 +220,7 @@ export class Heap {
 
     /**
      * The memory address that will be assigned to the next allocation.
-     * @return {number}
+     * @type {number}
      */
     get allocOffset() {
         return Atomics.load(this.mUint32View, 1);

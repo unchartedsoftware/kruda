@@ -26,12 +26,10 @@ import {Row} from './Row';
 
 /**
  * Class that represents a table in binary memory.
+ * @class Table
+ * @param {MemoryBlock} memory - The MemoryBlock containing the table's data
  */
 export class Table {
-    /**
-     * Table constructor.
-     * @param {MemoryBlock} memory - The MemoryBlock containing the table's data
-     */
     constructor(memory) {
         this.mMemory = memory;
         this.mHeader = new Header(this.mMemory);
@@ -49,7 +47,7 @@ export class Table {
 
     /**
      * The header of this table. Contains column names, order in memory, original order and type information.
-     * @return {Header}
+     * @type {Header}
      */
     get header() {
         return this.mHeader;
@@ -57,7 +55,7 @@ export class Table {
 
     /**
      * The total number of rows in this table.
-     * @return {number}
+     * @type {number}
      */
     get rowCount() {
         return this.mHeader.rowCount;
@@ -65,7 +63,7 @@ export class Table {
 
     /**
      * The memory block that contains this table's layout and data.
-     * @return {MemoryBlock}
+     * @type {MemoryBlock}
      */
     get memory() {
         return this.mMemory;
@@ -73,7 +71,7 @@ export class Table {
 
     /**
      * The offset, in bytes, from the beginning of this table to the row data.
-     * @return {number}
+     * @type {number}
      */
     get dataOffset() {
         return this.mHeader.length;
@@ -116,7 +114,7 @@ export class Table {
         }
     }
 
-    /**
+    /*
      * Iterable protocol implementation: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterable
      * WARNING: This function is designed to avoid garbage collection and improve performance so the row passed to the
      * `itr` callback is reused, the row cannot be stored as its contents will change. If you need to store unique rows

@@ -25,8 +25,20 @@ import * as Types from './Types';
 
 /**
  * This class represents a position in a memory block.
+ * @class Pointer
+ * @param {Heap|MemoryBlock} memory - The memory to which this Pointer will be bound to.
+ * @param {number=} address - The address of this pointer relative to the memory it is bound to.
+ * @param {Type=} type - The type of this pointer, defaults to Uint8.
  */
 export class Pointer {
+    constructor(memory, address = 0, type = Types.Uint8) {
+        this.mMemory = memory;
+        this.mOffset = address;
+        this.mView = this.mMemory.dataView;
+        this.mType = null;
+        this.type = type;
+    }
+
     /**
      * Returns a copy of the specified pointer.
      * @param {Pointer} other - The pointer to copy.
@@ -37,22 +49,8 @@ export class Pointer {
     }
 
     /**
-     * Constructor
-     * @param {Heap|MemoryBlock} memory - The memory to which this Pointer will be bound to.
-     * @param {number=} address - The address of this pointer relative to the memory it is bound to.
-     * @param {Type=} type - The type of this pointer, defaults to Uint8.
-     */
-    constructor(memory, address = 0, type = Types.Uint8) {
-        this.mMemory = memory;
-        this.mOffset = address;
-        this.mView = this.mMemory.dataView;
-        this.mType = null;
-        this.type = type;
-    }
-
-    /**
      * Returns the memory this pointer is bound to.
-     * @return {Heap|MemoryBlock}
+     * @type {Heap|MemoryBlock}
      */
     get memory() {
         return this.mMemory;
@@ -60,7 +58,7 @@ export class Pointer {
 
     /**
      * DataView of the memory this pointer is bound to.
-     * @return {DataView}
+     * @type {DataView}
      */
     get view() {
         return this.mView;
@@ -68,16 +66,11 @@ export class Pointer {
 
     /**
      * The address of this pointer relative to the memory it is bound to.
-     * @return {number}
+     * @type {number}
      */
     get address() {
         return this.mOffset;
     }
-
-    /**
-     * Sets the address of this pointer relative to the memory it is bound to.
-     * @param {number} value - The new address.
-     */
     set address(value) {
         /// #if !_DEBUG
         /*
@@ -93,16 +86,11 @@ export class Pointer {
 
     /**
      * The type of this pointer.
-     * @return {Type}
+     * @type {Type}
      */
     get type() {
         return this.mType;
     }
-
-    /**
-     * Sets the type of this pointer, think of it as "casting".
-     * @param {Type} value - The new type of this pointer.
-     */
     set type(value) {
         /// #if !_DEBUG
         /*
@@ -118,16 +106,11 @@ export class Pointer {
 
     /**
      * Given its type, returns the numeric value at this pointer's address.
-     * @return {number}
+     * @type {number}
      */
     get value() {
         return this.mType.get(this.mView, this.mOffset);
     }
-
-    /**
-     * Given its type, sets the numeric value at this pointer's address.
-     * @param {number} value - The value to set.
-     */
     set value(value) {
         this.mType.set(this.mView, value, this.mOffset);
     }

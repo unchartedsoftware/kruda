@@ -26,6 +26,10 @@ import {WebCPU} from 'webcpu';
 const kIsWorker = (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope); // eslint-disable-line
 const kCoreCount = kIsWorker ? null : WebCPU.detectCPU();
 
+/**
+ * Returns the estimated physical core count in this system.
+ * @return {Promise<any>}
+ */
 export async function coreCount() {
     return await kCoreCount;
 }

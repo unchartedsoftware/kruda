@@ -23,13 +23,10 @@
 import {FilterProcessor} from './FilterProcessor';
 
 /**
- * @namespace FilterWorker
- */
-
-/**
  * Variable that holds a FilterProcessor instance for each thread.
  * @type {FilterProcessor|null}
  * @memberof FilterWorker
+ * @private
  */
 let gProcessor = null;
 
@@ -37,6 +34,7 @@ let gProcessor = null;
  * Sends an error signal back to this worker's "owner"
  * @param {string} reason - The reason for this error to be triggered
  * @memberof FilterWorker
+ * @private
  */
 function sendError(reason) {
     self.postMessage({
@@ -49,6 +47,7 @@ function sendError(reason) {
  * Sends a success signal to this worker's "owner"
  * @param {*=} data - Data to be sent with the message. Defaults to `null`
  * @memberof FilterWorker
+ * @private
  */
 function sendSuccess(data = null) {
     self.postMessage({
@@ -61,6 +60,7 @@ function sendSuccess(data = null) {
  * Message event handler for messages sent from this worker's  "owner"
  * @param {Event} e - The event containing the message.
  * @memberof FilterWorker
+ * @private
  */
 self.onmessage = function filterWorkerOnMessage(e) {
     const message = e.data;

@@ -24,16 +24,13 @@
 import {DSBINInflate} from './DSBINInflate';
 
 /**
- * @namespace DSBINLoaderWorker
- */
-
-/**
  * Loads a DSBIN from a set of blobs.
  * @param {Uint32Array} indices - A SharedArrayBuffer-backed array with the current index of the chunk being loaded and the total number of chunks.
  * @param {Array} chunks - The chunks to load.
  * @param {SharedArrayBuffer} uncompressed - Memory where to store the uncompressed chunks.
  * @return {Promise<void>}
  * @memberof DSBINLoaderWorker
+ * @private
  */
 async function loadFromBlobs(indices, chunks, uncompressed) {
     const reader = new FileReader();
@@ -64,6 +61,7 @@ async function loadFromBlobs(indices, chunks, uncompressed) {
  * @param {number} offset - Offset, in bytes, where to write the uncompressed memory.
  * @param {number} size - The expected uncompressed size of the buffer.
  * @memberof DSBINLoaderWorker
+ * @private
  */
 function loadBuffer(compressedBuffer, uncompressed, offset, size) {
     // console.log(`compressedBuffer:${compressedBuffer} uncompressed:${uncompressed} offset:${offset} size:${size}`);
@@ -76,6 +74,7 @@ function loadBuffer(compressedBuffer, uncompressed, offset, size) {
  * @param {Event} e - The event containing the message.
  * @return {Promise<void>}
  * @memberof DSBINLoaderWorker
+ * @private
  */
 self.onmessage = async function DSBINLoaderWorkerOnMessage(e) {
     const message = e.data;

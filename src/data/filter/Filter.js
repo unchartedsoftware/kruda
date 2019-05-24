@@ -43,22 +43,13 @@ Object.freeze(kRowIndexResult);
 
 /**
  * Class to create and run filters on tables.
+ * Creates a Filter instance bound to the specified table.
+ * @class Filter
+ * @param {Table} table - The table this filter will be bound to.
+ * @param {number=} workerCount - The number of workers to spawn, should be the same as physical cores in the system, defaults to automatically detected.
+ * @param {Heap=} heap - The heap to use to allocate the filter results memory, defaults to using the same heap where the table is allocated.
  */
 export class Filter {
-    /**
-     * Returns an object that can be added to the `resultDescription` array to include the index of the resulting rows
-     * @return {Object}
-     */
-    static get rowIndexResult() {
-        return kRowIndexResult;
-    }
-
-    /**
-     * Creates a Filter instance bound to the specified table.
-     * @param {Table} table - The table this filter will be bound to.
-     * @param {number=} workerCount - The number of workers to spawn, should be the same as physical cores in the system, defaults to automatically detected.
-     * @param {Heap=} heap - The heap to use to allocate the filter results memory, defaults to using the same heap where the table is allocated.
-     */
     constructor(table, workerCount = -1, heap = table.memory.heap) {
         this.mTable = table;
         this.mHeap = heap;
@@ -81,8 +72,16 @@ export class Filter {
     }
 
     /**
+     * Returns an object that can be added to the `resultDescription` array to include the index of the resulting rows
+     * @type {Object}
+     */
+    static get rowIndexResult() {
+        return kRowIndexResult;
+    }
+
+    /**
      * The size, in bytes, of a results row.
-     * @return {number}
+     * @type {number}
      */
     get resultRowSize() {
         return this.mResultRowSize;
@@ -91,16 +90,11 @@ export class Filter {
     /**
      * An array of objects describing the desired fields in the filter's result.
      * WARNING: Do not modify this array, assign a brand new array instead.
-     * @return {Object[]}
+     * @type {Object[]}
      */
     get resultDescription() {
         return this.mResultDescription;
     }
-
-    /**
-     * Sets an array ob objects describing the desired fields in the filter's result.
-     * @param {Object[]} value - The new object array.
-     */
     set resultDescription(value) {
         this.mResultDescription = [...value];
 

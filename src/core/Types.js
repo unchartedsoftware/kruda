@@ -20,6 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 /**
  * name property symbol
  * @type {symbol}
@@ -56,13 +57,40 @@ const kIsPrimitive = Symbol('Type::isPrimitive');
 const kTypeMap = {};
 
 /**
- * Class used to create runtime types, default primitive types are provided.
+ * Creates a new type instance.
+ * In DEBUG mode performs checks if the bit and byte sizes are consistent.
+ * @class Type
+ * @param {string} name - The name of the type to create
+ * @param {number} byteSize - Size in bytes of this type
+ * @param {number} bitSize - Size in bits of this type, must be x8 bigger than `byteSize`
  */
 export class Type {
+    constructor(name, byteSize = 0, bitSize = 0) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (bitSize / byteSize !== 8) {
+            throw 'ERROR: Inconsistent byteSize and bitSize';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+
+        if (kTypeMap.hasOwnProperty(name)) {
+            throw 'ERROR: Type names must be unique';
+        }
+
+        this[kName] = name;
+        this[kByteSize] = byteSize;
+        this[kBitSize] = bitSize;
+        this[kIsPrimitive] = false;
+
+        kTypeMap[name] = this;
+    }
+
     /**
      * Inspects the specified type and returns it's size. This method is equivalent to the `byteSize` property of the
      * type instance. When in DEBUG mode this method checks if the parameter `t` is an instance of Type.
-     * @method sizeOf
      * @param {Type} t - The type to inspect
      * @return {number}
      * @static
@@ -124,38 +152,8 @@ export class Type {
     }
 
     /**
-     * Creates a new type instance.
-     * In DEBUG mode performs checks if the bit and byte sizes are consistent.
-     * @param {string} name - The name of the type to create
-     * @param {number} byteSize - Size in bytes of this type
-     * @param {number} bitSize - Size in bits of this type, must be x8 bigger than `byteSize`
-     */
-    constructor(name, byteSize = 0, bitSize = 0) {
-        /// #if !_DEBUG
-        /*
-        /// #endif
-        if (bitSize / byteSize !== 8) {
-            throw 'ERROR: Inconsistent byteSize and bitSize';
-        }
-        /// #if !_DEBUG
-         */
-        /// #endif
-
-        if (kTypeMap.hasOwnProperty(name)) {
-            throw 'ERROR: Type names must be unique';
-        }
-
-        this[kName] = name;
-        this[kByteSize] = byteSize;
-        this[kBitSize] = bitSize;
-        this[kIsPrimitive] = false;
-
-        kTypeMap[name] = this;
-    }
-
-    /**
      * Returns the name of this type
-     * @return {string}
+     * @type {string}
      */
     get name() {
         return this[kName];
@@ -163,7 +161,7 @@ export class Type {
 
     /**
      * Returns the size, in bytes, of this type.
-     * @return {number}
+     * @type {number}
      */
     get byteSize() {
         return this[kByteSize];
@@ -171,7 +169,7 @@ export class Type {
 
     /**
      * Returns the size, in bits, of this type.
-     * @return {number}
+     * @type {number}
      */
     get bitSize() {
         return this[kBitSize];
@@ -237,7 +235,6 @@ export function typeByName(name) {
 }
 
 /**
- * @name Int8
  * @extends Type
  */
 class _Int8 extends Type {
@@ -254,10 +251,13 @@ class _Int8 extends Type {
         view.setInt8(offset, value);
     }
 }
+
+/**
+ * @type {_Int8}
+ */
 export const Int8 = new _Int8();
 
 /**
- * @name Int16
  * @extends Type
  */
 class _Int16 extends Type {
@@ -274,10 +274,13 @@ class _Int16 extends Type {
         view.setInt16(offset, value, true);
     }
 }
+
+/**
+ * @type {_Int16}
+ */
 export const Int16 = new _Int16();
 
 /**
- * @name Int32
  * @extends Type
  */
 class _Int32 extends Type {
@@ -294,10 +297,13 @@ class _Int32 extends Type {
         view.setInt32(offset, value, true);
     }
 }
+
+/**
+ * @type {_Int32}
+ */
 export const Int32 = new _Int32();
 
 /**
- * @name Uint8
  * @extends Type
  */
 class _Uint8 extends Type {
@@ -314,10 +320,13 @@ class _Uint8 extends Type {
         view.setUint8(offset, value);
     }
 }
+
+/**
+ * @type {_Uint8}
+ */
 export const Uint8 = new _Uint8();
 
 /**
- * @name Uint16
  * @extends Type
  */
 class _Uint16 extends Type {
@@ -334,10 +343,13 @@ class _Uint16 extends Type {
         view.setUint16(offset, value, true);
     }
 }
+
+/**
+ * @type {_Uint16}
+ */
 export const Uint16 = new _Uint16();
 
 /**
- * @name Uint32
  * @extends Type
  */
 class _Uint32 extends Type {
@@ -354,10 +366,13 @@ class _Uint32 extends Type {
         view.setUint32(offset, value, true);
     }
 }
+
+/**
+ * @type {_Uint32}
+ */
 export const Uint32 = new _Uint32();
 
 /**
- * @name Float32
  * @extends Type
  */
 class _Float32 extends Type {
@@ -374,11 +389,14 @@ class _Float32 extends Type {
         view.setFloat32(offset, value, true);
     }
 }
+
+/**
+ * @type {_Float32}
+ */
 export const Float32 = new _Float32();
 
 /**
  * Void type (not to be confused with the `void` value.
- * @name Void
  * @extends Type
  */
 class _Void extends Type {
@@ -395,4 +413,8 @@ class _Void extends Type {
         throw ' Cannot set the value of void, you must use type casting';
     }
 }
+
+/**
+ * @type {_Void}
+ */
 export const Void = new _Void();

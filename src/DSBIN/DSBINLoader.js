@@ -40,6 +40,7 @@ const kMinWorkerCount = 1;
 
 /**
  * Multi-threaded DSBIN file loader.
+ * @class DSBINLoader
  */
 export class DSBINLoader {
     /**

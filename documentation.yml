@@ -12,7 +12,6 @@ toc:
       description: Filtering, aggregation, etc.
     - Filter
     - FilterProcessor
-    - FilterWorker
 
     - name: Byte Strings
       descripton: Working with binary strings in kruda.js
@@ -24,7 +23,6 @@ toc:
     - name: Types
       description: Type base class, utilities and primitive type definitions.
     - Type
-    - sizeOf
     - isType
     - isPrimitiveType
     - sizeof
@@ -48,7 +46,6 @@ toc:
       description: DS BIN files utilities.
     - DSBINLoader
     - DSBINInflate
-    - DSBINLoaderWorker
 
     - name: Misc
       description: Uncategorized or undocumented objects.

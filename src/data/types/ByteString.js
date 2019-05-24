@@ -39,12 +39,11 @@ const kCodeZ = ('Z').charCodeAt(0);
 
 /**
  * Base class for all byte string classes. Cannot be used directly.
+ * Constructs a ByteString instance of the given size.
+ * @class ByteStringBase
+ * @param {number} size - The maximum size of this string.
  */
 class ByteStringBase {
-    /**
-     * Constructs a ByteString instance of the given size.
-     * @param {number} size - The maximum size of this string.
-     */
     constructor(size = 256) {
         /// #if !_DEBUG
         /*
@@ -208,14 +207,13 @@ class ByteStringBase {
 /**
  * ByteString implementation using pointers. If the underlying pointer changes location the contents of this string
  * are automatically updated to reflect the data contained at the new location.
+ * Constructs a byte string instance backed by a Pointer.
+ * @class ByteStringPtr
+ * @param {Pointer} pointer - The pointer to read the string data from.
+ * @param {number=} offset - The offset, from the location of the pointer, to read the data from. Defaults to 0.
+ * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
  */
 class ByteStringPtr extends ByteStringBase {
-    /**
-     * Constructs a byte string instance backed by a Pointer.
-     * @param {Pointer} pointer - The pointer to read the string data from.
-     * @param {number=} offset - The offset, from the location of the pointer, to read the data from. Defaults to 0.
-     * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
-     */
     constructor(pointer, offset = 0, size = 256) {
         super(size);
         this.mOffset = offset;
@@ -256,14 +254,13 @@ class ByteStringPtr extends ByteStringBase {
 /**
  * ByteString implementation using ArrayBuffers. This implementation is useful for quick off-heap strings. It also
  * guarantees that it will no change its contents without implicit user interaction.
+ * Constructs a byte string backed by an ArrayBuffer.
+ * @class ByteStringBuffer
+ * @param {ArrayBufferLike} buffer - The ArrayBuffer object where this string resides.
+ * @param {number=} address - The offset, in bytes, within the buffer where the string resides. Defaults to 0.
+ * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
  */
 class ByteStringBuffer extends ByteStringBase {
-    /**
-     * Constructs a byte string backed by an ArrayBuffer.
-     * @param {ArrayBufferLike} buffer - The ArrayBuffer object where this string resides.
-     * @param {number=} address - The offset, in bytes, within the buffer where the string resides. Defaults to 0.
-     * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
-     */
     constructor(buffer, address = 0, size = 256) {
         super(size);
         this.mBuffer = buffer;
@@ -304,7 +301,6 @@ class ByteStringBuffer extends ByteStringBase {
 
 /**
  * ByteString type
- * @name ByteString
  * @extends Type
  */
 class _ByteString extends Type {
@@ -393,4 +389,7 @@ class _ByteString extends Type {
     }
 }
 
+/**
+ * @type {_ByteString}
+ */
 export const ByteString = new _ByteString();

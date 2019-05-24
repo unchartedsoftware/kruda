@@ -25,7 +25,7 @@ import {ByteString} from '../types/ByteString';
 
 /**
  * Binary type map.
- * @type {*[]}
+ * @type {Array<Type>}
  */
 export const kBinaryTypeMap = [
     ByteString, // 0
@@ -36,8 +36,52 @@ export const kBinaryTypeMap = [
 
 /**
  * Class that represents the header of a {@link Table}.
+ * Constructs an instance of a Header by reading its properties from the begining of the specified memory block.
+ * @class Header
+ * @param {MemoryBlock} memory - The memory containing the table header. The table header must be at the beginning.
  */
 export class Header {
+    constructor(memory) {
+        const view = memory.dataView;
+        let offset = 0;
+
+        this.mLength = view.getUint32(offset, true);
+        offset += 4;
+
+        this.mColumnCount = view.getUint32(offset, true);
+        offset += 4;
+
+        this.mRowCount = view.getUint32(offset, true);
+        offset += 4;
+
+        this.mRowLength = view.getUint32(offset, true);
+        offset += 4;
+
+        this.mDataLength = view.getUint32(offset, true);
+        offset += 4;
+
+        this.mColumns = [];
+        this.mNames = {};
+
+        let nameOffset = 12 * this.mColumnCount + 20;
+        let nameLength;
+        let name;
+        for (let i = 0; i < this.mColumnCount; ++i) {
+            nameLength = view.getUint8(nameOffset++);
+            name = String.fromCharCode(...(new Uint8Array(memory.buffer, memory.address + nameOffset, nameLength)));
+            nameOffset += nameLength;
+
+            this.mNames[name] = this.mColumns.length;
+            this.mColumns.push({
+                name,
+                size: view.getUint32(offset, true),
+                offset: view.getUint32(offset + 4, true),
+                type: kBinaryTypeMap[view.getUint32(offset + 8, true)],
+            });
+            offset += 12;
+        }
+    }
+
     /**
      * Convenience function to build a binary buffer containing the header info from an object descriptor.
      * @param {{}} header - Object describing the properties of the header
@@ -98,53 +142,8 @@ export class Header {
     }
 
     /**
-     * Constructs an instance of a Header by reading its properties from the begining of the specified memory block.
-     * @param {MemoryBlock} memory - The memory containing the table header. The table header must be at the beginning.
-     */
-    constructor(memory) {
-        const view = memory.dataView;
-        let offset = 0;
-
-        this.mLength = view.getUint32(offset, true);
-        offset += 4;
-
-        this.mColumnCount = view.getUint32(offset, true);
-        offset += 4;
-
-        this.mRowCount = view.getUint32(offset, true);
-        offset += 4;
-
-        this.mRowLength = view.getUint32(offset, true);
-        offset += 4;
-
-        this.mDataLength = view.getUint32(offset, true);
-        offset += 4;
-
-        this.mColumns = [];
-        this.mNames = {};
-
-        let nameOffset = 12 * this.mColumnCount + 20;
-        let nameLength;
-        let name;
-        for (let i = 0; i < this.mColumnCount; ++i) {
-            nameLength = view.getUint8(nameOffset++);
-            name = String.fromCharCode(...(new Uint8Array(memory.buffer, memory.address + nameOffset, nameLength)));
-            nameOffset += nameLength;
-
-            this.mNames[name] = this.mColumns.length;
-            this.mColumns.push({
-                name,
-                size: view.getUint32(offset, true),
-                offset: view.getUint32(offset + 4, true),
-                type: kBinaryTypeMap[view.getUint32(offset + 8, true)],
-            });
-            offset += 12;
-        }
-    }
-
-    /**
      * The length, in bytes, of this header in memory.
-     * @return {number}
+     * @type {number}
      */
     get length() {
         return this.mLength;
@@ -152,7 +151,7 @@ export class Header {
 
     /**
      * The number of columns described in the header.
-     * @return {number}
+     * @type {number}
      */
     get columnCount() {
         return this.mColumnCount;
@@ -160,7 +159,7 @@ export class Header {
 
     /**
      * The number of rows that the table linked to this header should contain.
-     * @return {number}
+     * @type {number}
      */
     get rowCount() {
         return this.mRowCount;
@@ -168,7 +167,7 @@ export class Header {
 
     /**
      * The normalized length, in bytes, of a single row in the table.
-     * @return {number}
+     * @type {number}
      */
     get rowLength() {
         return this.mRowLength;
@@ -176,7 +175,7 @@ export class Header {
 
     /**
      * The length, in bytes, of the data contained in the table this header is describing.
-     * @return {number}
+     * @type {number}
      */
     get dataLength() {
         return this.mDataLength;
@@ -184,7 +183,7 @@ export class Header {
 
     /**
      * An array containing objects describing each of the columns described in this header.
-     * @return {[{name: string, size: number, offset: number, type: Type}]}
+     * @type {Array<{name: string, size: number, offset: number, type: Type}>}
      */
     get columns() {
         return this.mColumns;
@@ -193,7 +192,7 @@ export class Header {
     /**
      * Returns an object which contains the names of the columns described in this header as keys and the index of the
      * column within the `columns` array as their value.
-     * @return {Object<string, number>}
+     * @type {Object<string, number>}
      */
     get names() {
         return this.mNames;

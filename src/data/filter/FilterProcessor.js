@@ -29,17 +29,16 @@ import * as Types from '../../core/Types';
 /**
  * Class to process filters on Tables.
  * This class is meant to be used by filter workers, but it is safe to use on the main thread as well.
+ * Creates a new instance and reconstructs the Heap, Memory Object and Table specified in the config object.
+ * NOTE: Heap, MemoryBlock and Table classes are thread safe.
+ * @class FilterProcessor
+ * @param {{
+ * heapBuffer: ArrayBufferLike,
+ * tableAddress: number,
+ * tableSize: number
+ * }} config - Configuration object.
  */
 export class FilterProcessor {
-    /**
-     * Creates a new instance and reconstructs the Heap, Memory Object and Table specified in the config object.
-     * NOTE: Heap, MemoryBlock and Table classes are thread safe.
-     * @param {{
-     * heapBuffer: ArrayBufferLike,
-     * tableAddress: number,
-     * tableSize: number
-     * }} config - Configuration object.
-     */
     constructor(config) {
         this.mHeap = new Heap(config.heapBuffer);
         this.mTableMemory = new MemoryBlock(this.mHeap, config.tableAddress, config.tableSize);
