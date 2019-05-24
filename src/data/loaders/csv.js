@@ -54,6 +54,7 @@ export async function tableFromLocalCSV(file, heap) {
     };
 
     await DataTools.mergeChunksIntoBuffer(result.chunks, result.header, config);
+    dekkai.terminate();
     return new Table(memory);
 }
 
