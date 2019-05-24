@@ -102,7 +102,13 @@ export class Heap {
              */
             /// #endif
 
-            this.mBuffer = new SharedArrayBuffer(buffer);
+            if (typeof SharedArrayBuffer !== 'undefined') {
+                this.mBuffer = new SharedArrayBuffer(buffer);
+                this.mShared = true;
+            } else {
+                this.mBuffer = new ArrayBuffer(buffer);
+                this.mShared = false;
+            }
 
             /*
              * Header structure
@@ -120,6 +126,7 @@ export class Heap {
             this.mDataView.setUint32(12, 0xffffffff, true);
         } else {
             this.mBuffer = buffer;
+            this.mShared = !(buffer instanceof ArrayBuffer);
             this.mDataView = new DataView(this.mBuffer);
         }
 
@@ -174,6 +181,14 @@ export class Heap {
      */
     get buffer() {
         return this.mBuffer;
+    }
+
+    /**
+     * Is the buffer in this heap an instance of SharedArrayBuffer
+     * @type {boolean}
+     */
+    get shared() {
+        return this.mShared;
     }
 
     /**
