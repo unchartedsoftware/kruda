@@ -32,7 +32,7 @@ import dekkai from 'dekkai';
  * @return {Table}
  */
 export async function tableFromLocalCSV(file, heap) {
-    const {estimatedPhysicalCores: workerCount} = await coreCount();
+    const workerCount = await coreCount();
     const DataTools = dekkai.DataTools;
     await dekkai.init(workerCount);
     const dataFile = new dekkai.DataFile(file);

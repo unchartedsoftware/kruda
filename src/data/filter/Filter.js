@@ -62,8 +62,8 @@ export class Filter {
 
         this.mInitialized = new Promise(resolve => {
             if (workerCount < 1 || isNaN(workerCount)) {
-                coreCount().then(({estimatedPhysicalCores}) => {
-                    this._initializeThreads(estimatedPhysicalCores).then(resolve);
+                coreCount().then(count => {
+                    this._initializeThreads(count).then(resolve);
                 });
             } else {
                 this._initializeThreads(Math.max(1, workerCount)).then(resolve);

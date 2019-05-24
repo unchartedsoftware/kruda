@@ -137,7 +137,7 @@ export class DSBINLoader {
         const memory = heap.malloc(totalUncompressedSize);
         const address = memory.address;
 
-        const maxWorkerCount = (await coreCount()).estimatedPhysicalCores;
+        const maxWorkerCount = await coreCount();
         const threadableChunks = chunkCount - kMinChunksForThreading + maxWorkerCount;
         const workerCount = Math.min(maxWorkerCount, Math.max(kMinWorkerCount, threadableChunks));
         const workers = [];
@@ -264,7 +264,7 @@ export class DSBINLoader {
      * @private
      */
     static async _scheduleBlobLoadingWorkers(chunkCount, chunks, uncompressed) {
-        const maxWorkerCount = (await coreCount()).estimatedPhysicalCores;
+        const maxWorkerCount = await coreCount();
         const threadableChunks = chunkCount - kMinChunksForThreading + maxWorkerCount;
         const workerCount = Math.min(maxWorkerCount, Math.max(kMinWorkerCount, threadableChunks));
         const indicesBuffer = new SharedArrayBuffer(8);
