@@ -101,7 +101,7 @@ export class Header {
             columnNameLength += Math.min(255, header.columns[i].name.length) + 1;
         }
 
-        const headerLength = 12 * columnCount + columnNameLength + 20;
+        const headerLength = (12 * columnCount + columnNameLength + 20 + 3) & ~0x03; // round to nearest 4
         const buffer = new ArrayBuffer(headerLength);
         const view = new DataView(buffer);
         let nameOffset = 12 * columnCount + 20;
