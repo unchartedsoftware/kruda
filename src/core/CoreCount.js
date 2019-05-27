@@ -25,7 +25,7 @@ import {WebCPU} from 'webcpu';
 
 const kIsWorker = (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope); // eslint-disable-line
 const kCoreCount = (async function() {
-    if (!kIsWorker) {
+    if (!kIsWorker && typeof Atomics !== 'undefined') {
         try {
             const {estimatedPhysicalCores} = await WebCPU.detectCPU();
             return estimatedPhysicalCores;
