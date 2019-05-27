@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 import {MemoryBlock} from './MemoryBlock';
+import {Atomize} from './Atomize';
 
 /**
  * Utility constant for the size of 1KB
@@ -222,7 +223,7 @@ export class Heap {
      * @type {number}
      */
     get usedMemory() {
-        return Atomics.load(this.mUint32View, 1);
+        return Atomize.load(this.mUint32View, 1);
     }
 
     /**
@@ -238,7 +239,7 @@ export class Heap {
      * @type {number}
      */
     get allocOffset() {
-        return Atomics.load(this.mUint32View, 1);
+        return Atomize.load(this.mUint32View, 1);
     }
 
     /**
@@ -266,9 +267,9 @@ export class Heap {
 
         let lockState = 1;
         while (lockState) {
-            lockState = Atomics.compareExchange(this.mInt32View, 2, 0, 1);
+            lockState = Atomize.compareExchange(this.mInt32View, 2, 0, 1);
             if (lockState) {
-                Atomics.wait(this.mInt32View, 2, 1);
+                Atomize.wait(this.mInt32View, 2, 1);
             }
         }
 
@@ -276,8 +277,8 @@ export class Heap {
         /*
         /// #endif
         if (blockSize > this.freeMemory) {
-            Atomics.store(this.mInt32View, 2, 0);
-            Atomics.notify(this.mInt32View, 2, 1);
+            Atomize.store(this.mInt32View, 2, 0);
+            Atomize.notify(this.mInt32View, 2, 1);
             throw `ERROR: Not enough memory in the heap to allocate the requested memory size (${size} bytes)`;
         }
         /// #if !_DEBUG
@@ -285,11 +286,11 @@ export class Heap {
         /// #endif
 
         let address;
-        address = Atomics.add(this.mUint32View, 1, blockSize);
-        Atomics.store(this.mUint32View, ((address + blockSize) >> 2) - 1, address);
+        address = Atomize.add(this.mUint32View, 1, blockSize);
+        Atomize.store(this.mUint32View, ((address + blockSize) >> 2) - 1, address);
 
-        Atomics.store(this.mInt32View, 2, 0);
-        Atomics.notify(this.mInt32View, 2, 1);
+        Atomize.store(this.mInt32View, 2, 0);
+        Atomize.notify(this.mInt32View, 2, 1);
 
         return new MemoryBlock(this, address, blockSize - 4);
     }
@@ -317,9 +318,9 @@ export class Heap {
 
         let lockState = 1;
         while (lockState) {
-            lockState = Atomics.compareExchange(this.mInt32View, 2, 0, 1);
+            lockState = Atomize.compareExchange(this.mInt32View, 2, 0, 1);
             if (lockState) {
-                Atomics.wait(this.mInt32View, 2, 1);
+                Atomize.wait(this.mInt32View, 2, 1);
             }
         }
 
@@ -333,14 +334,14 @@ export class Heap {
          */
         /// #endif
 
-        Atomics.or(this.mUint32View, paddingAddress >> 2, kFreeFlag);
+        Atomize.or(this.mUint32View, paddingAddress >> 2, kFreeFlag);
 
         if (this.allocOffset === endAddress) {
-            Atomics.store(this.mUint32View, 1, this._findNewAllocOffset(memory.address));
+            Atomize.store(this.mUint32View, 1, this._findNewAllocOffset(memory.address));
         }
 
-        Atomics.store(this.mInt32View, 2, 0);
-        Atomics.notify(this.mInt32View, 2, 1);
+        Atomize.store(this.mInt32View, 2, 0);
+        Atomize.notify(this.mInt32View, 2, 1);
 
         memory._destroy();
     }
@@ -368,9 +369,9 @@ export class Heap {
         if (newSize < memory.size) {
             let lockState = 1;
             while (lockState) {
-                lockState = Atomics.compareExchange(this.mInt32View, 2, 0, 1);
+                lockState = Atomize.compareExchange(this.mInt32View, 2, 0, 1);
                 if (lockState) {
-                    Atomics.wait(this.mInt32View, 2, 1);
+                    Atomize.wait(this.mInt32View, 2, 1);
                 }
             }
 
@@ -384,18 +385,18 @@ export class Heap {
              */
             /// #endif
 
-            Atomics.store(this.mUint32View, ((memory.address + newSize) >> 2) - 1, memory.address);
-            Atomics.store(this.mUint32View, paddingAddress >> 2, memory.address + newSize);
-            Atomics.or(this.mUint32View, paddingAddress >> 2, kFreeFlag);
+            Atomize.store(this.mUint32View, ((memory.address + newSize) >> 2) - 1, memory.address);
+            Atomize.store(this.mUint32View, paddingAddress >> 2, memory.address + newSize);
+            Atomize.or(this.mUint32View, paddingAddress >> 2, kFreeFlag);
 
             memory._setSize(size);
 
             if (this.allocOffset === endAddress) {
-                Atomics.store(this.mUint32View, 1, this._findNewAllocOffset(memory.address));
+                Atomize.store(this.mUint32View, 1, this._findNewAllocOffset(memory.address));
             }
 
-            Atomics.store(this.mInt32View, 2, 0);
-            Atomics.notify(this.mInt32View, 2, 1);
+            Atomize.store(this.mInt32View, 2, 0);
+            Atomize.notify(this.mInt32View, 2, 1);
         }
     }
 
@@ -406,7 +407,7 @@ export class Heap {
      * @private
      */
     _isMarkedFree(offset) {
-        return Atomics.load(this.mUint32View, offset >> 2) & kFreeFlag;
+        return Atomize.load(this.mUint32View, offset >> 2) & kFreeFlag;
     }
 
     /**
@@ -416,7 +417,7 @@ export class Heap {
      * @private
      */
     _readPadding(offset) {
-        return Atomics.load(this.mUint32View, offset >> 2) ^ kFreeFlag;
+        return Atomize.load(this.mUint32View, offset >> 2) ^ kFreeFlag;
     }
 
     /**

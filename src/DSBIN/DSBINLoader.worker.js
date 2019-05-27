@@ -47,7 +47,7 @@ async function loadFromBlobs(indices, chunks, uncompressed) {
 
     let compressedBuffer;
     let uncompressedBuffer;
-    for (let i = Atomics.add(indices, 0, 1); i < indices[1]; i = Atomics.add(indices, 0, 1)) {
+    for (let i = Atomize.add(indices, 0, 1); i < indices[1]; i = Atomize.add(indices, 0, 1)) {
         compressedBuffer = await readBlob(chunks[i].compressedBlob);
         uncompressedBuffer = new Uint8Array(uncompressed, chunks[i].uncompressedOffset, chunks[i].uncompressedSize);
         DSBINInflate.inflate(compressedBuffer, uncompressedBuffer, chunks[i].uncompressedSize);

@@ -24,6 +24,7 @@ import {Heap} from '../../core/Heap';
 import {MemoryBlock} from '../../core/MemoryBlock';
 import {Table} from '../table/Table';
 import {ByteString} from '../types/ByteString';
+import {Atomize} from '../../core/Atomize';
 import * as Types from '../../core/Types';
 
 /**
@@ -69,7 +70,7 @@ export class FilterProcessor {
         let i;
         let n;
         let r;
-        for (i = Atomics.add(indices, 0, batchSize); i < rowCount; i = Atomics.add(indices, 0, batchSize)) {
+        for (i = Atomize.add(indices, 0, batchSize); i < rowCount; i = Atomize.add(indices, 0, batchSize)) {
             n = Math.min(i + batchSize, rowCount);
             for (r = i; r < n; ++r) {
                 row.index = r;
@@ -114,7 +115,7 @@ export class FilterProcessor {
         let offset;
         let i;
         return function resultWriter(row, view) {
-            offset = Atomics.add(indices, 1, 1) * resultSize;
+            offset = Atomize.add(indices, 1, 1) * resultSize;
             for (i = 0; i < writersLength; ++i) {
                 writers[i](row, offset, view);
             }
