@@ -54,6 +54,8 @@ export {ByteString} from './data/types/ByteString';
 export {DSBINLoader} from './DSBIN/DSBINLoader';
 
 export {Table} from './data/table/Table';
+export {Header} from './data/table/Header';
 export {Filter} from './data/filter/Filter';
 
+export {kBinaryTypes, kBinaryTypeMap} from './data/table/Header';
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';

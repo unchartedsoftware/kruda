@@ -24,15 +24,21 @@ import {Int32, Float32, Uint32} from '../../core/Types';
 import {ByteString} from '../types/ByteString';
 
 /**
- * Binary type map.
- * @type {Array<Type>}
+ * Binary type list.
+ * @type {Type[]}
  */
-export const kBinaryTypeMap = [
+export const kBinaryTypes = [
     ByteString, // 0
-    Int32, // 1
+    Int32, // 1,
     Float32, // 2
     Uint32, // 3
 ];
+
+/**
+ * Binary type map.
+ * @type {Map<Type, number>}
+ */
+export const kBinaryTypeMap = new Map(kBinaryTypes.map((value, i) => [value, i]));
 
 /**
  * Class that represents the header of a {@link Table}.
@@ -76,7 +82,7 @@ export class Header {
                 name,
                 size: view.getUint32(offset, true),
                 offset: view.getUint32(offset + 4, true),
-                type: kBinaryTypeMap[view.getUint32(offset + 8, true)],
+                type: kBinaryTypes[view.getUint32(offset + 8, true)],
             });
             offset += 12;
         }

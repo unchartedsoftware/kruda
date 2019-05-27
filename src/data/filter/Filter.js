@@ -307,11 +307,11 @@ export class Filter {
                 name: resultDescription[i].column || '',
             };
 
-            const type = kBinaryTypeMap.indexOf(Types.typeByName(resultDescription[i].type));
+            const type = kBinaryTypeMap.get(Types.typeByName(resultDescription[i].type));
             /// #if !_DEBUG
             /*
             /// #endif
-            if (type === -1) {
+            if (type === undefined) {
                 throw `ERROR: Unsupported type (${resultDescription[i].type})`;
             }
             /// #if !_DEBUG
