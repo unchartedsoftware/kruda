@@ -46,52 +46,60 @@
             filter.resultFieldForColumn('Fly_date'),
         ];
 
-        /* create the rules to be applied with the filter */
+        /*
+         * Create the rules to be applied with the filter
+         *
+         * The rules will be interpreted at runtime depending on the FilterExpressionMode specified when the filter runs.
+         * The options are based on conjunctive normal form and disjunctive normal form, in short:
+         *
+         * FilterExpressionMode.CNF = [[rule11 || rule12 || ... || rule1n] && [rule21 || rule22 || ... || rule2n] && ...];
+         * FilterExpressionMode.DNF = [[rule11 && rule12 && ... && rule1n] || [rule21 && rule22 && ... && rule2n] || ...];
+         */
         const filterRules = [ // must be an array of arrays
-            [ // each inner array represents a list of rules to be and'ed..
+            [
                 {
                     name: 'Origin_airport',
                     value: 'SEA',
-                    operation: 'equal',
+                    operation: kruda.FilterOperation.equal,
                 },
                 {
                     name: 'Passengers',
                     value: 110,
-                    operation: 'equal',
+                    operation: kruda.FilterOperation.equal,
                 },
                 {
                     name: 'Destination_airport',
                     value: 'LAX',
-                    operation: 'notEqual',
+                    operation: kruda.FilterOperation.notEqual,
                 },
             ],
-            [ // inner arrays are or'd
+            [
                 {
                     name: 'Origin_airport',
                     value: 'MCO',
-                    operation: 'equal',
+                    operation: kruda.FilterOperation.equal,
                 },
                 {
                     name: 'Passengers',
                     value: 200,
-                    operation: 'lessThan',
+                    operation: kruda.FilterOperation.lessThan,
                 },
                 {
                     name: 'Passengers',
                     value: 180,
-                    operation: 'moreThan',
+                    operation: kruda.FilterOperation.greaterThan,
                 },
                 {
                     name: 'Fly_date',
                     value: '2001',
-                    operation: 'contains',
+                    operation: kruda.FilterOperation.contains,
                 },
             ],
         ];
 
         const start = performance.now();
         /* run the filter with the rules */
-        const result = await filter.run(filterRules);
+        const result = await filter.run(filterRules, kruda.FilterExpressionMode.DNF);
         const end = performance.now();
         // console.log(result);
         document.body.innerText += `Filter took ${end - start}ms\n`;
