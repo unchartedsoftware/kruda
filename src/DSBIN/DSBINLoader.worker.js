@@ -22,6 +22,7 @@
  */
 
 import {DSBINInflate} from './DSBINInflate';
+import {Atomize} from '../core/Atomize';
 
 /**
  * Loads a DSBIN from a set of blobs.
