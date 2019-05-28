@@ -34,7 +34,6 @@ export class Pointer {
     constructor(memory, address = 0, type = Types.Uint8) {
         this.mMemory = memory;
         this.mOffset = address;
-        this.mView = this.mMemory.dataView;
         this.mType = null;
         this.type = type;
     }
@@ -61,7 +60,7 @@ export class Pointer {
      * @type {DataView}
      */
     get view() {
-        return this.mView;
+        return this.mMemory.dataView;
     }
 
     /**
@@ -109,10 +108,10 @@ export class Pointer {
      * @type {number}
      */
     get value() {
-        return this.mType.get(this.mView, this.mOffset);
+        return this.mType.get(this.view, this.mOffset);
     }
     set value(value) {
-        this.mType.set(this.mView, value, this.mOffset);
+        this.mType.set(this.view, value, this.mOffset);
     }
 
     /**
@@ -130,7 +129,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return type.get(this.mView, this.mOffset);
+        return type.get(this.view, this.mOffset);
     }
 
     /**
@@ -158,7 +157,7 @@ export class Pointer {
      * @return {number}
      */
     getValueAt(offset) {
-        return this.mType.get(this.mView, this.mOffset + offset * this.mType.byteSize);
+        return this.mType.get(this.view, this.mOffset + offset * this.mType.byteSize);
     }
 
     /**
@@ -168,7 +167,7 @@ export class Pointer {
      * @return {*}
      */
     setValueAt(offset, value) {
-        return this.mType.set(this.mView, value, this.mOffset + offset * this.mType.byteSize);
+        return this.mType.set(this.view, value, this.mOffset + offset * this.mType.byteSize);
     }
 
     /**
@@ -187,7 +186,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return type.get(this.mView, this.mOffset + offset);
+        return type.get(this.view, this.mOffset + offset);
     }
 
     /**
@@ -206,7 +205,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return this.mView.getInt8(this.mOffset + offset);
+        return this.view.getInt8(this.mOffset + offset);
     }
 
     /**
@@ -225,7 +224,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return this.mView.getInt16(this.mOffset + offset, true);
+        return this.view.getInt16(this.mOffset + offset, true);
     }
 
     /**
@@ -244,7 +243,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return this.mView.getInt32(this.mOffset + offset, true);
+        return this.view.getInt32(this.mOffset + offset, true);
     }
 
     /**
@@ -263,7 +262,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return this.mView.getUint8(this.mOffset + offset);
+        return this.view.getUint8(this.mOffset + offset);
     }
 
     /**
@@ -282,7 +281,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return this.mView.getUint16(this.mOffset + offset, true);
+        return this.view.getUint16(this.mOffset + offset, true);
     }
 
     /**
@@ -301,7 +300,7 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return this.mView.getUint32(this.mOffset + offset, true);
+        return this.view.getUint32(this.mOffset + offset, true);
     }
 
     /**
@@ -320,6 +319,6 @@ export class Pointer {
         /// #if !_DEBUG
          */
         /// #endif
-        return this.mView.getFloat32(this.mOffset + offset, true);
+        return this.view.getFloat32(this.mOffset + offset, true);
     }
 }
