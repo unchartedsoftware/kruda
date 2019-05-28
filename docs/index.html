@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@uncharted.software/kruda 0.0.6 | Documentation</title>
+  <title>@uncharted.software/kruda 0.0.7 | Documentation</title>
   <meta name='description' content='Close to the metal data processing'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@uncharted.software/kruda</h3>
-          <div class='mb1'><code>0.0.6</code></div>
+          <div class='mb1'><code>0.0.7</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -523,6 +523,176 @@
                       </a></li>
                       
                     </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#filterexpression'
+                  class="">
+                  FilterExpression
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#filterclause'
+                  class="">
+                  FilterClause
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#filterrule'
+                  class="">
+                  FilterRule
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#filteroperation'
+                  class=" toggle-sibling">
+                  FilterOperation
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#filteroperationcontains'
+                        class='regular pre-open'>
+                        .contains
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationnotcontains'
+                        class='regular pre-open'>
+                        .notContains
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationin'
+                        class='regular pre-open'>
+                        .in
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationnotin'
+                        class='regular pre-open'>
+                        .notIn
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationequal'
+                        class='regular pre-open'>
+                        .equal
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationnotequal'
+                        class='regular pre-open'>
+                        .notEqual
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationgreaterthan'
+                        class='regular pre-open'>
+                        .greaterThan
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationgreaterthanorequal'
+                        class='regular pre-open'>
+                        .greaterThanOrEqual
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationlessthan'
+                        class='regular pre-open'>
+                        .lessThan
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationlessthanorequal'
+                        class='regular pre-open'>
+                        .lessThanOrEqual
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationstartswith'
+                        class='regular pre-open'>
+                        .startsWith
+                      </a></li>
+                    
+                      <li><a
+                        href='#filteroperationendswith'
+                        class='regular pre-open'>
+                        .endsWith
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#filterexpressionmode'
+                  class=" toggle-sibling">
+                  FilterExpressionMode
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#filterexpressionmodecnf'
+                        class='regular pre-open'>
+                        .CNF
+                      </a></li>
+                    
+                      <li><a
+                        href='#filterexpressionmodeconjunctivenormalform'
+                        class='regular pre-open'>
+                        .conjunctiveNormalForm
+                      </a></li>
+                    
+                      <li><a
+                        href='#filterexpressionmodednf'
+                        class='regular pre-open'>
+                        .DNF
+                      </a></li>
+                    
+                      <li><a
+                        href='#filterexpressionmodedisjunctivenormalform'
+                        class='regular pre-open'>
+                        .disjunctiveNormalForm
+                      </a></li>
+                    
+                    </ul>
+                  
                   
                   
                   
@@ -4883,7 +5053,7 @@ will be returned.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>run(rules)</span>
+            <span class='code strong strong truncate'>run(rules, mode = FilterExpressionMode.DNF)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4891,57 +5061,9 @@ will be returned.</p>
 
   
 
-  <p>Runs this filter with the specified set of rules.
-Rules are an array of arrays containing objects describing the rules for this filter. Each object has the following structure:</p>
-<pre><code>{
-    name: string - The name of the column this rule applies to
-    value: * - The value to compare the column's values with
-    operation: string - Which operation to perform, must be one of the following: "equal", "notEqual", "lessThan", "moreThan" or "contains"
-}
-</code></pre>
-<p>Rule objects within the same array are treated as <code>AND</code>'ed and separate rule arrays are <code>OR</code>'ed.
-Here's an example of a valid <code>rules</code> array:</p>
-<pre><code>[
-    [
-           {
-               name: 'Origin_airport',
-               value: 'SEA',
-               operation: 'equal',
-           },
-           {
-               name: 'Destination_airport',
-               value: 'LAX',
-               operation: 'notEqual',
-           },
-    ],
-    [
-           {
-               name: 'Origin_airport',
-               value: 'MCO',
-               operation: 'equal',
-           },
-           {
-               name: 'Passengers',
-               value: 180,
-               operation: 'moreThan',
-           },
-    ],
-]
-</code></pre>
-<p>In the example above, the filter requires that in the results:
-{
-The value of column <code>Origin_airport</code> is equal to <code>SEA</code>
-AND
-The value of column <code>Destination_airport</code> is not equal to <code>LAX</code>
-}
-OR
-{
-The value of column <code>Origin_airport</code> is equal to <code>MCO</code>
-AND
-The value of column <code>Passengers</code> is more than 180
-}</p>
+  <p>Runs this filter with the specified set of rules.</p>
 
-    <div class='pre p1 fill-light mt0'>run(rules: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>>): <a href="#table">Table</a></div>
+    <div class='pre p1 fill-light mt0'>run(rules: <a href="#filterexpression">FilterExpression</a>, mode: <a href="#filterexpressionmode">FilterExpressionMode</a>?): <a href="#table">Table</a></div>
   
   
 
@@ -4958,8 +5080,18 @@ The value of column <code>Passengers</code> is more than 180
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>rules</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>>)</code>
+            <span class='code bold'>rules</span> <code class='quiet'>(<a href="#filterexpression">FilterExpression</a>)</code>
 	    The rules to run this filter with.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mode</span> <code class='quiet'>(<a href="#filterexpressionmode">FilterExpressionMode</a>?
+            = <code>FilterExpressionMode.DNF</code>)</code>
+	    The mode in which the specified rules should be interpreted.
 
           </div>
           
@@ -5247,6 +5379,1060 @@ WARNING: This filter worker will not work after this function is called and befo
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='filterexpression'>
+      FilterExpression
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A set of clauses that describe a filter. How it will be interpreted depends in the <a href="#filterexpressionmode">FilterExpressionMode</a> used
+at runtime.</p>
+
+    <div class='pre p1 fill-light mt0'>FilterExpression</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#filterclause">FilterClause</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='filterclause'>
+      FilterClause
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Group of rules used by this filter, it will interpreted either as a conjunction or disjunction, depending on the
+<a href="#filterexpressionmode">FilterExpressionMode</a> used at runtime.</p>
+
+    <div class='pre p1 fill-light mt0'>FilterClause</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#filterrule">FilterRule</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='filterrule'>
+      FilterRule
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Object describing a single rule used in a filter.</p>
+
+    <div class='pre p1 fill-light mt0'>FilterRule</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>field</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>value</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>operation</span> <code class='quiet'>(<a href="#filteroperation">FilterOperation</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='filteroperation'>
+      FilterOperation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Enum containing the different operations that a filter can perform.</p>
+
+    <div class='pre p1 fill-light mt0'>FilterOperation</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='filteroperationcontains'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>contains</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Indicates that string-based values contains the given value, or that
+collection-based values contain the given value</p>
+
+    <div class='pre p1 fill-light mt0'>contains</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationnotcontains'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>notContains</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Indicates that string-based values dose not contain the given value, or that
+collection-based values do not contain the given value</p>
+
+    <div class='pre p1 fill-light mt0'>notContains</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationin'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>in</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Indicates that the row value is part of the given array of values</p>
+
+    <div class='pre p1 fill-light mt0'>in</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationnotin'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>notIn</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Indicates that row value is not in the given array of values</p>
+
+    <div class='pre p1 fill-light mt0'>notIn</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationequal'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>equal</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the target field equals the value</p>
+
+    <div class='pre p1 fill-light mt0'>equal</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationnotequal'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>notEqual</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the target field is not equal to the value</p>
+
+    <div class='pre p1 fill-light mt0'>notEqual</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationgreaterthan'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>greaterThan</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the value is greater than the given value</p>
+
+    <div class='pre p1 fill-light mt0'>greaterThan</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationgreaterthanorequal'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>greaterThanOrEqual</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the value is greater than the given value</p>
+
+    <div class='pre p1 fill-light mt0'>greaterThanOrEqual</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationlessthan'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>lessThan</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the value is less than the given value</p>
+
+    <div class='pre p1 fill-light mt0'>lessThan</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationlessthanorequal'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>lessThanOrEqual</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the value is less than the given value</p>
+
+    <div class='pre p1 fill-light mt0'>lessThanOrEqual</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationstartswith'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>startsWith</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the string value starts with the given value</p>
+
+    <div class='pre p1 fill-light mt0'>startsWith</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filteroperationendswith'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>endsWith</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Filters for rows where the string value ends with the given value</p>
+
+    <div class='pre p1 fill-light mt0'>endsWith</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='filterexpressionmode'>
+      FilterExpressionMode
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Enum that represents the different modes in which a filter can be interpreted.</p>
+<p>Can be "conjunctive normal form" boolean logic:
+<a href="https://en.wikipedia.org/wiki/Conjunctive_normal_form">https://en.wikipedia.org/wiki/Conjunctive_normal_form</a>
+or "disjunctive normal form" boolean logic:
+<a href="https://en.wikipedia.org/wiki/Disjunctive_normal_form">https://en.wikipedia.org/wiki/Disjunctive_normal_form</a></p>
+
+    <div class='pre p1 fill-light mt0'>FilterExpressionMode</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='filterexpressionmodecnf'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>CNF</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Short form for conjunctive normal form.
+Same as <code>conjunctiveNormalForm</code></p>
+
+    <div class='pre p1 fill-light mt0'>CNF</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filterexpressionmodeconjunctivenormalform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>conjunctiveNormalForm</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Long form for conjunctive normal form.
+Same as <code>CNF</code></p>
+
+    <div class='pre p1 fill-light mt0'>conjunctiveNormalForm</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filterexpressionmodednf'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>DNF</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Short form for disjunctive normal form.
+Same as <code>disjunctiveNormalForm</code></p>
+
+    <div class='pre p1 fill-light mt0'>DNF</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filterexpressionmodedisjunctivenormalform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>disjunctiveNormalForm</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Long form for disjunctive normal form.
+Same as <code>DNF</code></p>
+
+    <div class='pre p1 fill-light mt0'>disjunctiveNormalForm</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
 
   
 

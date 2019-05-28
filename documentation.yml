@@ -12,6 +12,11 @@ toc:
       description: Filtering, aggregation, etc.
     - Filter
     - FilterProcessor
+    - FilterExpression
+    - FilterClause
+    - FilterRule
+    - FilterOperation
+    - FilterExpressionMode
 
     - name: Byte Strings
       descripton: Working with binary strings in kruda.js
