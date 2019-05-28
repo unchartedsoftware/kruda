@@ -45,6 +45,7 @@ import * as _Types from './core/Types';
  * @property {_Void} Void
  */
 export const Types = _Types;
+
 export {Heap} from './core/Heap';
 export {MemoryBlock} from './core/MemoryBlock';
 export {Pointer} from './core/Pointer';
@@ -55,7 +56,11 @@ export {DSBINLoader} from './DSBIN/DSBINLoader';
 
 export {Table} from './data/table/Table';
 export {Header} from './data/table/Header';
+// export {Row} from './data/table/Row'; // only export type for TypeScript
+
 export {Filter} from './data/filter/Filter';
+export {FilterOperation} from './data/filter/FilterOperation';
+export {FilterExpressionMode} from './data/filter/FilterExpressionMode';
 
 export {kBinaryTypes, kBinaryTypeMap} from './data/table/Header';
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';
