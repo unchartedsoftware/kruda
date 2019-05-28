@@ -209,6 +209,16 @@ export class Filter {
         const promises = [];
         const resultMemory = this._allocateResultMemory();
         const indices = this.mHeap.malloc(8);
+
+        if (!this.mHeap.shared) {
+            /* if the heap isn't shared, there should only be one thread */
+            await this.mWorkerPool.scheduleTask('setMemory', {
+                heapBuffer: this.mTable.memory.heap.buffer,
+                tableAddress: this.mTable.memory.address,
+                tableSize: this.mTable.memory.size,
+            }, [this.mTable.memory.heap.buffer]);
+        }
+
         for (let i = 0; i < this.mWorkerPool.workerCount; ++i) {
             const promise = this.mWorkerPool.scheduleTask('processFilters', {
                 rules: rules,
@@ -220,32 +230,40 @@ export class Filter {
             });
             promises.push(promise);
         }
-        return await Promise.all(promises).then(() => {
-            const indicesPtr = new Pointer(indices, 0, Types.Uint32);
-            const resultCount = indicesPtr.getValueAt(1);
-            indices.free();
 
-            this.mResultHeader.rowCount = resultCount;
-            this.mResultHeader.dataLength = this.mResultRowSize * resultCount;
+        await Promise.all(promises);
 
-            const binaryHeader = Header.buildBinaryHeader(this.mResultHeader);
-            const resultView = new Uint8Array(resultMemory.buffer);
-            const headerView = new Uint8Array(binaryHeader);
-            resultView.set(headerView, resultMemory.address);
+        if (!this.mHeap.shared) {
+            /* if the heap isn't shared, there should only be one thread */
+            const result = await this.mWorkerPool.scheduleTask('fetchMemory', {});
 
-            const finalMemorySize = this.mResultHeader.length + this.mResultHeader.dataLength;
-            if (finalMemorySize < resultMemory.size) {
-                resultMemory.heap.shrink(resultMemory, finalMemorySize);
-            }
+            this.mHeap._restoreBuffer(result.buffer);
+        }
 
-            const resultTable = new Table(resultMemory);
+        const indicesPtr = new Pointer(indices, 0, Types.Uint32);
+        const resultCount = indicesPtr.getValueAt(1);
+        indices.free();
 
-            if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
-                return new ProxyTable(this.mTable, resultTable);
-            }
+        this.mResultHeader.rowCount = resultCount;
+        this.mResultHeader.dataLength = this.mResultRowSize * resultCount;
 
-            return resultTable;
-        });
+        const binaryHeader = Header.buildBinaryHeader(this.mResultHeader);
+        const resultView = new Uint8Array(resultMemory.buffer);
+        const headerView = new Uint8Array(binaryHeader);
+        resultView.set(headerView, resultMemory.address);
+
+        const finalMemorySize = this.mResultHeader.length + this.mResultHeader.dataLength;
+        if (finalMemorySize < resultMemory.size) {
+            resultMemory.heap.shrink(resultMemory, finalMemorySize);
+        }
+
+        const resultTable = new Table(resultMemory);
+
+        if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
+            return new ProxyTable(this.mTable, resultTable);
+        }
+
+        return resultTable;
     }
 
     /**
@@ -271,14 +289,18 @@ export class Filter {
             this.mWorkerPool = new WorkerPool();
         }
 
+        const options = {};
+
+        if (this.mTable.memory.heap.shared) {
+            options.heapBuffer = this.mTable.memory.heap.buffer;
+            options.tableAddress = this.mTable.memory.address;
+            options.tableSize = this.mTable.memory.size;
+        }
+
         for (let i = 0; i < count; ++i) {
             this.mWorkerPool.addWorker(new FilterWorker(), {
                 type: 'initialize',
-                options: {
-                    heapBuffer: this.mTable.memory.heap.buffer,
-                    tableAddress: this.mTable.memory.address,
-                    tableSize: this.mTable.memory.size,
-                },
+                options,
             });
         }
     }

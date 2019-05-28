@@ -49,11 +49,11 @@ function sendError(reason) {
  * @memberof FilterWorker
  * @private
  */
-function sendSuccess(data = null) {
+function sendSuccess(data = null, transferable = null) {
     self.postMessage({
         type: 'success',
         data,
-    });
+    }, transferable);
 }
 
 /**
@@ -78,6 +78,24 @@ self.onmessage = function filterWorkerOnMessage(e) {
             if (gProcessor) {
                 gProcessor.process(message.options);
                 sendSuccess();
+            } else {
+                sendError('ERROR: Filter.worker has not been initialized');
+            }
+            break;
+
+        case 'setMemory':
+            if (gProcessor) {
+                gProcessor.setMemory(message.options);
+                sendSuccess();
+            } else {
+                sendError('ERROR: Filter.worker has not been initialized');
+            }
+            break;
+
+        case 'fetchMemory':
+            if (gProcessor) {
+                const buffer = gProcessor.fetchMemory();
+                sendSuccess({ buffer }, [ buffer ]);
             } else {
                 sendError('ERROR: Filter.worker has not been initialized');
             }

@@ -37,14 +37,48 @@ import * as Types from '../../core/Types';
  * heapBuffer: ArrayBufferLike,
  * tableAddress: number,
  * tableSize: number
- * }} config - Configuration object.
+ * }|{}} config - Configuration object.
  */
 export class FilterProcessor {
     constructor(config) {
+        this.mHeap = null;
+        this.mTableMemory = null;
+        this.mTable = null;
+        this.mRow = null;
+
+        if (config.heapBuffer) {
+            this.setMemory(config);
+        }
+    }
+
+    /**
+     * Sets the memory this filter processor should use during processing. Useful when SharedArrayBuffer is not
+     * available.
+     * @param {{
+     * heapBuffer: ArrayBufferLike,
+     * tableAddress: number,
+     * tableSize: number
+     * }|{}} config - Configuration object.
+     */
+    setMemory(config) {
         this.mHeap = new Heap(config.heapBuffer);
         this.mTableMemory = new MemoryBlock(this.mHeap, config.tableAddress, config.tableSize);
         this.mTable = new Table(this.mTableMemory);
-        this.mRow = this.mTable.getRow();
+        this.mRow = this.mTable.getRow(0);
+    }
+
+    /**
+     * Fetches the memory from this filter processor and invalidates all objects linked to it.
+     * WARNING: This filter worker will not work after this function is called and before a new memory block is set.
+     * @return {ArrayBuffer|SharedArrayBuffer}
+     */
+    fetchMemory() {
+        const buffer = this.mHeap.buffer;
+        this.mHeap = null;
+        this.mTableMemory = null;
+        this.mTable = null;
+        this.mRow = null;
+        return buffer;
     }
 
     /**
