@@ -53,7 +53,11 @@ export async function tableFromLocalCSV(file, heap) {
         offset: memory.address + tableHeader.byteLength,
     };
 
-    await DataTools.mergeChunksIntoBuffer(result.chunks, result.header, config);
+    const merged = await DataTools.mergeChunksIntoBuffer(result.chunks, result.header, config);
+    if (!heap.shared) {
+        heap._restoreBuffer(merged.data.buffer);
+    }
+
     dekkai.terminate();
     return new Table(memory);
 }
