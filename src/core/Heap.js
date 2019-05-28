@@ -103,7 +103,7 @@ export class Heap {
              */
             /// #endif
 
-            if (typeof SharedArrayBuffer !== 'undefined') {
+            if (typeof SharedArrayBuffer !== 'undefined' && typeof Atomics !== 'undefined') {
                 this.mBuffer = new SharedArrayBuffer(buffer);
                 this.mShared = true;
             } else {
@@ -134,6 +134,8 @@ export class Heap {
 
         this.mInt32View = new Int32Array(this.mBuffer, 0, 4);
         this.mUint32View = new Uint32Array(this.mBuffer);
+
+        this.mMemoryBlocks = [];
     }
 
     /**
@@ -432,5 +434,69 @@ export class Heap {
             return this._findNewAllocOffset(this._readPadding(offset - 4));
         }
         return offset;
+    }
+
+    /**
+     * Restores the underlying buffer used by this heap, useful when SharedArrayBuffer is not available and the memory
+     * needs to be passed among threads.
+     * @param {ArrayBuffer|SharedArrayBuffer} buffer - The buffer to restore.
+     * @private
+     */
+    _restoreBuffer(buffer) {
+        this.mBuffer = buffer;
+        this.mShared = !(buffer instanceof ArrayBuffer);
+        this.mDataView = new DataView(this.mBuffer);
+        this.mInt32View = new Int32Array(this.mBuffer, 0, 4);
+        this.mUint32View = new Uint32Array(this.mBuffer);
+
+        for (let i = 0, n = this.mMemoryBlocks.length; i < n; ++i) {
+            this.mMemoryBlocks[i]._setSize(this.mMemoryBlocks[i].size);
+        }
+    }
+
+    /**
+     * Registers a memory block so its memory can be properly managed by this heap. Useful when the system kruda is
+     * running on does not support SharedArrayBuffer or Atomics.
+     * @param {MemoryBlock} memory - The memory block to register
+     * @private
+     */
+    _registerMemoryBlock(memory) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (this.mMemoryBlocks.indexOf(memory) !== -1) {
+            throw 'ERROR: Cannot register memory block twice';
+        }
+
+        if (memory.heap !== this) {
+            throw 'ERROR: Memory blocks can only be registered with the Heap that owns them';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+        this.mMemoryBlocks.push(memory);
+    }
+
+    /**
+     * Unregisters a memory block so its memory stops being managed by this heap. Useful when the system kruda is
+     * running on does not support SharedArrayBuffer or Atomics.
+     * @param {MemoryBlock} memory - The memory block to unregister.
+     * @private
+     */
+    _unregisterMemoryBlock(memory) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (this.mMemoryBlocks.indexOf(memory) === -1) {
+            throw 'ERROR: Trying to unregister an unknown memory block';
+        }
+
+        if (memory.heap !== this) {
+            throw 'ERROR: Memory blocks can only be unregistered from the Heap that owns them';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+        this.mMemoryBlocks.splice(this.mMemoryBlocks.indexOf(memory), 1);
     }
 }

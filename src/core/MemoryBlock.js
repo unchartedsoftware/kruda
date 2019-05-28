@@ -36,6 +36,8 @@ export class MemoryBlock {
         this.mOffset = address;
         this.mSize = size;
         this.mDataView = new DataView(this.mHeap.buffer, this.mOffset, this.mSize);
+
+        this.mHeap._registerMemoryBlock(this);
     }
 
     /**
@@ -90,6 +92,8 @@ export class MemoryBlock {
      * @private
      */
     _destroy() {
+        this.mHeap._unregisterMemoryBlock(this);
+
         this.mHeap = null;
         this.mOffset = -1;
         this.mSize = 0;
