@@ -1,6 +1,6 @@
 {
   "name": "@uncharted.software/kruda",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Close to the metal data processing",
   "entry": "src/index.js",
   "main": "dist/esm/kruda.js",
@@ -49,7 +49,7 @@
     "pako": "^1.0.8",
     "webcpu": "^0.4.1"
   },
-  "engineStrict": true,  
+  "engineStrict": true,
   "engines": {
     "node": ">=0.11.0"
   },
