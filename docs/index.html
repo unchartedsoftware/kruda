@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>@uncharted.software/kruda 0.0.3 | Documentation</title>
+  <title>@uncharted.software/kruda 0.0.6 | Documentation</title>
   <meta name='description' content='Close to the metal data processing'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@uncharted.software/kruda</h3>
-          <div class='mb1'><code>0.0.3</code></div>
+          <div class='mb1'><code>0.0.6</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -503,6 +503,18 @@
                   
                     <ul class='list-reset py1-ul pl1'>
                       <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#filterprocessorsetmemory'
+                        class='regular pre-open'>
+                        #setMemory
+                      </a></li>
+                      
+                      <li><a
+                        href='#filterprocessorfetchmemory'
+                        class='regular pre-open'>
+                        #fetchMemory
+                      </a></li>
                       
                       <li><a
                         href='#filterprocessorprocess'
@@ -1035,6 +1047,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#heapshared'
+                        class='regular pre-open'>
+                        #shared
+                      </a></li>
+                      
+                      <li><a
                         href='#heapdataview'
                         class='regular pre-open'>
                         #dataView
@@ -1343,6 +1361,17 @@
                 
                 <div class='toggle-target display-none'>
                   
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#dsbininflateinflate'
+                        class='regular pre-open'>
+                        .inflate
+                      </a></li>
+                    
+                    </ul>
+                  
                   
                     <ul class='list-reset py1-ul pl1'>
                       <li class='h5'><span>Instance members</span></li>
@@ -1368,6 +1397,120 @@
                   Misc
                   
                 </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#inttypedarray'
+                  class="">
+                  IntTypedArray
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#atomize'
+                  class="">
+                  Atomize
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#atomicslike'
+                  class=" toggle-sibling">
+                  AtomicsLike
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#atomicslikeadd'
+                        class='regular pre-open'>
+                        #add
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikeand'
+                        class='regular pre-open'>
+                        #and
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikecompareexchange'
+                        class='regular pre-open'>
+                        #compareExchange
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikeexchange'
+                        class='regular pre-open'>
+                        #exchange
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikeislockfree'
+                        class='regular pre-open'>
+                        #isLockFree
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikeload'
+                        class='regular pre-open'>
+                        #load
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikenotify'
+                        class='regular pre-open'>
+                        #notify
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikeor'
+                        class='regular pre-open'>
+                        #or
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikestore'
+                        class='regular pre-open'>
+                        #store
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikesub'
+                        class='regular pre-open'>
+                        #sub
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikewait'
+                        class='regular pre-open'>
+                        #wait
+                      </a></li>
+                      
+                      <li><a
+                        href='#atomicslikexor'
+                        class='regular pre-open'>
+                        #xor
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -1466,6 +1609,16 @@
                   href='#tablefromremotecsv'
                   class="">
                   tableFromRemoteCSV
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#kbinarytypes'
+                  class="">
+                  kBinaryTypes
                   
                 </a>
                 
@@ -4739,39 +4892,40 @@ will be returned.</p>
   
 
   <p>Runs this filter with the specified set of rules.
-Rules are an array of arrays containing objects describing the rules for this filter. Each object has the following structure:
-{
-name: string - The name of the column this rule applies to
-value: * - The value to compare the column's values with
-operation: string - Which operation to perform, must be one of the following: "equal", "notEqual", "lessThan", "moreThan" or "contains"
-}</p>
-<p>Rule objects within the same array are treated as <code>AND</code>ed and separate rule arrays are <code>OR</code>ed.
+Rules are an array of arrays containing objects describing the rules for this filter. Each object has the following structure:</p>
+<pre><code>{
+    name: string - The name of the column this rule applies to
+    value: * - The value to compare the column's values with
+    operation: string - Which operation to perform, must be one of the following: "equal", "notEqual", "lessThan", "moreThan" or "contains"
+}
+</code></pre>
+<p>Rule objects within the same array are treated as <code>AND</code>'ed and separate rule arrays are <code>OR</code>'ed.
 Here's an example of a valid <code>rules</code> array:</p>
 <pre><code>[
-[
-{
-name: 'Origin_airport',
-value: 'SEA',
-operation: 'equal',
-},
-{
-name: 'Destination_airport',
-value: 'LAX',
-operation: 'notEqual',
-},
-],
-[
-{
-name: 'Origin_airport',
-value: 'MCO',
-operation: 'equal',
-},
-{
-name: 'Passengers',
-value: 180,
-operation: 'moreThan',
-},
-],
+    [
+           {
+               name: 'Origin_airport',
+               value: 'SEA',
+               operation: 'equal',
+           },
+           {
+               name: 'Destination_airport',
+               value: 'LAX',
+               operation: 'notEqual',
+           },
+    ],
+    [
+           {
+               name: 'Origin_airport',
+               value: 'MCO',
+               operation: 'equal',
+           },
+           {
+               name: 'Passengers',
+               value: 180,
+               operation: 'moreThan',
+           },
+    ],
 ]
 </code></pre>
 <p>In the example above, the filter requires that in the results:
@@ -4872,7 +5026,7 @@ This class is meant to be used by filter workers, but it is safe to use on the m
 Creates a new instance and reconstructs the Heap, Memory Object and Table specified in the config object.
 NOTE: Heap, MemoryBlock and Table classes are thread safe.</p>
 
-    <div class='pre p1 fill-light mt0'>new FilterProcessor(config: {heapBuffer: ArrayBufferLike, tableAddress: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, tableSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>})</div>
+    <div class='pre p1 fill-light mt0'>new FilterProcessor(config: ({heapBuffer: ArrayBufferLike, tableAddress: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, tableSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>} | {}))</div>
   
   
 
@@ -4889,7 +5043,7 @@ NOTE: Heap, MemoryBlock and Table classes are thread safe.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>config</span> <code class='quiet'>({heapBuffer: ArrayBufferLike, tableAddress: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, tableSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>})</code>
+            <span class='code bold'>config</span> <code class='quiet'>(({heapBuffer: ArrayBufferLike, tableAddress: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, tableSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>} | {}))</code>
 	    Configuration object.
 
           </div>
@@ -4912,6 +5066,124 @@ NOTE: Heap, MemoryBlock and Table classes are thread safe.</p>
   
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
+  
+    <div class='border-bottom' id='filterprocessorsetmemory'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setMemory(config)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Sets the memory this filter processor should use during processing. Useful when SharedArrayBuffer is not
+available.</p>
+
+    <div class='pre p1 fill-light mt0'>setMemory(config: ({heapBuffer: ArrayBufferLike, tableAddress: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, tableSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>} | {}))</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>config</span> <code class='quiet'>(({heapBuffer: ArrayBufferLike, tableAddress: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, tableSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>} | {}))</code>
+	    Configuration object.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='filterprocessorfetchmemory'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fetchMemory()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Fetches the memory from this filter processor and invalidates all objects linked to it.
+WARNING: This filter worker will not work after this function is called and before a new memory block is set.</p>
+
+    <div class='pre p1 fill-light mt0'>fetchMemory(): (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> | SharedArrayBuffer)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> | SharedArrayBuffer)</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
   
     <div class='border-bottom' id='filterprocessorprocess'>
       <div class="clearfix small pointer toggle-sibling">
@@ -8614,6 +8886,58 @@ the allocatable memory increases.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='heapshared'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>shared</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Is the buffer in this heap an instance of SharedArrayBuffer</p>
+
+    <div class='pre p1 fill-light mt0'>shared</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='heapdataview'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -11059,17 +11383,10 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   </div>
   
 
-  <p>Inflates the <code>inputBuffer</code> data into the <code>outputBuffer</code> optionally a final <code>size</code> can be specified.</p>
+  <p>Utility class to inflate zlib compressed ArrayBuffers into a custom ArrayBuffer, could be a SharedArrayBuffer.</p>
 
-    <div class='pre p1 fill-light mt0'>new DSBINInflate(outputBuffer: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, inputBuffer: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+    <div class='pre p1 fill-light mt0'>new DSBINInflate(outputBuffer: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</div>
   
-  
-    <p>
-      Extends
-      
-        pako.Inflate
-      
-    </p>
   
 
   
@@ -11094,8 +11411,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
-            = <code>outputBuffer.length</code>)</code>
+            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
 	    The expected final size of the uncompressed data. Defaults to the full size of 
 <code>outputBuffer</code>
 
@@ -11103,10 +11419,74 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
           
         </div>
       
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='dsbininflateinflate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>inflate(inputBuffer, outputBuffer, size = outputBuffer.length)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Inflates the <code>inputBuffer</code> data into the <code>outputBuffer</code> optionally a final <code>size</code> can be specified.</p>
+
+    <div class='pre p1 fill-light mt0'>inflate(inputBuffer: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>, outputBuffer: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>inputBuffer</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>)</code>
 	    The compressed data.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>outputBuffer</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>)</code>
+	    Buffer where the uncompressed data will be written.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>outputBuffer.length</code>)</code>
+	    The expected final size of the uncompressed data. Defaults to the full size of 
+<code>outputBuffer</code>
 
           </div>
           
@@ -11130,6 +11510,20 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -11231,6 +11625,1210 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='inttypedarray'>
+      IntTypedArray
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>IntTypedArray</div>
+  
+    <p>
+      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Int8Array">Int8Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Int16Array">Int16Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Int32Array">Int32Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array">Uint32Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='atomize'>
+      Atomize
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Simple wrapper to provide atomics-like functionality in systems that lack the functionality.</p>
+
+    <div class='pre p1 fill-light mt0'>Atomize</div>
+  
+    <p>
+      Type:
+      (Atomics | <a href="#atomicslike">AtomicsLike</a>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='atomicslike'>
+      AtomicsLike
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Simple stubbing for Atomics.
+WARNING: Does not implement any kind of synchronization.</p>
+
+    <div class='pre p1 fill-light mt0'>new AtomicsLike()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='atomicslikeadd'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>add(typedArray, index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Adds a given value at a given position in the array and returns the old value at that position</p>
+
+    <div class='pre p1 fill-light mt0'>add(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikeand'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>and(typedArray, index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Computes a bitwise AND with a given value at a given position in the array, and returns the old value at
+that position.</p>
+
+    <div class='pre p1 fill-light mt0'>and(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikecompareexchange'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>compareExchange(typedArray, index, expectedValue, replacementValue)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Exchanges a given replacement value at a given position in the array, if a given expected value equals the
+old value. It returns the old value at that position whether it was equal to the expected value or not</p>
+
+    <div class='pre p1 fill-light mt0'>compareExchange(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, expectedValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, replacementValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>expectedValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to check for equality.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>replacementValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The number to exchange.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikeexchange'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>exchange(typedArray, index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Stores a given value at a given position in the array and returns the old value at that position.</p>
+
+    <div class='pre p1 fill-light mt0'>exchange(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikeislockfree'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isLockFree(size)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The static Atomics.isLockFree() method is used to determine whether to use locks or atomic operations.
+It returns true, if the given size is one of the BYTES_PER_ELEMENT property of integer TypedArray types.</p>
+
+    <div class='pre p1 fill-light mt0'>isLockFree(size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The size in bytes to check.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikeload'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>load(typedArray, index)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Returns a value at a given position in the array.</p>
+
+    <div class='pre p1 fill-light mt0'>load(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikenotify'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>notify(typedArray, index, count)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Notifies up some agents that are sleeping in the wait queue.
+WARNING: NOT SUPPORTED IN SYSTEMS WITHOUT Atomics.</p>
+
+    <div class='pre p1 fill-light mt0'>notify(typedArray: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Int32Array">Int32Array</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, count: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Int32Array">Int32Array</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>count</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The number of threads to be notified.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikeor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>or(typedArray, index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Computes a bitwise OR with a given value at a given position in the array, and returns the old value at that
+position.</p>
+
+    <div class='pre p1 fill-light mt0'>or(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikestore'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>store(typedArray, index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Stores a given value at the given position in the array and returns that value.</p>
+
+    <div class='pre p1 fill-light mt0'>store(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikesub'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>sub(typedArray, index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Substracts a given value at a given position in the array and returns the old value at that position.</p>
+
+    <div class='pre p1 fill-light mt0'>sub(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikewait'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>wait(typedArray, index, value, timeout)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Verifies that a given position in an Int32Array still contains a given value and if so sleeps, awaiting a
+wakeup or a timeout. It returns a string which is either "ok", "not-equal", or "timed-out".
+WARNING: NOT SUPPORTED IN SYSTEMS WITHOUT Atomics.</p>
+
+    <div class='pre p1 fill-light mt0'>wait(typedArray: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Int32Array">Int32Array</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, timeout: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Int32Array">Int32Array</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeout</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>Infinity</code>)</code>
+	    Time, in milliseconds, to wait before the operation times out.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='atomicslikexor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>xor(typedArray, index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Computes a bitwise XOR with a given value at a given position in the array, and returns the old value at
+that position.</p>
+
+    <div class='pre p1 fill-light mt0'>xor(typedArray: <a href="#inttypedarray">IntTypedArray</a>, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typedArray</span> <code class='quiet'>(<a href="#inttypedarray">IntTypedArray</a>)</code>
+	    The typed array instance where the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index at which the operation will be performed.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to use while performing the operation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='corecount'>
       coreCount
     </h3>
@@ -11241,7 +12839,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
 
   <p>Returns the estimated physical core count in this system.</p>
 
-    <div class='pre p1 fill-light mt0'>coreCount(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
+    <div class='pre p1 fill-light mt0'>coreCount(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>></div>
   
   
 
@@ -11259,7 +12857,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></code>:
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>></code>:
         
 
       
@@ -11790,6 +13388,59 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='kbinarytypes'>
+      kBinaryTypes
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Binary type list.</p>
+
+    <div class='pre p1 fill-light mt0'>kBinaryTypes</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#type">Type</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='kbinarytypemap'>
       kBinaryTypeMap
     </h3>
@@ -11804,7 +13455,7 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
     <p>
       Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#type">Type</a>>
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map">Map</a>&#x3C;<a href="#type">Type</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>
     </p>
   
   

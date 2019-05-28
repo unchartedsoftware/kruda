@@ -150,43 +150,44 @@ export class Filter {
     /**
      * Runs this filter with the specified set of rules.
      * Rules are an array of arrays containing objects describing the rules for this filter. Each object has the following structure:
+     * ```
      * {
      *     name: string - The name of the column this rule applies to
      *     value: * - The value to compare the column's values with
      *     operation: string - Which operation to perform, must be one of the following: "equal", "notEqual", "lessThan", "moreThan" or "contains"
      * }
-     *
-     * Rule objects within the same array are treated as `AND`ed and separate rule arrays are `OR`ed.
+     * ```
+     * Rule objects within the same array are treated as `AND`'ed and separate rule arrays are `OR`'ed.
      * Here's an example of a valid `rules` array:
      *
-     ```
-     [
-         [
-                {
-                    name: 'Origin_airport',
-                    value: 'SEA',
-                    operation: 'equal',
-                },
-                {
-                    name: 'Destination_airport',
-                    value: 'LAX',
-                    operation: 'notEqual',
-                },
-         ],
-         [
-                {
-                    name: 'Origin_airport',
-                    value: 'MCO',
-                    operation: 'equal',
-                },
-                {
-                    name: 'Passengers',
-                    value: 180,
-                    operation: 'moreThan',
-                },
-         ],
-     ]
-     ```
+     * ```
+     * [
+     *     [
+     *            {
+     *                name: 'Origin_airport',
+     *                value: 'SEA',
+     *                operation: 'equal',
+     *            },
+     *            {
+     *                name: 'Destination_airport',
+     *                value: 'LAX',
+     *                operation: 'notEqual',
+     *            },
+     *     ],
+     *     [
+     *            {
+     *                name: 'Origin_airport',
+     *                value: 'MCO',
+     *                operation: 'equal',
+     *            },
+     *            {
+     *                name: 'Passengers',
+     *                value: 180,
+     *                operation: 'moreThan',
+     *            },
+     *     ],
+     * ]
+     * ```
      *
      * In the example above, the filter requires that in the results:
      * {
