@@ -325,7 +325,7 @@ export class Filter {
             columnNameLength += Math.min(255, column.name.length) + 1;
         }
 
-        header.length = 12 * header.columns.length + columnNameLength + 20;
+        header.length = (12 * header.columns.length + columnNameLength + 20 + 3) & ~0x03;
 
         return header;
     }
