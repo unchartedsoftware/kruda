@@ -25,6 +25,8 @@ import {MemoryBlock} from '../../core/MemoryBlock';
 import {Table} from '../table/Table';
 import {ByteString} from '../types/ByteString';
 import {Atomize} from '../../core/Atomize';
+import {FilterOperation} from './FilterOperation';
+import {FilterExpressionMode} from './FilterExpressionMode';
 import * as Types from '../../core/Types';
 
 /**
@@ -99,7 +101,7 @@ export class FilterProcessor {
         const resultView = resultMemory.dataView;
         const rowCount = this.mTable.rowCount;
         const row = this.mRow;
-        const filterTester = this._generateFilterTester(config.rules, row);
+        const filterTester = this._generateFilterTester(config.rules, config.mode, row);
         const resultWriter = this._generateResultWriter(config.resultDescription, indices, row);
         let i;
         let n;
@@ -160,11 +162,12 @@ export class FilterProcessor {
      * Generates a function that tests the specified rule sets against the specified row.
      * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
      * @param {Array} rules - An array of rule sets to test against.
+     * @param {FilterExpressionMode} mode - The mode in which the rules should be interpreted.
      * @param {Row} row - The row instance that will be used to iterate through the table.
      * @return {function():boolean}
      * @private
      */
-    _generateFilterTester(rules, row) {
+    _generateFilterTester(rules, mode, row) {
         if (!rules || !rules.length) {
             return function filterTesterEmpty() {
                 return true;
@@ -174,16 +177,27 @@ export class FilterProcessor {
         const testers = [];
         const testersLength = rules.length;
         for (let i = 0; i < testersLength; ++i) {
-            testers.push(this._generateRuleTester(rules[i], row));
+            testers.push(this._generateRuleTester(rules[i], mode, row));
         }
 
-        return function filterTester() {
+        if (mode === FilterExpressionMode.DNF || mode === FilterExpressionMode.disjunctiveNormalForm) {
+            return function filterTesterDNF() {
+                for (let i = 0; i < testersLength; ++i) {
+                    if (testers[i]()) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+        }
+
+        return function filterTesterCNF() {
             for (let i = 0; i < testersLength; ++i) {
-                if (testers[i]()) {
-                    return true;
+                if (!testers[i]()) {
+                    return false;
                 }
             }
-            return false;
+            return true;
         };
     }
 
@@ -191,24 +205,36 @@ export class FilterProcessor {
      * Generates a function that tests the specified rule set against the specified row.
      * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
      * @param {Array} rule - The rule set to test.
+     * @param {FilterExpressionMode} mode - The mode in which the rule should be interpreted.
      * @param {Row} row - The row instance that will be used to iterate through the table.
      * @return {function():boolean}
      * @private
      */
-    _generateRuleTester(rule, row) {
+    _generateRuleTester(rule, mode, row) {
         const testers = [];
         const testersLength = rule.length;
         for (let i = 0; i < testersLength; ++i) {
             testers.push(this._generateFieldTester(rule[i], row));
         }
 
-        return function ruleTester() {
+        if (mode === FilterExpressionMode.DNF || mode === FilterExpressionMode.disjunctiveNormalForm) {
+            return function ruleTesterDNF() {
+                for (let i = 0; i < testersLength; ++i) {
+                    if (!testers[i]()) {
+                        return false;
+                    }
+                }
+                return true;
+            };
+        }
+
+        return function ruleTesterCNF() {
             for (let i = 0; i < testersLength; ++i) {
-                if (!testers[i]()) {
-                    return false;
+                if (testers[i]()) {
+                    return true;
                 }
             }
-            return true;
+            return false;
         };
     }
 
@@ -224,12 +250,77 @@ export class FilterProcessor {
         const column = this.mTable.header.columns[row.names[field.name]];
         const getter = row.accessors[row.names[field.name]].getter;
         switch (field.operation) {
-            case 'contains': {
+            case FilterOperation.contains: {
                 const value = ByteString.fromString(field.value);
                 return function filterContains() { return getter().containsCase(value); };
             }
 
-            case 'equal': {
+            case FilterOperation.notContains: {
+                const value = ByteString.fromString(field.value);
+                return function filterNotContains() { return !getter().containsCase(value); };
+            }
+
+            case FilterOperation.in: {
+                if (column.type === ByteString) {
+                    const values = field.value.map(v => ByteString.fromString(v));
+                    const n = values.length;
+                    let i;
+                    return function filterIn() {
+                        const toTest = getter();
+                        for (i = 0; i < n; ++i) {
+                            if (toTest.equalsCase(values[i])) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                }
+
+                const values = field.value.map(v => parseFloat(v));
+                const n = values.length;
+                let i;
+                return function filterIn() {
+                    const toTest = getter();
+                    for (i = 0; i < n; ++i) {
+                        if (toTest === values[i]) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+            }
+
+            case FilterOperation.notIn: {
+                if (column.type === ByteString) {
+                    const values = field.value.map(v => ByteString.fromString(v));
+                    const n = values.length;
+                    let i;
+                    return function filterNotIn() {
+                        const toTest = getter();
+                        for (i = 0; i < n; ++i) {
+                            if (toTest.equalsCase(values[i])) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    };
+                }
+
+                const values = field.value.map(v => parseFloat(v));
+                const n = values.length;
+                let i;
+                return function filterNotIn() {
+                    const toTest = getter();
+                    for (i = 0; i < n; ++i) {
+                        if (toTest === values[i]) {
+                            return false;
+                        }
+                    }
+                    return true;
+                };
+            }
+
+            case FilterOperation.equal: {
                 if (column.type === ByteString) {
                     const value = ByteString.fromString(field.value);
                     return function filterEquals() {
@@ -242,7 +333,7 @@ export class FilterProcessor {
                 };
             }
 
-            case 'notEqual': {
+            case FilterOperation.notEqual: {
                 if (column.type === ByteString) {
                     const value = ByteString.fromString(field.value);
                     return function filterEquals() {
@@ -255,17 +346,31 @@ export class FilterProcessor {
                 };
             }
 
-            case 'moreThan': {
+            case FilterOperation.greaterThan: {
                 const value = parseFloat(field.value);
-                return function filterMoreThan() {
+                return function filterMoreThanOrEqual() {
                     return getter() > value;
                 };
             }
 
-            case 'lessThan': {
+            case FilterOperation.greaterThanOrEqual: {
+                const value = parseFloat(field.value);
+                return function filterMoreThan() {
+                    return getter() >= value;
+                };
+            }
+
+            case FilterOperation.lessThan: {
                 const value = parseFloat(field.value);
                 return function filterLessThan() {
                     return getter() < value;
+                };
+            }
+
+            case FilterOperation.lessThanOrEqual: {
+                const value = parseFloat(field.value);
+                return function filterLessThanOrEqual() {
+                    return getter() <= value;
                 };
             }
 

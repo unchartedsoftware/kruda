@@ -23,6 +23,7 @@
 import {Pointer} from '../../core/Pointer';
 import * as Types from '../../core/Types';
 import FilterWorker from 'web-worker:./Filter.worker';
+import {FilterExpressionMode} from './FilterExpressionMode';
 import {coreCount} from '../../core/CoreCount';
 import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
 import {Header, kBinaryTypeMap} from '../table/Header';
@@ -149,63 +150,12 @@ export class Filter {
 
     /**
      * Runs this filter with the specified set of rules.
-     * Rules are an array of arrays containing objects describing the rules for this filter. Each object has the following structure:
-     * ```
-     * {
-     *     name: string - The name of the column this rule applies to
-     *     value: * - The value to compare the column's values with
-     *     operation: string - Which operation to perform, must be one of the following: "equal", "notEqual", "lessThan", "moreThan" or "contains"
-     * }
-     * ```
-     * Rule objects within the same array are treated as `AND`'ed and separate rule arrays are `OR`'ed.
-     * Here's an example of a valid `rules` array:
      *
-     * ```
-     * [
-     *     [
-     *            {
-     *                name: 'Origin_airport',
-     *                value: 'SEA',
-     *                operation: 'equal',
-     *            },
-     *            {
-     *                name: 'Destination_airport',
-     *                value: 'LAX',
-     *                operation: 'notEqual',
-     *            },
-     *     ],
-     *     [
-     *            {
-     *                name: 'Origin_airport',
-     *                value: 'MCO',
-     *                operation: 'equal',
-     *            },
-     *            {
-     *                name: 'Passengers',
-     *                value: 180,
-     *                operation: 'moreThan',
-     *            },
-     *     ],
-     * ]
-     * ```
-     *
-     * In the example above, the filter requires that in the results:
-     * {
-     *     The value of column `Origin_airport` is equal to `SEA`
-     *     AND
-     *     The value of column `Destination_airport` is not equal to `LAX`
-     * }
-     * OR
-     * {
-     *     The value of column `Origin_airport` is equal to `MCO`
-     *     AND
-     *     The value of column `Passengers` is more than 180
-     * }
-     *
-     * @param {Array<Object[]>} rules - The rules to run this filter with.
+     * @param {FilterExpression} rules - The rules to run this filter with.
+     * @param {FilterExpressionMode=} mode - The mode in which the specified rules should be interpreted.
      * @return {Table}
      */
-    async run(rules) {
+    async run(rules, mode = FilterExpressionMode.DNF) {
         await this.mInitialized;
         const promises = [];
         const resultMemory = this._allocateResultMemory();
@@ -222,7 +172,8 @@ export class Filter {
 
         for (let i = 0; i < this.mWorkerPool.workerCount; ++i) {
             const promise = this.mWorkerPool.scheduleTask('processFilters', {
-                rules: rules,
+                rules,
+                mode,
                 resultDescription: this.mResultDescription,
                 resultAddress: resultMemory.address + this.mResultHeader.length,
                 resultSize: resultMemory.size,
