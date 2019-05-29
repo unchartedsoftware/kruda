@@ -153,7 +153,7 @@ export class Filter {
      *
      * @param {FilterExpression} rules - The rules to run this filter with.
      * @param {FilterExpressionMode=} mode - The mode in which the specified rules should be interpreted.
-     * @return {Table}
+     * @return {Promise<Table|ProxyTable>}
      */
     async run(rules, mode = FilterExpressionMode.DNF) {
         await this.mInitialized;
@@ -179,7 +179,7 @@ export class Filter {
                 resultSize: resultMemory.size,
                 indicesAddress: indices.address,
                 rowBatchSize: 1024,
-            });
+            }, []);
             promises.push(promise);
         }
 
@@ -187,7 +187,7 @@ export class Filter {
 
         if (!this.mHeap.shared) {
             /* if the heap isn't shared, there should only be one thread */
-            const result = await this.mWorkerPool.scheduleTask('fetchMemory', {});
+            const result = await this.mWorkerPool.scheduleTask('fetchMemory', {}, []);
 
             this.mHeap._restoreBuffer(result.buffer);
         }
