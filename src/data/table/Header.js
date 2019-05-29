@@ -42,7 +42,7 @@ export const kBinaryTypeMap = new Map(kBinaryTypes.map((value, i) => [value, i])
 
 /**
  * Class that represents the header of a {@link Table}.
- * Constructs an instance of a Header by reading its properties from the begining of the specified memory block.
+ * Constructs an instance of a Header by reading its properties from the beginning of the specified memory block.
  * @class Header
  * @param {MemoryBlock} memory - The memory containing the table header. The table header must be at the beginning.
  */
