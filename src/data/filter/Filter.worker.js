@@ -46,10 +46,11 @@ function sendError(reason) {
 /**
  * Sends a success signal to this worker's "owner"
  * @param {*=} data - Data to be sent with the message. Defaults to `null`
+ * @param {Array<ArrayBuffer>=} transferable - Array of ArrayBuffers to transfer
  * @memberof FilterWorker
  * @private
  */
-function sendSuccess(data = null, transferable = null) {
+function sendSuccess(data = null, transferable = undefined) {
     self.postMessage({
         type: 'success',
         data,
