@@ -101,7 +101,7 @@ export class FilterProcessor {
         const resultView = resultMemory.dataView;
         const rowCount = this.mTable.rowCount;
         const row = this.mRow;
-        const filterTester = this._generateFilterTester(config.rules, config.mode, row);
+        const filterTester = this._generateExpressionTester(config.rules, config.mode, row);
         const resultWriter = this._generateResultWriter(config.resultDescription, indices, row);
         let i;
         let n;
@@ -161,23 +161,23 @@ export class FilterProcessor {
     /**
      * Generates a function that tests the specified rule sets against the specified row.
      * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
-     * @param {Array} rules - An array of rule sets to test against.
+     * @param {FilterExpression} expression - An array of rule sets to test against.
      * @param {FilterExpressionMode} mode - The mode in which the rules should be interpreted.
      * @param {Row} row - The row instance that will be used to iterate through the table.
      * @return {function():boolean}
      * @private
      */
-    _generateFilterTester(rules, mode, row) {
-        if (!rules || !rules.length) {
+    _generateExpressionTester(expression, mode, row) {
+        if (!expression || !expression.length) {
             return function filterTesterEmpty() {
                 return true;
             };
         }
 
         const testers = [];
-        const testersLength = rules.length;
+        const testersLength = expression.length;
         for (let i = 0; i < testersLength; ++i) {
-            testers.push(this._generateRuleTester(rules[i], mode, row));
+            testers.push(this._generateClauseTester(expression[i], mode, row));
         }
 
         if (mode === FilterExpressionMode.DNF || mode === FilterExpressionMode.disjunctiveNormalForm) {
@@ -204,17 +204,17 @@ export class FilterProcessor {
     /**
      * Generates a function that tests the specified rule set against the specified row.
      * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
-     * @param {Array} rule - The rule set to test.
+     * @param {FilterClause} clause - The rule set to test.
      * @param {FilterExpressionMode} mode - The mode in which the rule should be interpreted.
      * @param {Row} row - The row instance that will be used to iterate through the table.
      * @return {function():boolean}
      * @private
      */
-    _generateRuleTester(rule, mode, row) {
+    _generateClauseTester(clause, mode, row) {
         const testers = [];
-        const testersLength = rule.length;
+        const testersLength = clause.length;
         for (let i = 0; i < testersLength; ++i) {
-            testers.push(this._generateFieldTester(rule[i], row));
+            testers.push(this._generateRuleTester(clause[i], row));
         }
 
         if (mode === FilterExpressionMode.DNF || mode === FilterExpressionMode.disjunctiveNormalForm) {
@@ -241,28 +241,28 @@ export class FilterProcessor {
     /**
      * Generate a function that tests the specified field in the specified row.
      * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method.
-     * @param {Object} field - Object containing the field and parameters to test.
+     * @param {FilterRule} rule - Object containing the field and parameters to test.
      * @param {Row} row - The row instance that will be used to iterate through the table.
      * @return {function():boolean|null}
      * @private
      */
-    _generateFieldTester(field, row) {
-        const column = this.mTable.header.columns[row.names[field.name]];
-        const getter = row.accessors[row.names[field.name]].getter;
-        switch (field.operation) {
+    _generateRuleTester(rule, row) {
+        const column = this.mTable.header.columns[row.names[rule.field]];
+        const getter = row.accessors[row.names[rule.field]].getter;
+        switch (rule.operation) {
             case FilterOperation.contains: {
-                const value = ByteString.fromString(field.value);
+                const value = ByteString.fromString(rule.value);
                 return function filterContains() { return getter().containsCase(value); };
             }
 
             case FilterOperation.notContains: {
-                const value = ByteString.fromString(field.value);
+                const value = ByteString.fromString(rule.value);
                 return function filterNotContains() { return !getter().containsCase(value); };
             }
 
             case FilterOperation.in: {
                 if (column.type === ByteString) {
-                    const values = field.value.map(v => ByteString.fromString(v));
+                    const values = rule.value.map(v => ByteString.fromString(v));
                     const n = values.length;
                     let i;
                     return function filterIn() {
@@ -276,7 +276,7 @@ export class FilterProcessor {
                     };
                 }
 
-                const values = field.value.map(v => parseFloat(v));
+                const values = rule.value.map(v => parseFloat(v));
                 const n = values.length;
                 let i;
                 return function filterIn() {
@@ -292,7 +292,7 @@ export class FilterProcessor {
 
             case FilterOperation.notIn: {
                 if (column.type === ByteString) {
-                    const values = field.value.map(v => ByteString.fromString(v));
+                    const values = rule.value.map(v => ByteString.fromString(v));
                     const n = values.length;
                     let i;
                     return function filterNotIn() {
@@ -306,7 +306,7 @@ export class FilterProcessor {
                     };
                 }
 
-                const values = field.value.map(v => parseFloat(v));
+                const values = rule.value.map(v => parseFloat(v));
                 const n = values.length;
                 let i;
                 return function filterNotIn() {
@@ -322,12 +322,12 @@ export class FilterProcessor {
 
             case FilterOperation.equal: {
                 if (column.type === ByteString) {
-                    const value = ByteString.fromString(field.value);
+                    const value = ByteString.fromString(rule.value);
                     return function filterEquals() {
                         return getter().equalsCase(value);
                     };
                 }
-                const value = parseFloat(field.value);
+                const value = parseFloat(rule.value);
                 return function filterEquals() {
                     return getter() === value;
                 };
@@ -335,40 +335,40 @@ export class FilterProcessor {
 
             case FilterOperation.notEqual: {
                 if (column.type === ByteString) {
-                    const value = ByteString.fromString(field.value);
+                    const value = ByteString.fromString(rule.value);
                     return function filterEquals() {
                         return !getter().equalsCase(value);
                     };
                 }
-                const value = parseFloat(field.value);
+                const value = parseFloat(rule.value);
                 return function filterNotEqual() {
                     return getter() !== value;
                 };
             }
 
             case FilterOperation.greaterThan: {
-                const value = parseFloat(field.value);
+                const value = parseFloat(rule.value);
                 return function filterMoreThanOrEqual() {
                     return getter() > value;
                 };
             }
 
             case FilterOperation.greaterThanOrEqual: {
-                const value = parseFloat(field.value);
+                const value = parseFloat(rule.value);
                 return function filterMoreThan() {
                     return getter() >= value;
                 };
             }
 
             case FilterOperation.lessThan: {
-                const value = parseFloat(field.value);
+                const value = parseFloat(rule.value);
                 return function filterLessThan() {
                     return getter() < value;
                 };
             }
 
             case FilterOperation.lessThanOrEqual: {
-                const value = parseFloat(field.value);
+                const value = parseFloat(rule.value);
                 return function filterLessThanOrEqual() {
                     return getter() <= value;
                 };
