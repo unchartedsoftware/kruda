@@ -110,7 +110,7 @@ export class ProxyTable {
      * @type {number}
      */
     get dataOffset() {
-        return this.mIndexTable.length;
+        return this.mIndexTable.dataOffset;
     }
 
     /**
@@ -118,7 +118,7 @@ export class ProxyTable {
      * @type {number}
      */
     get sourceTableDataOffset() {
-        return this.mIndexTable.length;
+        return this.mIndexTable.dataOffset;
     }
 
     /**
