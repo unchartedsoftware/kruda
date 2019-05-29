@@ -58,39 +58,39 @@
         const filterRules = [ // must be an array of arrays
             [
                 {
-                    name: 'Origin_airport',
+                    field: 'Origin_airport',
                     value: 'SEA',
                     operation: kruda.FilterOperation.equal,
                 },
                 {
-                    name: 'Passengers',
+                    field: 'Passengers',
                     value: 110,
                     operation: kruda.FilterOperation.equal,
                 },
                 {
-                    name: 'Destination_airport',
+                    field: 'Destination_airport',
                     value: 'LAX',
                     operation: kruda.FilterOperation.notEqual,
                 },
             ],
             [
                 {
-                    name: 'Origin_airport',
+                    field: 'Origin_airport',
                     value: 'MCO',
                     operation: kruda.FilterOperation.equal,
                 },
                 {
-                    name: 'Passengers',
+                    field: 'Passengers',
                     value: 200,
                     operation: kruda.FilterOperation.lessThan,
                 },
                 {
-                    name: 'Passengers',
+                    field: 'Passengers',
                     value: 180,
                     operation: kruda.FilterOperation.greaterThan,
                 },
                 {
-                    name: 'Fly_date',
+                    field: 'Fly_date',
                     value: '2001',
                     operation: kruda.FilterOperation.contains,
                 },
