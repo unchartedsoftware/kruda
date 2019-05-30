@@ -66,7 +66,7 @@ export class FilterProcessor {
         this.mHeap = new Heap(config.heapBuffer);
         this.mTableMemory = new MemoryBlock(this.mHeap, config.tableAddress, config.tableSize);
         this.mTable = new Table(this.mTableMemory);
-        this.mRow = this.mTable.getRow(0);
+        this.mRow = this.mTable.getBinaryRow(0);
     }
 
     /**

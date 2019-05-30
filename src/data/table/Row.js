@@ -34,9 +34,10 @@ import {ByteString} from '../types/ByteString';
  * @class Row
  * @param {Table} table - The table this row belongs to.
  * @param {number=} index - the row index at which this instance will read data. Defaults to 0.
+ * @param {boolean=} binary - Should this row return binary strings.
  */
 export class Row {
-    constructor(table, index = 0) {
+    constructor(table, index = 0, binary = false) {
         this.mTable = table;
         this.mTableOffset = this.mTable.dataOffset;
         this.mSize = this.mTable.header.rowLength;
@@ -44,6 +45,7 @@ export class Row {
         this.mPointer = new Pointer(this.mTable.memory, this.mTableOffset + this.mIndex * this.mSize, Types.Void);
         this.mAccessors = [];
         this.mFields = {};
+        this.mBinary = binary;
 
         this.mTable.header.columns.forEach(column => {
             const accessor = {
@@ -157,9 +159,22 @@ export class Row {
         const offset = description.offset;
         const type = description.type;
         if (type === ByteString) {
-            const string = ByteString.fromPointer(this.mPointer, description.offset, description.size);
+            const string = ByteString.fromPointer(pointer, description.offset, description.size);
+            if (this.mBinary) {
+                return function getColumnStringBinary() {
+                    return string; // ByteString.fromBuffer(string.buffer, string.address, string.size);
+                };
+            }
+
             return function getColumnString() {
-                return string; // ByteString.fromBuffer(string.buffer, string.address, string.size);
+                return string.toString();
+            };
+        }
+
+        return function getColumnValue() {
+            return pointer.castValueAt(offset, type);
+        };
+    }
             };
         }
 

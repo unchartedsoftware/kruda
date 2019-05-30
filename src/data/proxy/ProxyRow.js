@@ -33,12 +33,13 @@ import {Row} from '../table/Row';
  * @class ProxyRow
  * @param {ProxyTable} table - The table this row belongs to.
  * @param {number=} index - the row index at which this instance will read data. Defaults to 0.
+ * @param {boolean=} binary - Should this row return binary strings.
  */
 export class ProxyRow {
-    constructor(table, index = 0) {
+    constructor(table, index = 0, binary = false) {
         this.mTable = table;
-        this.mIndexRow = new Row(this.mTable.indexTable, index);
-        this.mSourceRow = new Row(this.mTable.sourceTable, this.mIndexRow.accessors[0].getter());
+        this.mIndexRow = new Row(this.mTable.indexTable, index, true);
+        this.mSourceRow = new Row(this.mTable.sourceTable, this.mIndexRow.accessors[0].getter(), binary);
     }
 
     /**

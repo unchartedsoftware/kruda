@@ -29,7 +29,7 @@ export class Binary {
     }
 
     benchmark() {
-        const row = this.mTable.getRow(0);
+        const row = this.mTable.getBinaryRow(0);
         const rowCount = this.mTable.rowCount;
         const rowFloats = 128 * 4;
         const pointer = row.pointer;
@@ -71,7 +71,7 @@ export class ASM {
     }
 
     benchmark() {
-        const row = this.mTable.getRow(0);
+        const row = this.mTable.getBinaryRow(0);
         this.mASM.compute(
             this.mTable.memory.address + row.pointer.address,
             row.size,

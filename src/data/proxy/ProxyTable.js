@@ -143,6 +143,29 @@ export class ProxyTable {
     }
 
     /**
+     * Gets a new Row instance pointing at the row at the specified index. The resulting row will return
+     * {@link ByteString} instances for the column fields which are strings. ByteStrings are faster to work with but are
+     * not replacements for JavaScript strings.
+     * NOTE: The returned row can be moved to point to a different row by changing its `index` property.
+     * @param {number} index - The index of the row to get the data from.
+     * @param {ProxyRow=} row - An optional row, belonging to this table, to reuse. Useful to reduce garbage collection.
+     * @return {ProxyRow}
+     */
+    getBinaryRow(index, row = new ProxyRow(this, index, true)) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (!index >= this.rowCount) {
+            throw 'ERROR: Index out of bounds!';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+        row.index = index;
+        return row;
+    }
+
+    /**
      * Iterates through all the rows in this table and invokes the provided callback `itr` on each iteration.
      * WARNING: This function is designed to avoid garbage collection and improve performance so the row passed to the
      * `itr` callback is reused, the row cannot be stored as its contents will change. If you need to store unique rows
