@@ -51,7 +51,7 @@ export class Row {
             const accessor = {
                 column,
                 getter: this._createPropertyGetter(column, this.mPointer),
-                setter: () => {}, // not implemented yet
+                setter: this._createPropertySetter(column, this.mPointer),
             };
 
             this.mAccessors.push(accessor);
@@ -175,9 +175,30 @@ export class Row {
             return pointer.castValueAt(offset, type);
         };
     }
+
+    /**
+     * Creates a function that sets the value of a column's field as specified by the `description` object.
+     * NOTE: The returned functions make use of the row's internal pointer for efficiency.
+     * @param {{type:number, size:number, offset:number}} description - Descriptions of the column this field belongs to.
+     * @param {Pointer} pointer - The row's internal pointer.
+     * @return {function(value):void}
+     * @private
+     */
+    _createPropertySetter(description, pointer) {
+        const offset = description.offset;
+        const type = description.type;
+        if (type === ByteString) {
+            let str;
+            return function setColumnString(value) {
+                if (value.length > description.size - 1) {
+                    str = value.substring(0, description.size);
+                    type.set(pointer.view, str, pointer.address + offset);
+                }
             };
         }
 
-        return () => pointer.castValueAt(offset, type);
+        return function setColumnValue(value) {
+            type.set(pointer.view, value, pointer.address + offset);
+        };
     }
 }
