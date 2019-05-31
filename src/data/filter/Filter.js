@@ -54,7 +54,7 @@ export class Filter {
     constructor(table, workerCount = -1, heap = table.memory.heap) {
         this.mTable = table;
         this.mHeap = heap;
-        this.mResultDescription = [ kRowIndexResult ];
+        this.mResultDescription = [kRowIndexResult];
         this.mResultRowSize = kRowIndexResult.size;
         this.mMemory = null;
         this.mWorkerPool = null;
@@ -157,65 +157,67 @@ export class Filter {
      */
     async run(rules, mode = FilterExpressionMode.DNF) {
         await this.mInitialized;
-        const promises = [];
-        const resultMemory = this._allocateResultMemory();
-        const indices = this.mHeap.malloc(8);
+        return await this.mHeap.enqueueOperation(async () => {
+            const promises = [];
+            const resultMemory = this._allocateResultMemory();
+            const indices = this.mHeap.malloc(8);
 
-        if (!this.mHeap.shared) {
-            /* if the heap isn't shared, there should only be one thread */
-            await this.mWorkerPool.scheduleTask('setMemory', {
-                heapBuffer: this.mTable.memory.heap.buffer,
-                tableAddress: this.mTable.memory.address,
-                tableSize: this.mTable.memory.size,
-            }, [this.mTable.memory.heap.buffer]);
-        }
+            if (!this.mHeap.shared) {
+                /* if the heap isn't shared, there should only be one thread */
+                await this.mWorkerPool.scheduleTask('setMemory', {
+                    heapBuffer: this.mTable.memory.heap.buffer,
+                    tableAddress: this.mTable.memory.address,
+                    tableSize: this.mTable.memory.size,
+                }, [this.mTable.memory.heap.buffer]);
+            }
 
-        for (let i = 0; i < this.mWorkerPool.workerCount; ++i) {
-            const promise = this.mWorkerPool.scheduleTask('processFilters', {
-                rules,
-                mode,
-                resultDescription: this.mResultDescription,
-                resultAddress: resultMemory.address + this.mResultHeader.length,
-                resultSize: resultMemory.size,
-                indicesAddress: indices.address,
-                rowBatchSize: 1024,
-            }, []);
-            promises.push(promise);
-        }
+            for (let i = 0; i < this.mWorkerPool.workerCount; ++i) {
+                const promise = this.mWorkerPool.scheduleTask('processFilters', {
+                    rules,
+                    mode,
+                    resultDescription: this.mResultDescription,
+                    resultAddress: resultMemory.address + this.mResultHeader.length,
+                    resultSize: resultMemory.size,
+                    indicesAddress: indices.address,
+                    rowBatchSize: 1024,
+                }, []);
+                promises.push(promise);
+            }
 
-        await Promise.all(promises);
+            await Promise.all(promises);
 
-        if (!this.mHeap.shared) {
-            /* if the heap isn't shared, there should only be one thread */
-            const result = await this.mWorkerPool.scheduleTask('fetchMemory', {}, []);
+            if (!this.mHeap.shared) {
+                /* if the heap isn't shared, there should only be one thread */
+                const result = await this.mWorkerPool.scheduleTask('fetchMemory', {}, []);
 
-            this.mHeap._restoreBuffer(result.buffer);
-        }
+                this.mHeap._restoreBuffer(result.buffer);
+            }
 
-        const indicesPtr = new Pointer(indices, 0, Types.Uint32);
-        const resultCount = indicesPtr.getValueAt(1);
-        indices.free();
+            const indicesPtr = new Pointer(indices, 0, Types.Uint32);
+            const resultCount = indicesPtr.getValueAt(1);
+            indices.free();
 
-        this.mResultHeader.rowCount = resultCount;
-        this.mResultHeader.dataLength = this.mResultRowSize * resultCount;
+            this.mResultHeader.rowCount = resultCount;
+            this.mResultHeader.dataLength = this.mResultRowSize * resultCount;
 
-        const binaryHeader = Header.buildBinaryHeader(this.mResultHeader);
-        const resultView = new Uint8Array(resultMemory.buffer);
-        const headerView = new Uint8Array(binaryHeader);
-        resultView.set(headerView, resultMemory.address);
+            const binaryHeader = Header.buildBinaryHeader(this.mResultHeader);
+            const resultView = new Uint8Array(resultMemory.buffer);
+            const headerView = new Uint8Array(binaryHeader);
+            resultView.set(headerView, resultMemory.address);
 
-        const finalMemorySize = this.mResultHeader.length + this.mResultHeader.dataLength;
-        if (finalMemorySize < resultMemory.size) {
-            resultMemory.heap.shrink(resultMemory, finalMemorySize);
-        }
+            const finalMemorySize = this.mResultHeader.length + this.mResultHeader.dataLength;
+            if (finalMemorySize < resultMemory.size) {
+                resultMemory.heap.shrink(resultMemory, finalMemorySize);
+            }
 
-        const resultTable = new Table(resultMemory);
+            const resultTable = new Table(resultMemory);
 
-        if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
-            return new ProxyTable(this.mTable, resultTable);
-        }
+            if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
+                return new ProxyTable(this.mTable, resultTable);
+            }
 
-        return resultTable;
+            return resultTable;
+        });
     }
 
     /**
