@@ -105,10 +105,10 @@ export class Heap {
 
             if (typeof SharedArrayBuffer !== 'undefined' && typeof Atomics !== 'undefined') {
                 this.mBuffer = new SharedArrayBuffer(buffer);
-                this.mShared = true;
+                this.mOperationQueue = null;
             } else {
                 this.mBuffer = new ArrayBuffer(buffer);
-                this.mShared = false;
+                this.mOperationQueue = Promise.resolve();
             }
 
             /*
@@ -191,7 +191,16 @@ export class Heap {
      * @type {boolean}
      */
     get shared() {
-        return this.mShared;
+        return this.mOperationQueue === null;
+    }
+
+    /**
+     * Returns a promise that can be used to synchronize threaded memory operations in this heap.
+     * If this heap can be shared across threads, this property returns `null`
+     * @type {Promise<*>|null}
+     */
+    get operationQueue() {
+        return this.mOperationQueue;
     }
 
     /**
@@ -221,7 +230,7 @@ export class Heap {
 
     /**
      * Total memory used.
-     * Freeing a memory block doesn not guarantee that this number will increase.
+     * Freeing a memory block does not guarantee that this number will increase.
      * @type {number}
      */
     get usedMemory() {
@@ -242,6 +251,20 @@ export class Heap {
      */
     get allocOffset() {
         return Atomize.load(this.mUint32View, 1);
+    }
+
+    /**
+     * Enqueues an new operation in the operation queue.
+     * @param {function():Promise<*>} operation - The operation to enqueue
+     * @return {Promise<*>}
+     */
+    enqueueOperation(operation) {
+        if (this.shared) {
+            return operation();
+        }
+
+        this.mOperationQueue = this.mOperationQueue.then(operation);
+        return this.mOperationQueue;
     }
 
     /**
@@ -443,8 +466,16 @@ export class Heap {
      * @private
      */
     _restoreBuffer(buffer) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (!(buffer instanceof ArrayBuffer)) {
+            throw 'ERROR: Heap can only be restored with ArrayBuffer instances (not SharedArrayBuffer)';
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
         this.mBuffer = buffer;
-        this.mShared = !(buffer instanceof ArrayBuffer);
         this.mDataView = new DataView(this.mBuffer);
         this.mInt32View = new Int32Array(this.mBuffer, 0, 4);
         this.mUint32View = new Uint32Array(this.mBuffer);
