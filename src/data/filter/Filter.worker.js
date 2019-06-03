@@ -84,24 +84,6 @@ self.onmessage = function filterWorkerOnMessage(e) {
             }
             break;
 
-        case 'setMemory':
-            if (gProcessor) {
-                gProcessor.setMemory(message.options);
-                sendSuccess();
-            } else {
-                sendError('ERROR: Filter.worker has not been initialized');
-            }
-            break;
-
-        case 'fetchMemory':
-            if (gProcessor) {
-                const buffer = gProcessor.fetchMemory();
-                sendSuccess({ buffer }, [ buffer ]);
-            } else {
-                sendError('ERROR: Filter.worker has not been initialized');
-            }
-            break;
-
         default:
             sendError(`ERROR: Unrecognized message type "${message.type}"`);
             break;
