@@ -57,6 +57,7 @@ export class Row {
             this.mAccessors.push(accessor);
 
             Object.defineProperty(this.mFields, column.name, {
+                enumerable: true,
                 get: accessor.getter,
                 set: accessor.setter,
             });
