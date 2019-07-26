@@ -30,24 +30,24 @@
     "cli-progress": "^2.1.1",
     "concat": "^1.0.3",
     "cross-env": "^5.2.0",
-    "documentation": "^9.3.0",
-    "eslint": "^5.15.1",
-    "jsdoc": "^3.6.2",
+    "documentation": "^12.0.3",
+    "eslint": "^6.1.0",
+    "jsdoc": "^3.6.3",
     "npm-run-all": "^4.1.5",
-    "rollup": "^1.10.1",
-    "rollup-plugin-commonjs": "^9.3.4",
-    "rollup-plugin-eslint": "^5.1.0",
+    "rollup": "^1.17.0",
+    "rollup-plugin-commonjs": "^10.0.1",
+    "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-jscc": "^1.0.0",
-    "rollup-plugin-live-server": "^1.0.1",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "rollup-plugin-url": "^2.2.0",
-    "rollup-plugin-web-worker-loader": "^0.5.1",
-    "tsd-jsdoc": "^2.2.0"
+    "rollup-plugin-live-server": "^1.0.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-url": "^2.2.2",
+    "rollup-plugin-web-worker-loader": "^0.5.2",
+    "tsd-jsdoc": "^2.3.1"
   },
   "dependencies": {
-    "dekkai": "^0.3.3",
-    "pako": "^1.0.8",
-    "webcpu": "^0.4.1"
+    "dekkai": "^0.3.4",
+    "pako": "^1.0.10",
+    "webcpu": "^0.4.3"
   },
   "engineStrict": true,
   "engines": {
