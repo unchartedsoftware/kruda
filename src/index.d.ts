@@ -22,4 +22,5 @@ export {
 
     tableFromLocalCSV,
     tableFromRemoteCSV,
+    coreCount,
 }

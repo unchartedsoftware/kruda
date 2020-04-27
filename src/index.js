@@ -64,3 +64,4 @@ export {FilterExpressionMode} from './data/filter/FilterExpressionMode';
 
 export {kBinaryTypes, kBinaryTypeMap} from './data/table/Header';
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';
+export {coreCount} from './core/CoreCount';
