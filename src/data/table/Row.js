@@ -193,6 +193,8 @@ export class Row {
                 if (value.length > description.size - 1) {
                     str = value.substring(0, description.size);
                     type.set(pointer.view, str, pointer.address + offset);
+                } else {
+                    type.set(pointer.view, value, pointer.address + offset);
                 }
             };
         }
