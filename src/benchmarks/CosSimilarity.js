@@ -74,7 +74,7 @@ export class ASM {
         const row = this.mTable.getBinaryRow(0);
         this.mASM.compute(
             this.mTable.memory.address + row.pointer.address,
-            row.size,
+            row.step,
             128 * 4,
             this.mTable.rowCount * row.size,
             this.mResult.address

@@ -28,6 +28,7 @@ import {Row} from './Row';
  * Class that represents a table in binary memory.
  * @class Table
  * @param {MemoryBlock} memory - The MemoryBlock containing the table's data
+ * @param {MemoryLayout} layout - Is the
  */
 export class Table {
     constructor(memory) {
@@ -46,14 +47,23 @@ export class Table {
     }
 
     /**
+     * Different memory layouts for a table
+     * @type {Object<string, MemoryLayout>}
+     */
+    static get memoryLayout() {
+        return Header.memoryLayout;
+    }
+
+    /**
      * Crates a new empty Table with the specified columns in the supplied memory. The table will
      * be able to grow as big as the memory that contains it.
      * @param {ColumnDescriptor[]} columns - The columns for the new Table
      * @param {MemoryBlock} memory - The memory where the new Table will live
+     * @param {MemoryLayout=} layout - The memory layout to use for the new table. Defaults to RELATIONAL
      * @return {Table}
      */
-    static emptyFromColumns(columns, memory) {
-        const binaryHeader = Header.binaryFromColumns(columns);
+    static emptyFromColumns(columns, memory, layout = Header.memoryLayout.RELATIONAL) {
+        const binaryHeader = Header.binaryFromColumns(columns, memory.size, layout);
         return this.emptyFromBinaryHeader(binaryHeader, memory);
     }
 

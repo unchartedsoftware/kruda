@@ -23,6 +23,7 @@
 import {Pointer} from '../../core/Pointer';
 import * as Types from '../../core/Types';
 import {ByteString} from '../types/ByteString';
+import {Header} from './Header';
 
 /**
  * Class to read and write values of a row in a {@link Table}.
@@ -41,17 +42,43 @@ export class Row {
         this.mTable = table;
         this.mTableOffset = this.mTable.dataOffset;
         this.mSize = this.mTable.header.rowLength;
+        this.mStep = this.mTable.header.rowStep;
         this.mIndex = index;
-        this.mPointer = new Pointer(this.mTable.memory, this.mTableOffset + this.mIndex * this.mSize, Types.Void);
+        this.mPointers = [];
         this.mAccessors = [];
         this.mFields = {};
         this.mBinary = binary;
 
-        this.mTable.header.columns.forEach(column => {
+        const isColumnar = this.mTable.header.layout === Header.memoryLayout.COLUMNAR;
+        if (!isColumnar) {
+            this.mPointers.push({
+                pointer: new Pointer(this.mTable.memory, this.mTableOffset + this.mIndex * this.mStep, Types.Void),
+                offset: this.mTableOffset,
+                step: this.mStep,
+            });
+        }
+
+        const columns = this.mTable.header.columns;
+        let column;
+        for (let i = 0, n = columns.length; i < n; ++i) {
+            column = columns[i];
+
+            let pointer;
+            if (isColumnar) {
+                pointer = new Pointer(this.mTable.memory, this.mTableOffset + column.dataOffset + this.mIndex * column.size, Types.Void);
+                this.mPointers.push({
+                    pointer,
+                    offset: this.mTableOffset + column.dataOffset,
+                    step: column.size,
+                });
+            } else {
+                pointer = this.mPointers[0].pointer;
+            }
+
             const accessor = {
                 column,
-                getter: this._createPropertyGetter(column, this.mPointer),
-                setter: this._createPropertySetter(column, this.mPointer),
+                getter: this._createPropertyGetter(column, pointer),
+                setter: this._createPropertySetter(column, pointer),
             };
 
             this.mAccessors.push(accessor);
@@ -60,7 +87,7 @@ export class Row {
                 get: accessor.getter,
                 set: accessor.setter,
             });
-        });
+        }
     }
 
     /**
@@ -69,6 +96,14 @@ export class Row {
      */
     get size() {
         return this.mSize;
+    }
+
+    /**
+     * The number of bytes the internal pointer shifts in order to move to the next/previous row in the data.
+     * @type {number}
+     */
+    get step() {
+        return this.mStep;
     }
 
     /**
@@ -121,7 +156,7 @@ export class Row {
      * @type {Pointer}
      */
     get pointer() {
-        return this.mPointer;
+        return this.mPointers[0].pointer;
     }
 
     /**
@@ -144,13 +179,18 @@ export class Row {
          */
         /// #endif
         this.mIndex = value;
-        this.mPointer.address = this.mTableOffset + this.mIndex * this.mSize;
+
+        let ptr;
+        for (let i = 0, n = this.mPointers.length; i < n; ++i) {
+            ptr = this.mPointers[i];
+            ptr.pointer.address = ptr.offset + ptr.step * this.mIndex;
+        }
     }
 
     /**
      * Creates a function that returns the contents of a column's field as specified by the `description` object.
      * NOTE: The returned functions make use of the row's internal pointer for efficiency.
-     * @param {{type:number, size:number, offset:number}} description - Descriptions of the column this field belongs to.
+     * @param {Column} description - Descriptions of the column this field belongs to.
      * @param {Pointer} pointer - The row's internal pointer.
      * @return {function():*}
      * @private
@@ -159,7 +199,7 @@ export class Row {
         const offset = description.offset;
         const type = description.type;
         if (type === ByteString) {
-            const string = ByteString.fromPointer(pointer, description.offset, description.size);
+            const string = ByteString.fromPointer(pointer, offset, description.size);
             if (this.mBinary) {
                 return function getColumnStringBinary() {
                     return string; // ByteString.fromBuffer(string.buffer, string.address, string.size);
@@ -179,7 +219,7 @@ export class Row {
     /**
      * Creates a function that sets the value of a column's field as specified by the `description` object.
      * NOTE: The returned functions make use of the row's internal pointer for efficiency.
-     * @param {{type:number, size:number, offset:number}} description - Descriptions of the column this field belongs to.
+     * @param {Column} description - Descriptions of the column this field belongs to.
      * @param {Pointer} pointer - The row's internal pointer.
      * @return {function(value):void}
      * @private

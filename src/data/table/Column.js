@@ -45,6 +45,9 @@ export class Column {
         this.mSizeOffset = this.mByteLength + offset;
         this.mByteLength += 4;
 
+        this.mDataOffsetOffset = this.mByteLength + offset;
+        this.mByteLength += 4;
+
         this.mOffsetOffset = this.mByteLength + offset;
         this.mByteLength += 4;
 
@@ -67,6 +70,14 @@ export class Column {
      */
     get size() {
         return this.mView.getUint32(this.mSizeOffset, true);
+    }
+
+    /**
+     * The offset in bytes for the start of the data this column represents.
+     * @type {number}
+     */
+    get dataOffset() {
+        return this.mView.getUint32(this.mDataOffsetOffset, true);
     }
 
     /**

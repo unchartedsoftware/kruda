@@ -27,10 +27,27 @@ import {Column} from './Column';
 import {kBinaryTypes, kBinaryTypeMap, kBinaryTypeNameMap} from '../types/TypeEnums';
 
 /**
+ * RELATIONAL: 0
+ * COLUMNAR: 1
+ * @typedef MemoryLayout
+ * @type {0|1}
+ */
+
+/**
+ * Different memory layouts for a table
+ * @type {Object<string, MemoryLayout>}
+ */
+const kMemoryLayout = Object.freeze({
+    RELATIONAL: 0,
+    COLUMNAR: 1,
+});
+
+/**
  * @typedef ColumnDescriptor
  * @type {Object}
  * @property {string} name - This column's name
  * @property {Type|string|number} type - The type of this column by name, index or Type instance.
+ * @property {number} [dataOffset] - The offset in bytes for the start of the data this column represents.
  * @property {number} [offset] - The offset in bytes where the data in this column is in each row.
  * @property {number} [length] - The maximum length of the column, if the type is `ByteString`
  */
@@ -41,7 +58,9 @@ import {kBinaryTypes, kBinaryTypeMap, kBinaryTypeNameMap} from '../types/TypeEnu
  * @property {ColumnDescriptor[]} columns - The columns in the table
  * @property {number} rowCount - Current number of rows in the table.
  * @property {number} rowLength - The length, in bytes, of a row in the table.
+ * @property {number} rowStep - The number of bytes a pointer needs to shift to point at the next/prev row.
  * @property {number} dataLength - The total length, in bytes, of the data contained in the table.
+ * @property {MemoryLayout} layout - The layout for the data in this table
  */
 
 /**
@@ -68,30 +87,48 @@ export class Header {
         this.mRowLengthOffset = offset;
         offset += 4;
 
+        this.mRowStepOffset = offset;
+        offset += 4;
+
         this.mDataLengthOffset = offset;
+        offset += 4;
+
+        this.mLayoutOffset = offset;
         offset += 4;
 
         this.mColumns = [];
         this.mNames = {};
 
-        let nameOffset = 12 * this.columnCount + offset;
+        const columnMetaLength = 16;
+        let nameOffset = columnMetaLength * this.columnCount + offset;
         for (let i = 0; i < this.columnCount; ++i) {
             const column = new Column(this.mMemory, offset, nameOffset);
             this.mNames[column.name.toString()] = this.mColumns.length;
             this.mColumns.push(column);
 
             nameOffset += column.name.length + 1;
-            offset += 12;
+            offset += columnMetaLength;
         }
     }
 
     /**
+     * Different memory layouts for a table
+     * @type {Object<string, MemoryLayout>}
+     */
+    static get memoryLayout() {
+        return kMemoryLayout;
+    }
+
+    /**
      * Convenience function to build a header for an empty table.
-     * @param {ColumnDescriptor[]} columns - The columns to initialize the header with.
+     * @param {ColumnDescriptor[]} columns - The columns to initialize the header with
+     * @param {number=} memoryLength - The length of the memory where the table will reside. Defaults to 0
+     * @param {MemoryLayout=} layout - The layout of the table. Defaults to RELATIONAL
      * @return {ArrayBuffer}
      */
-    static binaryFromColumns(columns) {
+    static binaryFromColumns(columns, memoryLength = 0, layout = Header.memoryLayout.RELATIONAL) {
         const resultColumns = [];
+        let rowLength = 0;
         for (let i = 0, n = columns.length; i < n; ++i) {
             const column = columns[i];
 
@@ -105,31 +142,56 @@ export class Header {
             }
 
             const type = kBinaryTypes[typeIndex];
+            const columnLength = type === ByteString ? column.length : type.byteSize;
+            rowLength += columnLength;
 
             resultColumns.push({
                 name: column.name,
                 type: typeIndex,
-                length: type === ByteString ? column.length : type.byteSize,
+                length: columnLength,
+                dataOffset: 0,
                 offset: 0,
             });
         }
 
         const sortedColumns = resultColumns.slice().sort((c1, c2) => c1.type - c2.type);
-        let offset = 0;
-        for (let i = 0, n = sortedColumns.length; i < n; ++i) {
-            const column = sortedColumns[i];
-            column.offset = offset;
-            offset += column.length;
+        let rowStep;
+        if (layout === Header.memoryLayout.COLUMNAR) {
+            const rowCount = Math.floor(memoryLength / rowLength);
+            /// #if !_DEBUG
+            /*
+            /// #endif
+            if (!rowCount) {
+                throw 'ERROR: Not a single row of the specified data fits in the provided memory length';
+            }
+            /// #if !_DEBUG
+             */
+            /// #endif
+            let offset = 0;
+            for (let i = 0, n = sortedColumns.length; i < n; ++i) {
+                const column = sortedColumns[i];
+                column.dataOffset = offset;
+                offset += column.length * rowCount;
+            }
+            rowStep = sortedColumns[0].length;
+        } else {
+            let offset = 0;
+            for (let i = 0, n = sortedColumns.length; i < n; ++i) {
+                const column = sortedColumns[i];
+                column.offset = offset;
+                offset += column.length;
+            }
+            // make sure the row step is a multiple of four
+            rowStep = ((rowLength - 1) | 3) + 1;
         }
-
-        // make sure the row length is a multiple of four
-        const rowLength = ((offset - 1) | 3) + 1;
 
         const header = {
             columns: resultColumns,
             rowLength: rowLength,
+            rowStep: rowStep,
             rowCount: 0,
             dataLength: 0,
+            layout: layout,
         };
 
         return this.buildBinaryHeader(header);
@@ -148,10 +210,12 @@ export class Header {
             columnNameLength += Math.min(255, header.columns[i].name.length) + 1;
         }
 
-        const headerLength = (12 * columnCount + columnNameLength + 20 + 3) & ~0x03; // round to nearest 4
+        const headerMetaLength = 28;
+        const columnMetaLength = 16;
+        const headerLength = (columnMetaLength * columnCount + columnNameLength + headerMetaLength + 3) & ~0x03; // round to nearest 4
         const buffer = new ArrayBuffer(headerLength);
         const view = new DataView(buffer);
-        let nameOffset = 12 * columnCount + 20;
+        let nameOffset = columnMetaLength * columnCount + headerMetaLength;
         let offset = 0;
         let name;
         let ii;
@@ -169,11 +233,20 @@ export class Header {
         view.setUint32(offset, header.rowLength, true);
         offset += 4;
 
+        view.setUint32(offset, header.rowStep, true);
+        offset += 4;
+
         view.setUint32(offset, header.dataLength, true);
+        offset += 4;
+
+        view.setUint32(offset, header.layout, true);
         offset += 4;
 
         for (let i = 0; i < columnCount; ++i) {
             view.setUint32(offset, header.columns[i].length, true);
+            offset += 4;
+
+            view.setUint32(offset, header.columns[i].dataOffset, true);
             offset += 4;
 
             view.setUint32(offset, header.columns[i].offset, true);
@@ -226,12 +299,24 @@ export class Header {
         return this.mView.getUint32(this.mRowLengthOffset, true);
     }
 
+    get rowStep() {
+        return this.mView.getUint32(this.mRowStepOffset, true);
+    }
+
     /**
      * The length, in bytes, of the data contained in the table this header is describing.
      * @type {number}
      */
     get dataLength() {
         return this.mView.getUint32(this.mDataLengthOffset, true);
+    }
+
+    /**
+     * The memory layout of the table.
+     * @type {MemoryLayout}
+     */
+    get layout() {
+        return this.mView.getUint32(this.mLayoutOffset, true);
     }
 
     /**
@@ -267,7 +352,7 @@ export class Header {
         /// #if !_DEBUG
          */
         /// #endif
-        const memoryView = new Uint32Array(this.mMemory.buffer, this.mMemory.address, 5);
+        const memoryView = new Uint32Array(this.mMemory.buffer, this.mMemory.address);
         // increase the data length
         Atomize.add(memoryView, this.mDataLengthOffset / 4, count * this.rowLength);
         // increase the row count and return the old value
