@@ -44,11 +44,11 @@ const kCodeZ = ('Z').charCodeAt(0);
  * @param {number} size - The maximum size of this string.
  */
 class ByteStringBase {
-    constructor(size = 256) {
+    constructor(size = 255) {
         /// #if !_DEBUG
         /*
         /// #endif
-        if (size > 256) {
+        if (size > 255) {
             throw 'ERROR: ByteString instances can hold a maximum of 255 characters (+1 byte to hold their length)';
         }
         if (size % 4) {
@@ -211,10 +211,10 @@ class ByteStringBase {
  * @class ByteStringPtr
  * @param {Pointer} pointer - The pointer to read the string data from.
  * @param {number=} offset - The offset, from the location of the pointer, to read the data from. Defaults to 0.
- * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
+ * @param {number=} size - The maximum size of this string in bytes. Defaults to 255.
  */
 class ByteStringPtr extends ByteStringBase {
-    constructor(pointer, offset = 0, size = 256) {
+    constructor(pointer, offset = 0, size = 255) {
         super(size);
         this.mOffset = offset;
         this.mPointer = pointer;
@@ -258,10 +258,10 @@ class ByteStringPtr extends ByteStringBase {
  * @class ByteStringBuffer
  * @param {ArrayBufferLike} buffer - The ArrayBuffer object where this string resides.
  * @param {number=} address - The offset, in bytes, within the buffer where the string resides. Defaults to 0.
- * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
+ * @param {number=} size - The maximum size of this string in bytes. Defaults to 255.
  */
 class ByteStringBuffer extends ByteStringBase {
-    constructor(buffer, address = 0, size = 256) {
+    constructor(buffer, address = 0, size = 255) {
         super(size);
         this.mBuffer = buffer;
         this.mAddress = address;
@@ -305,7 +305,7 @@ class ByteStringBuffer extends ByteStringBase {
  */
 class _ByteString extends Type {
     constructor() {
-        super('ByteString', 256, 2048);
+        super('ByteString', 255, 2048);
     }
 
     get(view, offset) {
@@ -334,11 +334,11 @@ class _ByteString extends Type {
      * `fromBuffer` and `fromString` functions is recommended.
      * @param {Pointer|ArrayBufferLike|String} arg1 - The memory object from which the string will be copied from.
      * @param {number=} arg2 - An offset, if needed for the resulting instance. Defaults to 0.
-     * @param {number} size - The maximum size, if needed, of the resulting instance. Defaults to 256.
+     * @param {number=} size - The maximum size, if needed, of the resulting instance. Defaults to 255.
      * @return {ByteStringBase}
      * @memberof ByteString
      */
-    new(arg1, arg2 = 0, size = 256) {
+    new(arg1, arg2 = 0, size = 255) {
         if (arg1 instanceof Pointer) {
             return this.fromPointer(arg1, arg2, size);
         } else if (typeof arg1 === 'string' || arg1 instanceof String) {
@@ -351,11 +351,11 @@ class _ByteString extends Type {
      * Creates a ByteString instance from a pointer.
      * @param {Pointer} pointer - The pointer to read the string data from.
      * @param {number=} offset - The offset, from the location of the pointer, to read the data from. Defaults to 0.
-     * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
+     * @param {number=} size - The maximum size of this string in bytes. Defaults to 255.
      * @return {ByteStringPtr}
      * @memberof ByteString
      */
-    fromPointer(pointer, offset = 0, size = 256) {
+    fromPointer(pointer, offset = 0, size = 255) {
         return new ByteStringPtr(pointer, offset, size);
     }
 
@@ -363,11 +363,11 @@ class _ByteString extends Type {
      * Creates a ByteString instance from an ArrayBuffer
      * @param {ArrayBufferLike} buffer - The ArrayBuffer object where this string resides.
      * @param {number=} address - The offset, in bytes, within the buffer where the string resides. Defaults to 0.
-     * @param {number=} size - The maximum size of this string in bytes. Defaults to 256.
+     * @param {number=} size - The maximum size of this string in bytes. Defaults to 255.
      * @return {ByteStringBuffer}
      * @memberof ByteString
      */
-    fromBuffer(buffer, address = 0, size = 256) {
+    fromBuffer(buffer, address = 0, size = 255) {
         return new ByteStringBuffer(buffer, address, size);
     }
 
