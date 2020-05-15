@@ -46,6 +46,44 @@ export class Table {
     }
 
     /**
+     * Crates a new empty Table with the specified columns in the supplied memory. The table will
+     * be able to grow as big as the memory that contains it.
+     * @param {ColumnDescriptor[]} columns - The columns for the new Table
+     * @param {MemoryBlock} memory - The memory where the new Table will live
+     * @return {Table}
+     */
+    static emptyFromColumns(columns, memory) {
+        const binaryHeader = Header.binaryFromColumns(columns);
+        return this.emptyFromBinaryHeader(binaryHeader, memory);
+    }
+
+    /**
+     * Crates a new empty Table with the specified header descriptor in the supplied memory. The table will
+     * be able to grow as big as the memory that contains it.
+     * @param {HeaderDescriptor} header - The header descriptor tu use
+     * @param {MemoryBlock} memory - The memory where the new Table will live
+     * @return {Table}
+     */
+    static emptyFromHeader(header, memory) {
+        const binaryHeader = Header.buildBinaryHeader(header);
+        return this.emptyFromBinaryHeader(binaryHeader, memory);
+    }
+
+    /**
+     * Crates a new empty Table with the specified binary header in the supplied memory. The table will
+     * be able to grow as big as the memory that contains it.
+     * @param {ArrayBuffer} header - The binary header to use
+     * @param {MemoryBlock} memory - The memory where the new Table will live
+     * @return {Table}
+     */
+    static emptyFromBinaryHeader(header, memory) {
+        const memoryView = new Uint8Array(memory.buffer);
+        const headerView = new Uint8Array(header);
+        memoryView.set(headerView, memory.address);
+        return new Table(memory);
+    }
+
+    /**
      * The header of this table. Contains column names, order in memory, original order and type information.
      * @type {Header}
      */
@@ -75,6 +113,16 @@ export class Table {
      */
     get dataOffset() {
         return this.mHeader.length;
+    }
+
+    /**
+     * Adds the specified number of rows to this table and returns the old row count.
+     * NOTE: The memory in the new rows is NOT cleared before returning.
+     * @param {number} count - The number of rows to add
+     * @returns {number}
+     */
+    addRows(count = 1) {
+        return this.mHeader.addRows(count);
     }
 
     /**
