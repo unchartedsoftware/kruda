@@ -27,7 +27,8 @@ import {FilterWorkerDummy} from './Filter.worker.dummy';
 import {FilterExpressionMode} from './FilterExpressionMode';
 import {coreCount} from '../../core/CoreCount';
 import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
-import {Header, kBinaryTypeMap} from '../table/Header';
+import {Header} from '../table/Header';
+import {kBinaryTypeMap} from '../table/Column';
 import {Table} from '../table/Table';
 import {ProxyTable} from '../proxy/ProxyTable';
 

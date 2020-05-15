@@ -20,25 +20,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Int32, Float32, Uint32} from '../../core/Types';
+import {Type} from '../../core/Types';
 import {ByteString} from '../types/ByteString';
+import {Atomize} from '../../core/Atomize';
+import {Column, kBinaryTypes, kBinaryTypeMap, kBinaryTypeNameMap} from './Column';
 
 /**
- * Binary type list.
- * @type {Type[]}
+ * @typedef ColumnDescriptor
+ * @type {Object}
+ * @property {string} name - This column's name
+ * @property {Type|string|number} type - The type of this column by name, index or Type instance.
+ * @property {number} [offset] - The offset in bytes where the data in this column is in each row.
+ * @property {number} [length] - The maximum length of the column, if the type is `ByteString`
  */
-export const kBinaryTypes = [
-    ByteString, // 0
-    Int32, // 1,
-    Float32, // 2
-    Uint32, // 3
-];
 
 /**
- * Binary type map.
- * @type {Map<Type, number>}
+ * @typedef HeaderDescriptor
+ * @type {Object}
+ * @property {ColumnDescriptor[]} columns - The columns in the table
+ * @property {number} rowCount - Current number of rows in the table.
+ * @property {number} rowLength - The length, in bytes, of a row in the table.
+ * @property {number} dataLength - The total length, in bytes, of the data contained in the table.
  */
-export const kBinaryTypeMap = new Map(kBinaryTypes.map((value, i) => [value, i]));
 
 /**
  * Class that represents the header of a {@link Table}.
@@ -48,49 +51,92 @@ export const kBinaryTypeMap = new Map(kBinaryTypes.map((value, i) => [value, i])
  */
 export class Header {
     constructor(memory) {
-        const view = memory.dataView;
+        this.mMemory = memory;
+        this.mView = new DataView(memory.heap.buffer, memory.address, memory.size);
         let offset = 0;
 
-        this.mLength = view.getUint32(offset, true);
+        this.mLengthOffset = offset;
         offset += 4;
 
-        this.mColumnCount = view.getUint32(offset, true);
+        this.mColumnCountOffset = offset;
         offset += 4;
 
-        this.mRowCount = view.getUint32(offset, true);
+        this.mRowCountOffset = offset;
         offset += 4;
 
-        this.mRowLength = view.getUint32(offset, true);
+        this.mRowLengthOffset = offset;
         offset += 4;
 
-        this.mDataLength = view.getUint32(offset, true);
+        this.mDataLengthOffset = offset;
         offset += 4;
 
         this.mColumns = [];
         this.mNames = {};
 
-        let nameOffset = 12 * this.mColumnCount + 20;
-        let nameLength;
-        let name;
-        for (let i = 0; i < this.mColumnCount; ++i) {
-            nameLength = view.getUint8(nameOffset++);
-            name = String.fromCharCode(...(new Uint8Array(memory.buffer, memory.address + nameOffset, nameLength)));
-            nameOffset += nameLength;
+        let nameOffset = 12 * this.columnCount + offset;
+        for (let i = 0; i < this.columnCount; ++i) {
+            const column = new Column(this.mMemory, offset, nameOffset);
+            this.mNames[column.name.toString()] = this.mColumns.length;
+            this.mColumns.push(column);
 
-            this.mNames[name] = this.mColumns.length;
-            this.mColumns.push({
-                name,
-                size: view.getUint32(offset, true),
-                offset: view.getUint32(offset + 4, true),
-                type: kBinaryTypes[view.getUint32(offset + 8, true)],
-            });
+            nameOffset += column.name.length + 1;
             offset += 12;
         }
     }
 
     /**
+     * Convenience function to build a header for an empty table.
+     * @param {ColumnDescriptor[]} columns - The columns to initialize the header with.
+     * @return {ArrayBuffer}
+     */
+    static binaryFromColumns(columns) {
+        const resultColumns = [];
+        for (let i = 0, n = columns.length; i < n; ++i) {
+            const column = columns[i];
+
+            let typeIndex;
+            if (column.type instanceof Type) {
+                typeIndex = kBinaryTypeMap.get(column.type);
+            } else if (isNaN(parseInt(column.type, 10))) {
+                typeIndex = kBinaryTypeNameMap.get(column.type);
+            } else {
+                typeIndex = column.type;
+            }
+
+            const type = kBinaryTypes[typeIndex];
+
+            resultColumns.push({
+                name: column.name,
+                type: typeIndex,
+                length: type === ByteString ? column.length : type.byteSize,
+                offset: 0,
+            });
+        }
+
+        const sortedColumns = resultColumns.slice().sort((c1, c2) => c1.type - c2.type);
+        let offset = 0;
+        for (let i = 0, n = sortedColumns.length; i < n; ++i) {
+            const column = sortedColumns[i];
+            column.offset = offset;
+            offset += column.length;
+        }
+
+        // make sure the row length is a multiple of four
+        const rowLength = ((offset - 1) | 3) + 1;
+
+        const header = {
+            columns: resultColumns,
+            rowLength: rowLength,
+            rowCount: 0,
+            dataLength: 0,
+        };
+
+        return this.buildBinaryHeader(header);
+    }
+
+    /**
      * Convenience function to build a binary buffer containing the header info from an object descriptor.
-     * @param {{}} header - Object describing the properties of the header
+     * @param {HeaderDescriptor} header - Object describing the properties of the header
      * @return {ArrayBuffer}
      */
     static buildBinaryHeader(header) {
@@ -152,7 +198,7 @@ export class Header {
      * @type {number}
      */
     get length() {
-        return this.mLength;
+        return this.mView.getUint32(this.mLengthOffset, true);
     }
 
     /**
@@ -160,7 +206,7 @@ export class Header {
      * @type {number}
      */
     get columnCount() {
-        return this.mColumnCount;
+        return this.mView.getUint32(this.mColumnCountOffset, true);
     }
 
     /**
@@ -168,7 +214,7 @@ export class Header {
      * @type {number}
      */
     get rowCount() {
-        return this.mRowCount;
+        return this.mView.getUint32(this.mRowCountOffset, true);
     }
 
     /**
@@ -176,7 +222,7 @@ export class Header {
      * @type {number}
      */
     get rowLength() {
-        return this.mRowLength;
+        return this.mView.getUint32(this.mRowLengthOffset, true);
     }
 
     /**
@@ -184,12 +230,12 @@ export class Header {
      * @type {number}
      */
     get dataLength() {
-        return this.mDataLength;
+        return this.mView.getUint32(this.mDataLengthOffset, true);
     }
 
     /**
      * An array containing objects describing each of the columns described in this header.
-     * @type {Array<{name: string, size: number, offset: number, type: Type}>}
+     * @type {Column[]}
      */
     get columns() {
         return this.mColumns;
@@ -202,5 +248,28 @@ export class Header {
      */
     get names() {
         return this.mNames;
+    }
+
+
+    /**
+     * Modifies this header atomically to add the number of rows specified.
+     * @param {number} count - The number of rows to add
+     * @returns {number}
+     */
+    addRows(count) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if ((this.rowCount + count) * this.rowLength > this.mMemory.byteSize) {
+            throw `ERROR: Adding ${count} rows to the table would exceed the bounds of its containing memory block`;
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+        const memoryView = new Uint32Array(this.mMemory.buffer, this.mMemory.address, 5);
+        // increase the data length
+        Atomize.add(memoryView, this.mDataLengthOffset / 4, count * this.rowLength);
+        // increase the row count and return the old value
+        return Atomize.add(memoryView, this.mRowCountOffset / 4, count);
     }
 }

@@ -56,12 +56,13 @@ export {DSBINLoader} from './DSBIN/DSBINLoader';
 
 export {Table} from './data/table/Table';
 export {Header} from './data/table/Header';
-// export {Row} from './data/table/Row'; // only export type for TypeScript
+export {Column} from './data/table/Column';
+export {Row} from './data/table/Row';
 
 export {Filter} from './data/filter/Filter';
 export {FilterOperation} from './data/filter/FilterOperation';
 export {FilterExpressionMode} from './data/filter/FilterExpressionMode';
 
-export {kBinaryTypes, kBinaryTypeMap} from './data/table/Header';
+export {kBinaryTypes, kBinaryTypeMap} from './data/table/Column';
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';
 export {coreCount} from './core/CoreCount';

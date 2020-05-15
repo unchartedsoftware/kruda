@@ -56,7 +56,7 @@ export class Row {
 
             this.mAccessors.push(accessor);
 
-            Object.defineProperty(this.mFields, column.name, {
+            Object.defineProperty(this.mFields, column.name.toString(), {
                 get: accessor.getter,
                 set: accessor.setter,
             });
