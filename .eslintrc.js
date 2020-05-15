@@ -5,7 +5,8 @@ module.exports = {
     "browser": true,
     "node" : true,
     "es6": true,
-    "mocha": true
+    "mocha": true,
+    "worker": true,
   },
 
   "globals": {
@@ -16,8 +17,6 @@ module.exports = {
     "_":true,
     "$":true,
     "require":true,
-    "SharedArrayBuffer": true,
-    "Atomics": true,
   },
 
     "parserOptions": {
