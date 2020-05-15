@@ -63,6 +63,6 @@ export {Filter} from './data/filter/Filter';
 export {FilterOperation} from './data/filter/FilterOperation';
 export {FilterExpressionMode} from './data/filter/FilterExpressionMode';
 
-export {kBinaryTypes, kBinaryTypeMap} from './data/table/Column';
+export {kBinaryTypes, kBinaryTypeMap, kBinaryTypeNameMap} from './data/types/TypeEnums';
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';
 export {coreCount} from './core/CoreCount';

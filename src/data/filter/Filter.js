@@ -28,7 +28,7 @@ import {FilterExpressionMode} from './FilterExpressionMode';
 import {coreCount} from '../../core/CoreCount';
 import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
 import {Header} from '../table/Header';
-import {kBinaryTypeMap} from '../table/Column';
+import {kBinaryTypeMap} from '../types/TypeEnums';
 import {Table} from '../table/Table';
 import {ProxyTable} from '../proxy/ProxyTable';
 

@@ -23,7 +23,8 @@
 import {Type} from '../../core/Types';
 import {ByteString} from '../types/ByteString';
 import {Atomize} from '../../core/Atomize';
-import {Column, kBinaryTypes, kBinaryTypeMap, kBinaryTypeNameMap} from './Column';
+import {Column} from './Column';
+import {kBinaryTypes, kBinaryTypeMap, kBinaryTypeNameMap} from '../types/TypeEnums';
 
 /**
  * @typedef ColumnDescriptor
