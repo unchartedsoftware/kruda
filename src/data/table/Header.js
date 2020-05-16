@@ -151,9 +151,9 @@ export class Header {
      * @param {ColumnDescriptor[]} columns - The columns to initialize the header with
      * @param {number=} memoryLength - The length of the memory where the table will reside. Defaults to 0
      * @param {MemoryLayout=} layout - The layout of the table. Defaults to RELATIONAL
-     * @return {ArrayBuffer}
+     * @return {HeaderDescriptor}
      */
-    static binaryFromColumns(columns, memoryLength = 0, layout = Header.memoryLayout.RELATIONAL) {
+    static descriptorFromColumns(columns, memoryLength = 0, layout = Header.memoryLayout.RELATIONAL) {
         const resultColumns = [];
         let rowLength = 0;
         for (let i = 0, n = columns.length; i < n; ++i) {
@@ -221,7 +221,7 @@ export class Header {
             rowStep = ((rowLength - 1) | 3) + 1;
         }
 
-        const header = {
+        return {
             columns: resultColumns,
             rowLength: rowLength,
             rowStep: rowStep,
@@ -229,8 +229,17 @@ export class Header {
             dataLength: 0,
             layout: layout,
         };
+    }
 
-        return this.buildBinaryHeader(header);
+    /**
+     * Convenience function to build a binary header from an array of column descriptors.
+     * @param {ColumnDescriptor[]} columns - The columns to initialize the header with
+     * @param {number=} memoryLength - The length of the memory where the table will reside. Defaults to 0
+     * @param {MemoryLayout=} layout - The layout of the table. Defaults to RELATIONAL
+     * @return {ArrayBuffer}
+     */
+    static binaryFromColumns(columns, memoryLength = 0, layout = Header.memoryLayout.RELATIONAL) {
+        return this.buildBinaryHeader(this.descriptorFromColumns(columns, memoryLength, layout));
     }
 
     /**
