@@ -40,7 +40,7 @@ export class Column {
         this.mByteLength = 0;
 
         const nameLength = this.mView.getUint8(nameOffset);
-        this.mName = ByteString.fromBuffer(this.mMemory.buffer, this.mMemory.address + nameOffset, nameLength);
+        this.mName = ByteString.fromBuffer(this.mMemory.buffer, this.mMemory.address + nameOffset, nameLength + 1);
 
         this.mSizeOffset = this.mByteLength + offset;
         this.mByteLength += 4;
