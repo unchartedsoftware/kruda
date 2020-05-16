@@ -51,10 +51,10 @@ const kIsPrimitive = Symbol('Type::isPrimitive');
 
 /**
  * Dictionary to keep track of registered types. Type names must be unique.
- * @type {object}
+ * @type {Map<string, Type>}
  * @private
  */
-const kTypeMap = {};
+const kTypeMap = new Map();
 
 /**
  * Creates a new type instance.
@@ -76,7 +76,7 @@ export class Type {
          */
         /// #endif
 
-        if (kTypeMap.hasOwnProperty(name)) {
+        if (kTypeMap.has(name)) {
             throw 'ERROR: Type names must be unique';
         }
 
@@ -85,7 +85,7 @@ export class Type {
         this[kBitSize] = bitSize;
         this[kIsPrimitive] = false;
 
-        kTypeMap[name] = this;
+        kTypeMap.set(name, this);
     }
 
     /**
@@ -145,10 +145,7 @@ export class Type {
      * @static
      */
     static getTypeByName(name) {
-        if (kTypeMap.hasOwnProperty(name)) {
-            return kTypeMap[name];
-        }
-        return null;
+        return kTypeMap.get(name);
     }
 
     /**
