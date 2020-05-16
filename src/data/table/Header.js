@@ -24,7 +24,7 @@ import {Type} from '../../core/Types';
 import {ByteString} from '../types/ByteString';
 import {Atomize} from '../../core/Atomize';
 import {Column} from './Column';
-import {kBinaryTypes, kBinaryTypeMap, kBinaryTypeNameMap} from '../types/TypeEnums';
+import {kBinaryTypes, kBinaryTypeMap} from '../types/TypeEnums';
 
 /**
  * RELATIONAL: 0
@@ -136,7 +136,7 @@ export class Header {
             if (column.type instanceof Type) {
                 typeIndex = kBinaryTypeMap.get(column.type);
             } else if (isNaN(parseInt(column.type, 10))) {
-                typeIndex = kBinaryTypeNameMap.get(column.type);
+                typeIndex = kBinaryTypeMap.get(Type.getTypeByName(column.type));
             } else {
                 typeIndex = column.type;
             }

@@ -22,9 +22,3 @@ export const kBinaryTypes = [
  * @type {Map<Type, number>}
  */
 export const kBinaryTypeMap = new Map(kBinaryTypes.map((value, i) => [value, i]));
-
-/**
- * Binary type name map.
- * @type {Map<string, number>}
- */
-export const kBinaryTypeNameMap = new Map(kBinaryTypes.map((value, i) => [value.name, i]));
