@@ -246,7 +246,7 @@ export class Filter {
     /**
      * Utility function to build a preliminary version of the result table's header.
      * @param {Object[]} resultDescription - The result description used to generate the filter result.
-     * @return {{rowLength: number, columns: Array, dataLength: number, length: number, rowCount: number}}
+     * @return {HeaderDescriptor}
      * @private
      */
     _buildResultHeader(resultDescription) {
@@ -256,6 +256,8 @@ export class Filter {
             dataLength: 0,
             rowCount: 0,
             rowLength: this.mResultRowSize,
+            rowStep: this.mResultRowSize,
+            layout: Header.memoryLayout.RELATIONAL,
         };
 
         let offset = 0;
@@ -265,6 +267,7 @@ export class Filter {
                 length: resultDescription[i].size,
                 offset: offset,
                 name: resultDescription[i].column || '',
+                dataOffset: 0,
             };
 
             const type = kBinaryTypeMap.get(Types.typeByName(resultDescription[i].type));
@@ -285,7 +288,7 @@ export class Filter {
             columnNameLength += Math.min(255, column.name.length) + 1;
         }
 
-        header.length = (12 * header.columns.length + columnNameLength + 20 + 3) & ~0x03;
+        header.length = (Header.columnMetaLength * header.columns.length + columnNameLength + Header.headerMetaLength + 3) & ~0x03;
 
         return header;
     }
