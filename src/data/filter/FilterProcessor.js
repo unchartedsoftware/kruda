@@ -137,11 +137,11 @@ export class FilterProcessor {
             if (description[i].column) {
                 const getter = baseRow.accessors[baseRow.names[description[i].column]].getter;
                 writers.push(function resultWriterField(row, offset, view) {
-                    type.set(view, getter(), offset + fieldOffset);
+                    type.set(view, offset + fieldOffset, getter());
                 });
             } else {
                 writers.push(function resultWriterRowIndex(row, offset, view) {
-                    type.set(view, row.index, offset + fieldOffset);
+                    type.set(view, offset + fieldOffset, row.index);
                 });
             }
             resultSize += description[i].size;

@@ -186,10 +186,10 @@ export class Type {
     /**
      * Utility function to set the value of this type in memory.
      * @param {DataView} view - The data view used to write the value
-     * @param {*} value - The value to write.
      * @param {number} offset - The offset, in bytes, at which the value will be written.
+     * @param {*} value - The value to write.
      */
-    set(view, value, offset) {
+    set(view, offset, value) {
         throw 'Not implemented';
     }
     /* eslint enable*/
@@ -244,7 +244,7 @@ class _Int8 extends Type {
         return view.getInt8(offset);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         view.setInt8(offset, value);
     }
 }
@@ -267,7 +267,7 @@ class _Int16 extends Type {
         return view.getInt16(offset, true);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         view.setInt16(offset, value, true);
     }
 }
@@ -290,7 +290,7 @@ class _Int32 extends Type {
         return view.getInt32(offset, true);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         view.setInt32(offset, value, true);
     }
 }
@@ -313,7 +313,7 @@ class _Uint8 extends Type {
         return view.getUint8(offset);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         view.setUint8(offset, value);
     }
 }
@@ -336,7 +336,7 @@ class _Uint16 extends Type {
         return view.getUint16(offset, true);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         view.setUint16(offset, value, true);
     }
 }
@@ -359,7 +359,7 @@ class _Uint32 extends Type {
         return view.getUint32(offset, true);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         view.setUint32(offset, value, true);
     }
 }
@@ -382,7 +382,7 @@ class _Float32 extends Type {
         return view.getFloat32(offset, true);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         view.setFloat32(offset, value, true);
     }
 }

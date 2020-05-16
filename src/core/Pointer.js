@@ -111,7 +111,7 @@ export class Pointer {
         return this.mType.get(this.view, this.mOffset);
     }
     set value(value) {
-        this.mType.set(this.view, value, this.mOffset);
+        this.mType.set(this.view, this.mOffset, value);
     }
 
     /**
@@ -167,7 +167,7 @@ export class Pointer {
      * @return {*}
      */
     setValueAt(offset, value) {
-        return this.mType.set(this.view, value, this.mOffset + offset * this.mType.byteSize);
+        return this.mType.set(this.view, this.mOffset + offset * this.mType.byteSize, value);
     }
 
     /**

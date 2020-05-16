@@ -313,7 +313,7 @@ class _ByteString extends Type {
         return new ByteStringBuffer(view.buffer, view.byteOffset + offset, size);
     }
 
-    set(view, value, offset) {
+    set(view, offset, value) {
         /// #if !_DEBUG
         /*
         /// #endif

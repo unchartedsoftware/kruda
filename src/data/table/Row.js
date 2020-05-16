@@ -232,15 +232,15 @@ export class Row {
             return function setColumnString(value) {
                 if (value.length > description.size - 1) {
                     str = value.substring(0, description.size);
-                    type.set(pointer.view, str, pointer.address + offset);
+                    type.set(pointer.view, pointer.address + offset, str);
                 } else {
-                    type.set(pointer.view, value, pointer.address + offset);
+                    type.set(pointer.view, pointer.address + offset, value);
                 }
             };
         }
 
         return function setColumnValue(value) {
-            type.set(pointer.view, value, pointer.address + offset);
+            type.set(pointer.view, pointer.address + offset, value);
         };
     }
 }
