@@ -172,13 +172,18 @@ export class Header {
             const columnLength = type === ByteString ? column.length : type.byteSize;
             rowLength += columnLength;
 
-            resultColumns.push({
+            const computedColumn = {
                 name: column.name,
                 type: typeIndex,
                 length: columnLength,
                 dataOffset: 0,
-                offset: 0,
-            });
+            };
+
+            if (column.hasOwnProperty('offset')) {
+                computedColumn.offset = column.offset;
+            }
+
+            resultColumns.push(computedColumn);
         }
 
         const sortedColumns = resultColumns.slice().sort((c1, c2) => c1.type - c2.type);
@@ -197,16 +202,20 @@ export class Header {
             let offset = 0;
             for (let i = 0, n = sortedColumns.length; i < n; ++i) {
                 const column = sortedColumns[i];
-                column.dataOffset = offset;
-                offset += column.length * rowCount;
+                if (!column.hasOwnProperty('offset')) {
+                    column.dataOffset = offset;
+                    offset += column.length * rowCount;
+                }
             }
             rowStep = sortedColumns[0].length;
         } else {
             let offset = 0;
             for (let i = 0, n = sortedColumns.length; i < n; ++i) {
                 const column = sortedColumns[i];
-                column.offset = offset;
-                offset += column.length;
+                if (!column.hasOwnProperty('offset')) {
+                    column.offset = offset;
+                    offset += column.length;
+                }
             }
             // make sure the row step is a multiple of four
             rowStep = ((rowLength - 1) | 3) + 1;
