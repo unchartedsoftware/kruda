@@ -53,6 +53,12 @@ const kMemoryLayout = Object.freeze({
  */
 
 /**
+ * The length in bytes of a column's meta (without counting its name)
+ * @type {number}
+ */
+const kColumnMetaLength = 16;
+
+/**
  * @typedef HeaderDescriptor
  * @type {Object}
  * @property {ColumnDescriptor[]} columns - The columns in the table
@@ -62,6 +68,12 @@ const kMemoryLayout = Object.freeze({
  * @property {number} dataLength - The total length, in bytes, of the data contained in the table.
  * @property {MemoryLayout} layout - The layout for the data in this table
  */
+
+/**
+ * The length in bytes of a header's meta (without the columns)
+ * @type {number}
+ */
+const kHeaderMetaLength = 28;
 
 /**
  * Class that represents the header of a {@link Table}.
@@ -99,15 +111,14 @@ export class Header {
         this.mColumns = [];
         this.mNames = {};
 
-        const columnMetaLength = 16;
-        let nameOffset = columnMetaLength * this.columnCount + offset;
+        let nameOffset = kColumnMetaLength * this.columnCount + offset;
         for (let i = 0; i < this.columnCount; ++i) {
             const column = new Column(this.mMemory, offset, nameOffset);
             this.mNames[column.name.toString()] = this.mColumns.length;
             this.mColumns.push(column);
 
             nameOffset += column.name.length + 1;
-            offset += columnMetaLength;
+            offset += kColumnMetaLength;
         }
     }
 
@@ -120,7 +131,23 @@ export class Header {
     }
 
     /**
-     * Convenience function to build a header for an empty table.
+     * The length in bytes of a header's meta (without the columns)
+     * @type {number}
+     */
+    static get headerMetaLength() {
+        return kHeaderMetaLength;
+    }
+
+    /**
+     * The length in bytes of a column's meta (without counting its name)
+     * @type {number}
+     */
+    static get columnMetaLength() {
+        return kColumnMetaLength;
+    }
+
+    /**
+     * Convenience function to build a header descriptor from an array of column descriptors.
      * @param {ColumnDescriptor[]} columns - The columns to initialize the header with
      * @param {number=} memoryLength - The length of the memory where the table will reside. Defaults to 0
      * @param {MemoryLayout=} layout - The layout of the table. Defaults to RELATIONAL
@@ -210,12 +237,10 @@ export class Header {
             columnNameLength += Math.min(255, header.columns[i].name.length) + 1;
         }
 
-        const headerMetaLength = 28;
-        const columnMetaLength = 16;
-        const headerLength = (columnMetaLength * columnCount + columnNameLength + headerMetaLength + 3) & ~0x03; // round to nearest 4
+        const headerLength = (kColumnMetaLength * columnCount + columnNameLength + kHeaderMetaLength + 3) & ~0x03; // round to nearest 4
         const buffer = new ArrayBuffer(headerLength);
         const view = new DataView(buffer);
-        let nameOffset = columnMetaLength * columnCount + headerMetaLength;
+        let nameOffset = kColumnMetaLength * columnCount + kHeaderMetaLength;
         let offset = 0;
         let name;
         let ii;
