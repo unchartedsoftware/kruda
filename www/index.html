@@ -112,7 +112,7 @@
         tableStr += '<thead><tr>';
         result.header.columns.forEach(column => {
             /* write the table header's column */
-            tableStr += `<th>${column.name ? column.name : 'Index'}</th>`;
+            tableStr += `<th>${column.name.length ? column.name : 'Index'}</th>`;
         });
         tableStr += '</tr></thead>';
 
