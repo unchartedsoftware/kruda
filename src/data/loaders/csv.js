@@ -25,6 +25,14 @@ import {coreCount} from '../../core/CoreCount';
 import {Header} from '../table/Header';
 import {Table} from '../table/Table';
 import dekkai from 'dekkai';
+
+
+const kDekkaiTypeMap = new Map([
+    [0, 'ByteString'],
+    [1, 'Int32'],
+    [2, 'Float32'],
+]);
+
 /**
  * Creates a {@link Table} instance and fills its contents from the specified local CSV file.
  * @param {File} file - A file instance, representing the file to load.
@@ -41,16 +49,36 @@ export async function tableFromLocalCSV(file, heap) {
     const blobs = await DataTools.sliceFile(dataFile, offset, config);
     const result = await DataTools.binaryChunksFromBlobs(blobs, header, config);
 
-    const tableHeader = Header.buildBinaryHeader(result.header);
-    const memory = heap.malloc(result.header.dataLength + tableHeader.byteLength);
+    const columns = [];
+    const dekkaiColumns = result.header.columns;
+    for (let i = 0, n = dekkaiColumns.length; i < n; ++i) {
+        const column = {
+            name: dekkaiColumns[i].name,
+            type: kDekkaiTypeMap.get(dekkaiColumns[i].type),
+            offset: dekkaiColumns[i].offset,
+        };
 
-    const headerView = new Uint8Array(tableHeader);
+        if (column.type === 'ByteString') {
+            column.length = dekkaiColumns[i].length;
+        }
+
+        columns.push(column);
+    }
+
+    const tableHeader = Header.descriptorFromColumns(columns);
+    tableHeader.rowCount = result.header.rowCount;
+    tableHeader.dataLength = result.header.dataLength;
+
+    const binaryHeader = Header.buildBinaryHeader(tableHeader);
+    const memory = heap.malloc(result.header.dataLength + binaryHeader.byteLength);
+
+    const headerView = new Uint8Array(binaryHeader);
     const memoryView = new Uint8Array(memory.buffer);
     memoryView.set(headerView, memory.address);
 
     config.output = {
         buffer: memory.buffer,
-        offset: memory.address + tableHeader.byteLength,
+        offset: memory.address + binaryHeader.byteLength,
     };
 
     const merged = await DataTools.mergeChunksIntoBuffer(result.chunks, result.header, config);
