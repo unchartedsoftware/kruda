@@ -253,7 +253,7 @@ class ByteStringPtr extends ByteStringBase {
 
 /**
  * ByteString implementation using ArrayBuffers. This implementation is useful for quick off-heap strings. It also
- * guarantees that it will no change its contents without implicit user interaction.
+ * guarantees that it will not change its contents without implicit user interaction.
  * Constructs a byte string backed by an ArrayBuffer.
  * @class ByteStringBuffer
  * @param {ArrayBufferLike} buffer - The ArrayBuffer object where this string resides.

@@ -28,7 +28,6 @@ import {Row} from './Row';
  * Class that represents a table in binary memory.
  * @class Table
  * @param {MemoryBlock} memory - The MemoryBlock containing the table's data
- * @param {MemoryLayout} layout - Is the
  */
 export class Table {
     constructor(memory) {

@@ -342,6 +342,10 @@ export class Header {
         return this.mView.getUint32(this.mRowLengthOffset, true);
     }
 
+    /**
+     * The number of bytes a pointer needs to shift to move from one row to the next.
+     * @type {number}
+     */
     get rowStep() {
         return this.mView.getUint32(this.mRowStepOffset, true);
     }
