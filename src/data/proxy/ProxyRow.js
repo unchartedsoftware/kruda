@@ -38,8 +38,13 @@ import {Row} from '../table/Row';
 export class ProxyRow {
     constructor(table, index = 0, binary = false) {
         this.mTable = table;
-        this.mIndexRow = new Row(this.mTable.indexTable, index, true);
-        this.mSourceRow = new Row(this.mTable.sourceTable, this.mIndexRow.accessors[0].getter(), binary);
+        if (this.mTable.rowCount) {
+            this.mIndexRow = new Row(this.mTable.indexTable, index, true);
+            this.mSourceRow = new Row(this.mTable.sourceTable, this.mIndexRow.accessors[0].getter(), binary);
+        } else {
+            this.mIndexRow = null;
+            this.mSourceRow = null;
+        }
     }
 
     /**
