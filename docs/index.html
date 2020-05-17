@@ -1,8 +1,8 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@uncharted.software/kruda 0.0.14 | Documentation</title>
+  <title>@uncharted.software/kruda 0.1.0 | Documentation</title>
   <meta name='description' content='Close to the metal data processing'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,11 +15,14 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@uncharted.software/kruda</h3>
-          <div class='mb1'><code>0.0.14</code></div>
+          <div class='mb1'><code>0.1.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
             class='col12 block input'
+            spellcheck='false'
+            autocapitalize='off'
+            autocorrect='off'
             type='text' />
           <div id='toc'>
             <ul class='list-reset h5 py1-ul'>
@@ -46,6 +49,36 @@
                   
                   <ul class='list-reset py1-ul pl1'>
                     <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#headermemorylayout'
+                        class='regular pre-open'>
+                        .memoryLayout
+                      </a></li>
+                    
+                      <li><a
+                        href='#headerheadermetalength'
+                        class='regular pre-open'>
+                        .headerMetaLength
+                      </a></li>
+                    
+                      <li><a
+                        href='#headercolumnmetalength'
+                        class='regular pre-open'>
+                        .columnMetaLength
+                      </a></li>
+                    
+                      <li><a
+                        href='#headerdescriptorfromcolumns'
+                        class='regular pre-open'>
+                        .descriptorFromColumns
+                      </a></li>
+                    
+                      <li><a
+                        href='#headerbinaryfromcolumns'
+                        class='regular pre-open'>
+                        .binaryFromColumns
+                      </a></li>
                     
                       <li><a
                         href='#headerbuildbinaryheader'
@@ -84,9 +117,21 @@
                       </a></li>
                       
                       <li><a
+                        href='#headerrowstep'
+                        class='regular pre-open'>
+                        #rowStep
+                      </a></li>
+                      
+                      <li><a
                         href='#headerdatalength'
                         class='regular pre-open'>
                         #dataLength
+                      </a></li>
+                      
+                      <li><a
+                        href='#headerlayout'
+                        class='regular pre-open'>
+                        #layout
                       </a></li>
                       
                       <li><a
@@ -99,6 +144,12 @@
                         href='#headernames'
                         class='regular pre-open'>
                         #names
+                      </a></li>
+                      
+                      <li><a
+                        href='#headeraddrows'
+                        class='regular pre-open'>
+                        #addRows
                       </a></li>
                       
                     </ul>
@@ -118,6 +169,35 @@
                 </a>
                 
                 <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#tablememorylayout'
+                        class='regular pre-open'>
+                        .memoryLayout
+                      </a></li>
+                    
+                      <li><a
+                        href='#tableemptyfromcolumns'
+                        class='regular pre-open'>
+                        .emptyFromColumns
+                      </a></li>
+                    
+                      <li><a
+                        href='#tableemptyfromheader'
+                        class='regular pre-open'>
+                        .emptyFromHeader
+                      </a></li>
+                    
+                      <li><a
+                        href='#tableemptyfrombinaryheader'
+                        class='regular pre-open'>
+                        .emptyFromBinaryHeader
+                      </a></li>
+                    
+                    </ul>
                   
                   
                     <ul class='list-reset py1-ul pl1'>
@@ -151,6 +231,12 @@
                         href='#tabledataoffset'
                         class='regular pre-open'>
                         #dataOffset
+                      </a></li>
+                      
+                      <li><a
+                        href='#tableaddrows'
+                        class='regular pre-open'>
+                        #addRows
                       </a></li>
                       
                       <li><a
@@ -197,6 +283,12 @@
                         href='#rowsize'
                         class='regular pre-open'>
                         #size
+                      </a></li>
+                      
+                      <li><a
+                        href='#rowstep'
+                        class='regular pre-open'>
+                        #step
                       </a></li>
                       
                       <li><a
@@ -742,6 +834,18 @@
                       </a></li>
                     
                       <li><a
+                        href='#bytestringnew'
+                        class='regular pre-open'>
+                        .new
+                      </a></li>
+                    
+                      <li><a
+                        href='#bytestringfrompointer'
+                        class='regular pre-open'>
+                        .fromPointer
+                      </a></li>
+                    
+                      <li><a
                         href='#bytestringfrompointer'
                         class='regular pre-open'>
                         .fromPointer
@@ -751,6 +855,18 @@
                         href='#bytestringfrombuffer'
                         class='regular pre-open'>
                         .fromBuffer
+                      </a></li>
+                    
+                      <li><a
+                        href='#bytestringfrombuffer'
+                        class='regular pre-open'>
+                        .fromBuffer
+                      </a></li>
+                    
+                      <li><a
+                        href='#bytestringfromstring'
+                        class='regular pre-open'>
+                        .fromString
                       </a></li>
                     
                       <li><a
@@ -1798,6 +1914,134 @@
               
                 
                 <li><a
+                  href='#column'
+                  class=" toggle-sibling">
+                  Column
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#columnname'
+                        class='regular pre-open'>
+                        #name
+                      </a></li>
+                      
+                      <li><a
+                        href='#columnsize'
+                        class='regular pre-open'>
+                        #size
+                      </a></li>
+                      
+                      <li><a
+                        href='#columndataoffset'
+                        class='regular pre-open'>
+                        #dataOffset
+                      </a></li>
+                      
+                      <li><a
+                        href='#columnoffset'
+                        class='regular pre-open'>
+                        #offset
+                      </a></li>
+                      
+                      <li><a
+                        href='#columntype'
+                        class='regular pre-open'>
+                        #type
+                      </a></li>
+                      
+                      <li><a
+                        href='#columnbytelength'
+                        class='regular pre-open'>
+                        #byteLength
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#kmemorylayout'
+                  class="">
+                  kMemoryLayout
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#kmemorylayout'
+                  class="">
+                  kMemoryLayout
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#kcolumnmetalength'
+                  class="">
+                  kColumnMetaLength
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#kcolumnmetalength'
+                  class="">
+                  kColumnMetaLength
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#kheadermetalength'
+                  class="">
+                  kHeaderMetaLength
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#kheadermetalength'
+                  class="">
+                  kHeaderMetaLength
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#_bytestring'
+                  class="">
+                  _ByteString
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#kbinarytypes'
                   class="">
                   kBinaryTypes
@@ -1818,9 +2062,137 @@
               
                 
                 <li><a
-                  href='#_bytestring'
+                  href='#vectorbase'
+                  class=" toggle-sibling">
+                  VectorBase
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#vectorbaselength'
+                        class='regular pre-open'>
+                        #length
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasex'
+                        class='regular pre-open'>
+                        #x
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasey'
+                        class='regular pre-open'>
+                        #y
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasez'
+                        class='regular pre-open'>
+                        #z
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasew'
+                        class='regular pre-open'>
+                        #w
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbaser'
+                        class='regular pre-open'>
+                        #r
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbaseg'
+                        class='regular pre-open'>
+                        #g
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbaseb'
+                        class='regular pre-open'>
+                        #b
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasea'
+                        class='regular pre-open'>
+                        #a
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasegetcomponentat'
+                        class='regular pre-open'>
+                        #getComponentAt
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasesetcomponentat'
+                        class='regular pre-open'>
+                        #setComponentAt
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbasetostring'
+                        class='regular pre-open'>
+                        #toString
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#vectorbuffer'
+                  class=" toggle-sibling">
+                  VectorBuffer
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#vectorbuffergetcomponentat'
+                        class='regular pre-open'>
+                        #getComponentAt
+                      </a></li>
+                      
+                      <li><a
+                        href='#vectorbuffersetcomponentat'
+                        class='regular pre-open'>
+                        #setComponentAt
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#_vector'
                   class="">
-                  _ByteString
+                  _Vector
                   
                 </a>
                 
@@ -1902,14 +2274,16 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='headerbuildbinaryheader'>
+    <div class='border-bottom' id='headermemorylayout'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>buildBinaryHeader(header)</span>
+            <span class='code strong strong truncate'>memoryLayout</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -1917,9 +2291,171 @@ Constructs an instance of a Header by reading its properties from the beginning 
 
   
 
-  <p>Convenience function to build a binary buffer containing the header info from an object descriptor.</p>
+  <p>Different memory layouts for a table</p>
 
-    <div class='pre p1 fill-light mt0'>buildBinaryHeader(header: {}): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a></div>
+    <div class='pre p1 fill-light mt0'>memoryLayout</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, MemoryLayout>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headerheadermetalength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>headerMetaLength</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The length in bytes of a header's meta (without the columns)</p>
+
+    <div class='pre p1 fill-light mt0'>headerMetaLength</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headercolumnmetalength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>columnMetaLength</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The length in bytes of a column's meta (without counting its name)</p>
+
+    <div class='pre p1 fill-light mt0'>columnMetaLength</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headerdescriptorfromcolumns'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>descriptorFromColumns(columns, memoryLength = 0, layout = Header.memoryLayout.RELATIONAL)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience function to build a header descriptor from an array of column descriptors.</p>
+
+    <div class='pre p1 fill-light mt0'>descriptorFromColumns(columns: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;ColumnDescriptor>, memoryLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, layout: MemoryLayout?): HeaderDescriptor</div>
   
   
 
@@ -1936,7 +2472,189 @@ Constructs an instance of a Header by reading its properties from the beginning 
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>header</span> <code class='quiet'>({})</code>
+            <span class='code bold'>columns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;ColumnDescriptor>)</code>
+	    The columns to initialize the header with
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>memoryLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>0</code>)</code>
+	    The length of the memory where the table will reside. Defaults to 0
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>layout</span> <code class='quiet'>(MemoryLayout?
+            = <code>Header.memoryLayout.RELATIONAL</code>)</code>
+	    The layout of the table. Defaults to RELATIONAL
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>HeaderDescriptor</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headerbinaryfromcolumns'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>binaryFromColumns(columns, memoryLength = 0, layout = Header.memoryLayout.RELATIONAL)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience function to build a binary header from an array of column descriptors.</p>
+
+    <div class='pre p1 fill-light mt0'>binaryFromColumns(columns: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;ColumnDescriptor>, memoryLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, layout: MemoryLayout?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>columns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;ColumnDescriptor>)</code>
+	    The columns to initialize the header with
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>memoryLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>0</code>)</code>
+	    The length of the memory where the table will reside. Defaults to 0
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>layout</span> <code class='quiet'>(MemoryLayout?
+            = <code>Header.memoryLayout.RELATIONAL</code>)</code>
+	    The layout of the table. Defaults to RELATIONAL
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headerbuildbinaryheader'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>buildBinaryHeader(header)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience function to build a binary buffer containing the header info from an object descriptor.</p>
+
+    <div class='pre p1 fill-light mt0'>buildBinaryHeader(header: HeaderDescriptor): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>header</span> <code class='quiet'>(HeaderDescriptor)</code>
 	    Object describing the properties of the header
 
           </div>
@@ -1956,6 +2674,8 @@ Constructs an instance of a Header by reading its properties from the beginning 
 
       
     
+  
+
   
 
   
@@ -2029,6 +2749,8 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
 
   
+
+  
 </section>
 
       </div>
@@ -2062,6 +2784,8 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
   
   
+  
+
   
 
   
@@ -2133,6 +2857,8 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
 
   
+
+  
 </section>
 
       </div>
@@ -2166,6 +2892,62 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
   
   
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headerrowstep'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rowStep</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The number of bytes a pointer needs to shift to move from one row to the next.</p>
+
+    <div class='pre p1 fill-light mt0'>rowStep</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   
@@ -2237,6 +3019,62 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
 
   
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headerlayout'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>layout</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The memory layout of the table.</p>
+
+    <div class='pre p1 fill-light mt0'>layout</div>
+  
+    <p>
+      Type:
+      MemoryLayout
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 </section>
 
       </div>
@@ -2260,7 +3098,7 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
     <p>
       Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;{name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, offset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, type: <a href="#type">Type</a>}>
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#column">Column</a>>
     </p>
   
   
@@ -2270,6 +3108,8 @@ Constructs an instance of a Header by reading its properties from the beginning 
   
   
   
+  
+
   
 
   
@@ -2327,6 +3167,79 @@ column within the <code>columns</code> array as their value.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='headeraddrows'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addRows(count)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Modifies this header atomically to add the number of rows specified.</p>
+
+    <div class='pre p1 fill-light mt0'>addRows(count: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>count</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The number of rows to add
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
   
 
   
@@ -2412,6 +3325,321 @@ column within the <code>columns</code> array as their value.</p>
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='tablememorylayout'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>memoryLayout</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Different memory layouts for a table</p>
+
+    <div class='pre p1 fill-light mt0'>memoryLayout</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, MemoryLayout>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='tableemptyfromcolumns'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>emptyFromColumns(columns, memory, layout = Header.memoryLayout.RELATIONAL)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Crates a new empty Table with the specified columns in the supplied memory. The table will
+be able to grow as big as the memory that contains it.</p>
+
+    <div class='pre p1 fill-light mt0'>emptyFromColumns(columns: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;ColumnDescriptor>, memory: <a href="#memoryblock">MemoryBlock</a>, layout: MemoryLayout?): <a href="#table">Table</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>columns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;ColumnDescriptor>)</code>
+	    The columns for the new Table
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>memory</span> <code class='quiet'>(<a href="#memoryblock">MemoryBlock</a>)</code>
+	    The memory where the new Table will live
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>layout</span> <code class='quiet'>(MemoryLayout?
+            = <code>Header.memoryLayout.RELATIONAL</code>)</code>
+	    The memory layout to use for the new table. Defaults to RELATIONAL
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#table">Table</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='tableemptyfromheader'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>emptyFromHeader(header, memory)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Crates a new empty Table with the specified header descriptor in the supplied memory. The table will
+be able to grow as big as the memory that contains it.</p>
+
+    <div class='pre p1 fill-light mt0'>emptyFromHeader(header: HeaderDescriptor, memory: <a href="#memoryblock">MemoryBlock</a>): <a href="#table">Table</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>header</span> <code class='quiet'>(HeaderDescriptor)</code>
+	    The header descriptor tu use
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>memory</span> <code class='quiet'>(<a href="#memoryblock">MemoryBlock</a>)</code>
+	    The memory where the new Table will live
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#table">Table</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='tableemptyfrombinaryheader'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>emptyFromBinaryHeader(header, memory)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Crates a new empty Table with the specified binary header in the supplied memory. The table will
+be able to grow as big as the memory that contains it.</p>
+
+    <div class='pre p1 fill-light mt0'>emptyFromBinaryHeader(header: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a>, memory: <a href="#memoryblock">MemoryBlock</a>): <a href="#table">Table</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>header</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a>)</code>
+	    The binary header to use
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>memory</span> <code class='quiet'>(<a href="#memoryblock">MemoryBlock</a>)</code>
+	    The memory where the new Table will live
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#table">Table</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -2439,6 +3667,8 @@ associated to this table is no longer needed to avoid memory leaks in kruda's in
   
   
   
+  
+
   
 
   
@@ -2510,6 +3740,8 @@ associated to this table is no longer needed to avoid memory leaks in kruda's in
   
 
   
+
+  
 </section>
 
       </div>
@@ -2543,6 +3775,8 @@ associated to this table is no longer needed to avoid memory leaks in kruda's in
   
   
   
+  
+
   
 
   
@@ -2614,6 +3848,8 @@ associated to this table is no longer needed to avoid memory leaks in kruda's in
   
 
   
+
+  
 </section>
 
       </div>
@@ -2651,6 +3887,81 @@ associated to this table is no longer needed to avoid memory leaks in kruda's in
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='tableaddrows'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addRows(count)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Adds the specified number of rows to this table and returns the old row count.
+NOTE: The memory in the new rows is NOT cleared before returning.</p>
+
+    <div class='pre p1 fill-light mt0'>addRows(count: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>count</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>1</code>)</code>
+	    The number of rows to add
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
   
 
   
@@ -2746,6 +4057,8 @@ NOTE: The returned row can be moved to point to a different row by changing its 
   
 
   
+
+  
 </section>
 
       </div>
@@ -2828,6 +4141,8 @@ NOTE: The returned row can be moved to point to a different row by changing its 
   
 
   
+
+  
 </section>
 
       </div>
@@ -2875,6 +4190,8 @@ consider using the <code>getRow</code> method.</p>
         </div>
       
     </div>
+  
+
   
 
   
@@ -2985,6 +4302,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -3016,6 +4335,62 @@ needed, either copy of the string or create a JS string from it by calling <code
   
   
   
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rowstep'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>step</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The number of bytes the internal pointer shifts in order to move to the next/previous row in the data.</p>
+
+    <div class='pre p1 fill-light mt0'>step</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   
@@ -3087,6 +4462,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
 
   
+
+  
 </section>
 
       </div>
@@ -3139,6 +4516,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
 
   
+
+  
 </section>
 
       </div>
@@ -3172,6 +4551,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
   
   
+  
+
   
 
   
@@ -3244,6 +4625,8 @@ the fields in this row.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -3278,6 +4661,8 @@ NOTE: Setting values is not implemented yet.</p>
   
   
   
+  
+
   
 
   
@@ -3352,6 +4737,8 @@ row in a table will result in undefined behaviour.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -3387,6 +4774,8 @@ to calculate the new row address so it's safe to use to reset the internal point
   
   
   
+  
+
   
 
   
@@ -3486,6 +4875,8 @@ a filter operation.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -3516,6 +4907,8 @@ management to kruda (although retaining and releasing instances would still be t
   
   
   
+  
+
   
 
   
@@ -3587,6 +4980,8 @@ management to kruda (although retaining and releasing instances would still be t
   
 
   
+
+  
 </section>
 
       </div>
@@ -3620,6 +5015,8 @@ management to kruda (although retaining and releasing instances would still be t
   
   
   
+  
+
   
 
   
@@ -3691,6 +5088,8 @@ management to kruda (although retaining and releasing instances would still be t
   
 
   
+
+  
 </section>
 
       </div>
@@ -3724,6 +5123,8 @@ management to kruda (although retaining and releasing instances would still be t
   
   
   
+  
+
   
 
   
@@ -3795,6 +5196,8 @@ management to kruda (although retaining and releasing instances would still be t
   
 
   
+
+  
 </section>
 
       </div>
@@ -3828,6 +5231,8 @@ management to kruda (although retaining and releasing instances would still be t
   
   
   
+  
+
   
 
   
@@ -3899,6 +5304,8 @@ management to kruda (although retaining and releasing instances would still be t
   
 
   
+
+  
 </section>
 
       </div>
@@ -3951,6 +5358,8 @@ management to kruda (although retaining and releasing instances would still be t
   
 
   
+
+  
 </section>
 
       </div>
@@ -3984,6 +5393,8 @@ management to kruda (although retaining and releasing instances would still be t
   
   
   
+  
+
   
 
   
@@ -4083,6 +5494,8 @@ NOTE: The returned row can be moved to point to a different row by changing its 
   
 
   
+
+  
 </section>
 
       </div>
@@ -4165,6 +5578,8 @@ NOTE: The returned row can be moved to point to a different row by changing its 
   
 
   
+
+  
 </section>
 
       </div>
@@ -4212,6 +5627,8 @@ consider using the <code>getRow</code> method.</p>
         </div>
       
     </div>
+  
+
   
 
   
@@ -4322,6 +5739,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -4353,6 +5772,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
   
   
+  
+
   
 
   
@@ -4424,6 +5845,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
 
   
+
+  
 </section>
 
       </div>
@@ -4476,6 +5899,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
 
   
+
+  
 </section>
 
       </div>
@@ -4509,6 +5934,8 @@ needed, either copy of the string or create a JS string from it by calling <code
   
   
   
+  
+
   
 
   
@@ -4581,6 +6008,8 @@ the fields in this row.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -4615,6 +6044,8 @@ NOTE: Setting values is not implemented yet.</p>
   
   
   
+  
+
   
 
   
@@ -4689,6 +6120,8 @@ row in a table will result in undefined behaviour.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -4724,6 +6157,8 @@ to calculate the new row address so it's safe to use to reset the internal point
   
   
   
+  
+
   
 
   
@@ -4834,6 +6269,8 @@ to calculate the new row address so it's safe to use to reset the internal point
   
 
   
+
+  
 </section>
 
           
@@ -4923,6 +6360,8 @@ Creates a Filter instance bound to the specified table.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
@@ -4954,6 +6393,8 @@ Creates a Filter instance bound to the specified table.</p>
   
   
   
+  
+
   
 
   
@@ -5033,6 +6474,8 @@ Creates a Filter instance bound to the specified table.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -5067,6 +6510,8 @@ WARNING: Do not modify this array, assign a brand new array instead.</p>
   
   
   
+  
+
   
 
   
@@ -5160,6 +6605,8 @@ will be returned.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -5221,6 +6668,8 @@ will be returned.</p>
 
       
     
+  
+
   
 
   
@@ -5313,6 +6762,8 @@ will be returned.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -5386,6 +6837,8 @@ NOTE: Heap, MemoryBlock and Table classes are thread safe.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -5429,6 +6882,8 @@ available.</p>
         </div>
       
     </div>
+  
+
   
 
   
@@ -5502,6 +6957,8 @@ WARNING: This filter worker will not work after this function is called and befo
   
 
   
+
+  
 </section>
 
       </div>
@@ -5546,6 +7003,8 @@ WARNING: This filter worker will not work after this function is called and befo
         </div>
       
     </div>
+  
+
   
 
   
@@ -5629,6 +7088,8 @@ at runtime.</p>
   
 
   
+
+  
 </section>
 
           
@@ -5664,6 +7125,8 @@ at runtime.</p>
   
   
   
+  
+
   
 
   
@@ -5759,6 +7222,8 @@ at runtime.</p>
   
 
   
+
+  
 </section>
 
           
@@ -5801,6 +7266,8 @@ at runtime.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
@@ -5828,6 +7295,8 @@ collection-based values contain the given value</p>
   
   
   
+  
+
   
 
   
@@ -5895,6 +7364,8 @@ collection-based values do not contain the given value</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -5923,6 +7394,8 @@ collection-based values do not contain the given value</p>
   
   
   
+  
+
   
 
   
@@ -5989,6 +7462,8 @@ collection-based values do not contain the given value</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -6017,6 +7492,8 @@ collection-based values do not contain the given value</p>
   
   
   
+  
+
   
 
   
@@ -6083,6 +7560,8 @@ collection-based values do not contain the given value</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -6111,6 +7590,8 @@ collection-based values do not contain the given value</p>
   
   
   
+  
+
   
 
   
@@ -6177,6 +7658,8 @@ collection-based values do not contain the given value</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -6205,6 +7688,8 @@ collection-based values do not contain the given value</p>
   
   
   
+  
+
   
 
   
@@ -6271,6 +7756,8 @@ collection-based values do not contain the given value</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -6318,6 +7805,8 @@ collection-based values do not contain the given value</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -6346,6 +7835,8 @@ collection-based values do not contain the given value</p>
   
   
   
+  
+
   
 
   
@@ -6425,6 +7916,8 @@ or "disjunctive normal form" boolean logic:
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
@@ -6452,6 +7945,8 @@ Same as <code>conjunctiveNormalForm</code></p>
   
   
   
+  
+
   
 
   
@@ -6519,6 +8014,8 @@ Same as <code>CNF</code></p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -6567,6 +8064,8 @@ Same as <code>disjunctiveNormalForm</code></p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -6596,6 +8095,8 @@ Same as <code>DNF</code></p>
   
   
   
+  
+
   
 
   
@@ -6689,6 +8190,8 @@ Same as <code>DNF</code></p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
@@ -6696,7 +8199,7 @@ Same as <code>DNF</code></p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>new(arg1, arg2 = 0, size)</span>
+            <span class='code strong strong truncate'>new(arg1, arg2 = 0, size = 255)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6707,7 +8210,7 @@ Same as <code>DNF</code></p>
   <p>Creates a new ByteString instance based on the provided arguments. Using the more specific <code>fromPointer</code>,
 <code>fromBuffer</code> and <code>fromString</code> functions is recommended.</p>
 
-    <div class='pre p1 fill-light mt0'>new(arg1: (<a href="#pointer">Pointer</a> | ArrayBufferLike | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>), arg2: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#bytestringbase">ByteStringBase</a></div>
+    <div class='pre p1 fill-light mt0'>new(arg1: (<a href="#pointer">Pointer</a> | ArrayBufferLike | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>), arg2: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#bytestringbase">ByteStringBase</a></div>
   
   
 
@@ -6743,9 +8246,9 @@ Same as <code>DNF</code></p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-            = <code>256</code>)</code>
-	    The maximum size, if needed, of the resulting instance. Defaults to 256.
+            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>255</code>)</code>
+	    The maximum size, if needed, of the resulting instance. Defaults to 255.
 
           </div>
           
@@ -6777,6 +8280,100 @@ Same as <code>DNF</code></p>
   
 
   
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='bytestringnew'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>new(arg1, arg2 = 0, size = 255)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Creates a new ByteString instance based on the provided arguments. Using the more specific <code>fromPointer</code>,
+<code>fromBuffer</code> and <code>fromString</code> functions is recommended.</p>
+
+    <div class='pre p1 fill-light mt0'>new(arg1: (<a href="#pointer">Pointer</a> | ArrayBufferLike | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>), arg2: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#bytestringbase">ByteStringBase</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>arg1</span> <code class='quiet'>((<a href="#pointer">Pointer</a> | ArrayBufferLike | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>))</code>
+	    The memory object from which the string will be copied from.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>arg2</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>0</code>)</code>
+	    An offset, if needed for the resulting instance. Defaults to 0.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>255</code>)</code>
+	    The maximum size, if needed, of the resulting instance. Defaults to 255.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#bytestringbase">ByteStringBase</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 </section>
 
       </div>
@@ -6786,7 +8383,7 @@ Same as <code>DNF</code></p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromPointer(pointer, offset = 0, size = 256)</span>
+            <span class='code strong strong truncate'>fromPointer(pointer, offset = 0, size = 255)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6833,8 +8430,8 @@ Same as <code>DNF</code></p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
-            = <code>256</code>)</code>
-	    The maximum size of this string in bytes. Defaults to 256.
+            = <code>255</code>)</code>
+	    The maximum size of this string in bytes. Defaults to 255.
 
           </div>
           
@@ -6866,6 +8463,99 @@ Same as <code>DNF</code></p>
   
 
   
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='bytestringfrompointer'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromPointer(pointer, offset = 0, size = 255)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Creates a ByteString instance from a pointer.</p>
+
+    <div class='pre p1 fill-light mt0'>fromPointer(pointer: <a href="#pointer">Pointer</a>, offset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#bytestringptr">ByteStringPtr</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pointer</span> <code class='quiet'>(<a href="#pointer">Pointer</a>)</code>
+	    The pointer to read the string data from.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>0</code>)</code>
+	    The offset, from the location of the pointer, to read the data from. Defaults to 0.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>255</code>)</code>
+	    The maximum size of this string in bytes. Defaults to 255.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#bytestringptr">ByteStringPtr</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 </section>
 
       </div>
@@ -6875,7 +8565,7 @@ Same as <code>DNF</code></p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromBuffer(buffer, address = 0, size = 256)</span>
+            <span class='code strong strong truncate'>fromBuffer(buffer, address = 0, size = 255)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6922,8 +8612,8 @@ Same as <code>DNF</code></p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
-            = <code>256</code>)</code>
-	    The maximum size of this string in bytes. Defaults to 256.
+            = <code>255</code>)</code>
+	    The maximum size of this string in bytes. Defaults to 255.
 
           </div>
           
@@ -6942,6 +8632,99 @@ Same as <code>DNF</code></p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='bytestringfrombuffer'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromBuffer(buffer, address = 0, size = 255)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Creates a ByteString instance from an ArrayBuffer</p>
+
+    <div class='pre p1 fill-light mt0'>fromBuffer(buffer: ArrayBufferLike, address: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?): <a href="#bytestringbuffer">ByteStringBuffer</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>buffer</span> <code class='quiet'>(ArrayBufferLike)</code>
+	    The ArrayBuffer object where this string resides.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>address</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>0</code>)</code>
+	    The offset, in bytes, within the buffer where the string resides. Defaults to 0.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>255</code>)</code>
+	    The maximum size of this string in bytes. Defaults to 255.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#bytestringbuffer">ByteStringBuffer</a></code>:
+        
+
+      
+    
+  
+
   
 
   
@@ -7011,6 +8794,79 @@ Same as <code>DNF</code></p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='bytestringfromstring'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromString(str)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Creates a byte string from a JS string.</p>
+
+    <div class='pre p1 fill-light mt0'>fromString(str: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="#bytestringbuffer">ByteStringBuffer</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>str</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    The string to copy during creation.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#bytestringbuffer">ByteStringBuffer</a></code>:
+        
+
+      
+    
+  
+
   
 
   
@@ -7097,6 +8953,8 @@ Constructs a ByteString instance of the given size.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -7127,6 +8985,8 @@ Constructs a ByteString instance of the given size.</p>
   
   
   
+  
+
   
 
   
@@ -7197,6 +9057,8 @@ Constructs a ByteString instance of the given size.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -7229,6 +9091,8 @@ Constructs a ByteString instance of the given size.</p>
   
   
   
+  
+
   
 
   
@@ -7299,6 +9163,8 @@ Constructs a ByteString instance of the given size.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -7341,6 +9207,8 @@ Constructs a ByteString instance of the given size.</p>
 
       
     
+  
+
   
 
   
@@ -7423,6 +9291,8 @@ Constructs a ByteString instance of the given size.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -7479,6 +9349,8 @@ Constructs a ByteString instance of the given size.</p>
 
       
     
+  
+
   
 
   
@@ -7561,6 +9433,8 @@ Constructs a ByteString instance of the given size.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -7630,6 +9504,8 @@ Constructs a ByteString instance of the given size.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -7686,6 +9562,8 @@ Constructs a ByteString instance of the given size.</p>
 
       
     
+  
+
   
 
   
@@ -7769,13 +9647,15 @@ Constructs a byte string instance backed by a Pointer.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-	    The maximum size of this string in bytes. Defaults to 256.
+	    The maximum size of this string in bytes. Defaults to 255.
 
           </div>
           
         </div>
       
     </div>
+  
+
   
 
   
@@ -7819,6 +9699,8 @@ Constructs a byte string instance backed by a Pointer.</p>
   
   
   
+  
+
   
 
   
@@ -7889,6 +9771,8 @@ Constructs a byte string instance backed by a Pointer.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -7921,6 +9805,8 @@ Constructs a byte string instance backed by a Pointer.</p>
   
   
   
+  
+
   
 
   
@@ -8009,6 +9895,8 @@ Constructs a byte string instance backed by a Pointer.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -8040,7 +9928,7 @@ Constructs a byte string instance backed by a Pointer.</p>
   
 
   <p>ByteString implementation using ArrayBuffers. This implementation is useful for quick off-heap strings. It also
-guarantees that it will no change its contents without implicit user interaction.
+guarantees that it will not change its contents without implicit user interaction.
 Constructs a byte string backed by an ArrayBuffer.</p>
 
     <div class='pre p1 fill-light mt0'>new ByteStringBuffer(buffer: ArrayBufferLike, address: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</div>
@@ -8079,13 +9967,15 @@ Constructs a byte string backed by an ArrayBuffer.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-	    The maximum size of this string in bytes. Defaults to 256.
+	    The maximum size of this string in bytes. Defaults to 255.
 
           </div>
           
         </div>
       
     </div>
+  
+
   
 
   
@@ -8129,6 +10019,8 @@ Constructs a byte string backed by an ArrayBuffer.</p>
   
   
   
+  
+
   
 
   
@@ -8199,6 +10091,8 @@ Constructs a byte string backed by an ArrayBuffer.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -8231,6 +10125,8 @@ Constructs a byte string backed by an ArrayBuffer.</p>
   
   
   
+  
+
   
 
   
@@ -8306,6 +10202,8 @@ Constructs a byte string backed by an ArrayBuffer.</p>
 
       
     
+  
+
   
 
   
@@ -8480,6 +10378,8 @@ Constructs a byte string backed by an ArrayBuffer.</p>
   
 
   
+
+  
 </section>
 
           
@@ -8545,6 +10445,8 @@ In DEBUG mode performs checks if the bit and byte sizes are consistent.</p>
         </div>
       
     </div>
+  
+
   
 
   
@@ -8624,6 +10526,8 @@ type instance. When in DEBUG mode this method checks if the parameter <code>t</c
   
 
   
+
+  
 </section>
 
       </div>
@@ -8680,6 +10584,8 @@ type instance. When in DEBUG mode this method checks if the parameter <code>t</c
 
       
     
+  
+
   
 
   
@@ -8763,6 +10669,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -8819,6 +10727,8 @@ In DEBUG mode, performs a check to validate the type.</p>
 
       
     
+  
+
   
 
   
@@ -8892,6 +10802,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -8944,6 +10856,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -8977,6 +10891,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
   
   
+  
+
   
 
   
@@ -9074,6 +10990,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -9083,7 +11001,7 @@ In DEBUG mode, performs a check to validate the type.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>set(view, value, offset)</span>
+            <span class='code strong strong truncate'>set(view, offset, value)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9093,7 +11011,7 @@ In DEBUG mode, performs a check to validate the type.</p>
 
   <p>Utility function to set the value of this type in memory.</p>
 
-    <div class='pre p1 fill-light mt0'>set(view: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/DataView">DataView</a>, value: any, offset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+    <div class='pre p1 fill-light mt0'>set(view: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/DataView">DataView</a>, offset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: any)</div>
   
   
 
@@ -9119,15 +11037,6 @@ In DEBUG mode, performs a check to validate the type.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>(any)</code>
-	    The value to write.
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
             <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
 	    The offset, in bytes, at which the value will be written.
 
@@ -9135,7 +11044,18 @@ In DEBUG mode, performs a check to validate the type.</p>
           
         </div>
       
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(any)</code>
+	    The value to write.
+
+          </div>
+          
+        </div>
+      
     </div>
+  
+
   
 
   
@@ -9235,6 +11155,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
           
@@ -9292,6 +11214,8 @@ In DEBUG mode, performs a check to validate the type.</p>
 
       
     
+  
+
   
 
   
@@ -9375,6 +11299,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
           
@@ -9445,6 +11371,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
           
@@ -9478,6 +11406,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
   
   
+  
+
   
 
   
@@ -9549,6 +11479,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
           
@@ -9582,6 +11514,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
   
   
+  
+
   
 
   
@@ -9653,6 +11587,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
           
@@ -9686,6 +11622,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
   
   
+  
+
   
 
   
@@ -9757,6 +11695,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
           
@@ -9809,6 +11749,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
 
   
+
+  
 </section>
 
           
@@ -9842,6 +11784,8 @@ In DEBUG mode, performs a check to validate the type.</p>
   
   
   
+  
+
   
 
   
@@ -9933,6 +11877,8 @@ the allocatable memory increases.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
@@ -9964,6 +11910,8 @@ the allocatable memory increases.</p>
   
   
   
+  
+
   
 
   
@@ -10035,6 +11983,8 @@ the allocatable memory increases.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -10068,6 +12018,8 @@ the allocatable memory increases.</p>
   
   
   
+  
+
   
 
   
@@ -10139,6 +12091,8 @@ the allocatable memory increases.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -10172,6 +12126,8 @@ the allocatable memory increases.</p>
   
   
   
+  
+
   
 
   
@@ -10251,6 +12207,8 @@ the allocatable memory increases.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -10284,6 +12242,8 @@ the allocatable memory increases.</p>
   
   
   
+  
+
   
 
   
@@ -10355,6 +12315,8 @@ the allocatable memory increases.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -10388,6 +12350,8 @@ the allocatable memory increases.</p>
   
   
   
+  
+
   
 
   
@@ -10460,6 +12424,8 @@ Freeing a memory block does not guarantee that this number will increase.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -10512,6 +12478,8 @@ Freeing a memory block does not guarantee that this number will increase.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -10545,6 +12513,8 @@ Freeing a memory block does not guarantee that this number will increase.</p>
   
   
   
+  
+
   
 
   
@@ -10634,6 +12604,8 @@ The allocated memory is rounded up to the nearest multiple of 4 and padded by 4 
   
 
   
+
+  
 </section>
 
       </div>
@@ -10690,6 +12662,8 @@ The allocated memory is rounded up to the nearest multiple of 4 and padded by 4 
 
       
     
+  
+
   
 
   
@@ -10765,6 +12739,8 @@ last allocated memory block.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -10818,6 +12794,8 @@ last allocated memory block.</p>
         </div>
       
     </div>
+  
+
   
 
   
@@ -10925,6 +12903,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -10956,6 +12936,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
   
   
+  
+
   
 
   
@@ -11027,6 +13009,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -11060,6 +13044,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
   
   
+  
+
   
 
   
@@ -11131,6 +13117,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -11183,6 +13171,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -11211,6 +13201,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
   
   
+  
+
   
 
   
@@ -11316,6 +13308,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
@@ -11370,6 +13364,8 @@ Memory blocks can easily be recreated in web workers.</p>
 
       
     
+  
+
   
 
   
@@ -11443,6 +13439,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -11476,6 +13474,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
   
   
+  
+
   
 
   
@@ -11547,6 +13547,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -11599,6 +13601,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -11632,6 +13636,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
   
   
+  
+
   
 
   
@@ -11720,6 +13726,8 @@ Memory blocks can easily be recreated in web workers.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -11765,6 +13773,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
         </div>
       
     </div>
+  
+
   
 
   
@@ -11838,6 +13848,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
 
       
     
+  
+
   
 
   
@@ -11929,6 +13941,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
       </div>
@@ -11994,6 +14008,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
 
       
     
+  
+
   
 
   
@@ -12077,6 +14093,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
       </div>
@@ -12134,6 +14152,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
 
       
     
+  
+
   
 
   
@@ -12217,6 +14237,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
       </div>
@@ -12274,6 +14296,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
 
       
     
+  
+
   
 
   
@@ -12357,6 +14381,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
       </div>
@@ -12414,6 +14440,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
 
       
     
+  
+
   
 
   
@@ -12497,6 +14525,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
       </div>
@@ -12552,6 +14582,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
   
   
+  
+
   
 
   
@@ -12628,6 +14660,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
 
       
     
+  
+
   
 
   
@@ -12719,6 +14753,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
       </div>
@@ -12788,6 +14824,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
         </div>
       
     </div>
+  
+
   
 
   
@@ -12886,6 +14924,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
       </div>
@@ -12938,6 +14978,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
         </div>
       
     </div>
+  
+
   
 
   
@@ -13033,6 +15075,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
           
@@ -13086,6 +15130,8 @@ i.e. an offset of 1 will move a Uint32 pointer 4 bytes while a Uint8 pointer wil
   
 
   
+
+  
 </section>
 
           
@@ -13116,6 +15162,8 @@ WARNING: Does not implement any kind of synchronization.</p>
   
   
   
+  
+
   
 
   
@@ -13216,6 +15264,8 @@ WARNING: Does not implement any kind of synchronization.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -13291,6 +15341,8 @@ that position.</p>
 
       
     
+  
+
   
 
   
@@ -13401,6 +15453,8 @@ old value. It returns the old value at that position whether it was equal to the
   
 
   
+
+  
 </section>
 
       </div>
@@ -13488,6 +15542,8 @@ old value. It returns the old value at that position whether it was equal to the
   
 
   
+
+  
 </section>
 
       </div>
@@ -13545,6 +15601,8 @@ It returns true, if the given size is one of the BYTES_PER_ELEMENT property of i
 
       
     
+  
+
   
 
   
@@ -13623,6 +15681,8 @@ It returns true, if the given size is one of the BYTES_PER_ELEMENT property of i
 
       
     
+  
+
   
 
   
@@ -13724,6 +15784,8 @@ WARNING: NOT SUPPORTED IN SYSTEMS WITHOUT Atomics.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -13799,6 +15861,8 @@ position.</p>
 
       
     
+  
+
   
 
   
@@ -13899,6 +15963,8 @@ position.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -13973,6 +16039,8 @@ position.</p>
 
       
     
+  
+
   
 
   
@@ -14085,6 +16153,8 @@ WARNING: NOT SUPPORTED IN SYSTEMS WITHOUT Atomics.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -14173,6 +16243,8 @@ that position.</p>
   
 
   
+
+  
 </section>
 
       </div>
@@ -14241,6 +16313,8 @@ that position.</p>
   
 
   
+
+  
 </section>
 
           
@@ -14276,6 +16350,8 @@ that position.</p>
   
   
   
+  
+
   
 
   
@@ -14349,6 +16425,8 @@ that position.</p>
   
 
   
+
+  
 </section>
 
           
@@ -14384,6 +16462,8 @@ that position.</p>
   
   
   
+  
+
   
 
   
@@ -14457,6 +16537,8 @@ that position.</p>
   
 
   
+
+  
 </section>
 
           
@@ -14492,6 +16574,8 @@ that position.</p>
   
   
   
+  
+
   
 
   
@@ -14565,6 +16649,8 @@ that position.</p>
   
 
   
+
+  
 </section>
 
           
@@ -14600,6 +16686,8 @@ that position.</p>
   
   
   
+  
+
   
 
   
@@ -14655,6 +16743,8 @@ that position.</p>
   
   
   
+  
+
   
 
   
@@ -14744,6 +16834,895 @@ that position.</p>
   
 
   
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='column'>
+      Column
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Class that represents a column in a <a href="#header">Header</a>
+Constructs a Column by reading its properties from the offsets in the specified memory block.</p>
+
+    <div class='pre p1 fill-light mt0'>new Column(memory: <a href="#memoryblock">MemoryBlock</a>, offset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, nameOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>memory</span> <code class='quiet'>(<a href="#memoryblock">MemoryBlock</a>)</code>
+	    The memory to initialize this instance with
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The byte offset for the size, offset and type fields.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nameOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The byte offset for this column's name string.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='columnname'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>name</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The name of this column.</p>
+
+    <div class='pre p1 fill-light mt0'>name</div>
+  
+    <p>
+      Type:
+      <a href="#bytestringbase">ByteStringBase</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='columnsize'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>size</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The size in bytes of data entries in this column.</p>
+
+    <div class='pre p1 fill-light mt0'>size</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='columndataoffset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dataOffset</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The offset in bytes for the start of the data this column represents.</p>
+
+    <div class='pre p1 fill-light mt0'>dataOffset</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='columnoffset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>offset</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The offset with respect to the beginning of each row for data entries in this column.</p>
+
+    <div class='pre p1 fill-light mt0'>offset</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='columntype'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>type</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The type for data entries in this column.</p>
+
+    <div class='pre p1 fill-light mt0'>type</div>
+  
+    <p>
+      Type:
+      <a href="#type">Type</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='columnbytelength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>byteLength</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The total byteLength of this column's description.</p>
+
+    <div class='pre p1 fill-light mt0'>byteLength</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='kmemorylayout'>
+      kMemoryLayout
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>RELATIONAL: 0
+COLUMNAR: 1</p>
+
+    <div class='pre p1 fill-light mt0'>kMemoryLayout</div>
+  
+    <p>
+      Type:
+      (<code>0</code> | <code>1</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='kmemorylayout'>
+      kMemoryLayout
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Different memory layouts for a table</p>
+
+    <div class='pre p1 fill-light mt0'>kMemoryLayout</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, MemoryLayout>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='kcolumnmetalength'>
+      kColumnMetaLength
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>kColumnMetaLength</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : This column's name
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<a href="#type">Type</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+          : The type of this column by name, index or Type instance.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dataOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : The offset in bytes for the start of the data this column represents.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : The offset in bytes where the data in this column is in each row.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : The maximum length of the column, if the type is 
+<code>ByteString</code>
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='kcolumnmetalength'>
+      kColumnMetaLength
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>The length in bytes of a column's meta (without counting its name)</p>
+
+    <div class='pre p1 fill-light mt0'>kColumnMetaLength</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='kheadermetalength'>
+      kHeaderMetaLength
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>kHeaderMetaLength</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>columns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;ColumnDescriptor>)</code>
+          : The columns in the table
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rowCount</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : Current number of rows in the table.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rowLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : The length, in bytes, of a row in the table.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rowStep</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : The number of bytes a pointer needs to shift to point at the next/prev row.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dataLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : The total length, in bytes, of the data contained in the table.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>layout</span> <code class='quiet'>(MemoryLayout)</code>
+          : The layout for the data in this table
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='kheadermetalength'>
+      kHeaderMetaLength
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>The length in bytes of a header's meta (without the columns)</p>
+
+    <div class='pre p1 fill-light mt0'>kHeaderMetaLength</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='_bytestring'>
+      _ByteString
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>ByteString type</p>
+
+    <div class='pre p1 fill-light mt0'>new _ByteString()</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#type">Type</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 </section>
 
           
@@ -14778,6 +17757,8 @@ that position.</p>
   
   
   
+  
+
   
 
   
@@ -14850,6 +17831,8 @@ that position.</p>
   
 
   
+
+  
 </section>
 
           
@@ -14860,17 +17843,1014 @@ that position.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='_bytestring'>
-      _ByteString
+    <h3 class='fl m0' id='vectorbase'>
+      VectorBase
     </h3>
     
     
   </div>
   
 
-  <p>ByteString type</p>
+  <p>Base class for all vector classes that implements the convenience functions of the class. Cannot be used directly.
+Constructs a VectorBase instance.</p>
 
-    <div class='pre p1 fill-light mt0'>new _ByteString()</div>
+    <div class='pre p1 fill-light mt0'>new VectorBase(components: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>components</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The number of components in the vector
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='vectorbaselength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>length</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The number of dimensions in this vector.</p>
+
+    <div class='pre p1 fill-light mt0'>length</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasex'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>x</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the first component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>x</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasey'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>y</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the second component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>y</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasez'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>z</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the third component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>z</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasew'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>w</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the fourth component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>w</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbaser'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>r</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the first component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>r</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbaseg'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>g</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the second component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>g</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbaseb'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>b</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the third component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>b</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasea'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>a</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience property to access the fourth component of the vector</p>
+
+    <div class='pre p1 fill-light mt0'>a</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasegetcomponentat'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getComponentAt(index)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Gets the value of this vector at the specified index.</p>
+
+    <div class='pre p1 fill-light mt0'>getComponentAt(index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index of the value to get.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasesetcomponentat'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setComponentAt(index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Sets the value of this vector at the specified index.</p>
+
+    <div class='pre p1 fill-light mt0'>setComponentAt(index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index of the value to set
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to set.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbasetostring'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toString()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Utility function, converts this Vector to a JS string instance.</p>
+
+    <div class='pre p1 fill-light mt0'>toString(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='vectorbuffer'>
+      VectorBuffer
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Vector class that gets its data from an ArrayBuffer.</p>
+
+    <div class='pre p1 fill-light mt0'>new VectorBuffer(type: <a href="#type">Type</a>, components: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, buffer: ArrayBufferLike, address: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(<a href="#type">Type</a>)</code>
+	    The type of the components in this vector
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>components</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The number of components in the vector
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>buffer</span> <code class='quiet'>(ArrayBufferLike)</code>
+	    The buffer from which the components will be read
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>address</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+	    The offset, in bytes, where the data resides within the buffer
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='vectorbuffergetcomponentat'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getComponentAt(index)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Gets the value of this vector at the specified index.</p>
+
+    <div class='pre p1 fill-light mt0'>getComponentAt(index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index of the value to get.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='vectorbuffersetcomponentat'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setComponentAt(index, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Sets the value of this vector at the specified index.</p>
+
+    <div class='pre p1 fill-light mt0'>setComponentAt(index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index of the value to set
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The value to set.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='_vector'>
+      _Vector
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>_Vector type</p>
+
+    <div class='pre p1 fill-light mt0'>new _Vector(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, type: <a href="#type">Type</a>, components: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
   
   
     <p>
@@ -14886,6 +18866,40 @@ that position.</p>
   
   
   
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    The name of the new vector type
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(<a href="#type">Type</a>)</code>
+	    The type of the element in this vector
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>components</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The number of components for the new vector
+
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
