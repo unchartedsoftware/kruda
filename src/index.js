@@ -23,6 +23,27 @@
 
 import * as _Types from './core/Types';
 
+/**
+ * @type {Object}
+ * @property {Class<isPrimitiveType>} isPrimitiveType
+ * @property {Class<typeByName>} typeByName
+ * @property {Class<sizeof>} sizeof
+ * @property {Class<isType>} isType
+ *
+ * @property {Class<Type>} Type
+ *
+ * @property {_Int8} Int8
+ * @property {_Int16} Int16
+ * @property {_Int32} Int32
+ *
+ * @property {_Uint8} Uint8
+ * @property {_Uint16} Uint16
+ * @property {_Uint32} Uint32
+ *
+ * @property {_Float32} Float32
+ *
+ * @property {_Void} Void
+ */
 export const Types = _Types;
 
 export {Heap} from './core/Heap';
@@ -45,3 +66,5 @@ export {FilterExpressionMode} from './data/filter/FilterExpressionMode';
 export {kBinaryTypes, kBinaryTypeMap} from './data/types/TypeEnums';
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';
 export {coreCount} from './utils/CoreCount';
+
+export * from './utils/Serializer.js';
