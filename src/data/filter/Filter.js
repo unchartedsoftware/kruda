@@ -25,7 +25,7 @@ import * as Types from '../../core/Types';
 import FilterWorker from 'web-worker:./Filter.worker';
 import {FilterWorkerDummy} from './Filter.worker.dummy';
 import {FilterExpressionMode} from './FilterExpressionMode';
-import {coreCount} from '../../core/CoreCount';
+import {coreCount} from '../../utils/CoreCount';
 import {WorkerPool} from 'dekkai/src/workers/WorkerPool';
 import {Header} from '../table/Header';
 import {kBinaryTypeMap} from '../types/TypeEnums';

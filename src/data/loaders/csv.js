@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import {coreCount} from '../../core/CoreCount';
+import {coreCount} from '../../utils/CoreCount';
 import {Header} from '../table/Header';
 import {Table} from '../table/Table';
 import dekkai from 'dekkai';

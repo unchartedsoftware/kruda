@@ -23,7 +23,7 @@
 
 import {WebCPU} from 'webcpu';
 
-const kCoreCount = (async function() {
+async function getCoreCount() {
     if (typeof Atomics !== 'undefined' && typeof SharedArrayBuffer !== 'undefined') {
         try {
             const {estimatedPhysicalCores} = await WebCPU.detectCPU();
@@ -31,12 +31,17 @@ const kCoreCount = (async function() {
         } catch (e) {} // eslint-disable-line
     }
     return 1;
-})();
+}
+
+let kCoreCount = null;
 
 /**
  * Returns the estimated physical core count in this system.
  * @return {Promise<number>}
  */
 export async function coreCount() {
-    return await kCoreCount;
+    if (kCoreCount === null) {
+        kCoreCount = await getCoreCount();
+    }
+    return kCoreCount;
 }

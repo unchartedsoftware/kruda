@@ -22,7 +22,7 @@
  */
 
 import DSBINLoaderWorker from 'web-worker:./DSBINLoader.worker';
-import {coreCount} from '../core/CoreCount';
+import {coreCount} from '../utils/CoreCount';
 
 /**
  * Minimum number of chunks needed in a file to multi-thread the process.

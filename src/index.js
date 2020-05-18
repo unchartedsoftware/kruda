@@ -44,4 +44,4 @@ export {FilterExpressionMode} from './data/filter/FilterExpressionMode';
 
 export {kBinaryTypes, kBinaryTypeMap} from './data/types/TypeEnums';
 export {tableFromLocalCSV, tableFromRemoteCSV} from './data/loaders/csv';
-export {coreCount} from './core/CoreCount';
+export {coreCount} from './utils/CoreCount';
