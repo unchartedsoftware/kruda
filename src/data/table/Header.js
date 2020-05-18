@@ -27,20 +27,15 @@ import {Column} from './Column';
 import {kBinaryTypes, kBinaryTypeMap} from '../types/TypeEnums';
 
 /**
- * RELATIONAL: 0
- * COLUMNAR: 1
- * @typedef MemoryLayout
- * @type {0|1}
- */
-
-/**
  * Different memory layouts for a table
- * @type {Object<string, MemoryLayout>}
+ * @readonly
+ * @enum {number}
  */
-const kMemoryLayout = Object.freeze({
+const MemoryLayout = {
     RELATIONAL: 0,
     COLUMNAR: 1,
-});
+};
+Object.freeze(MemoryLayout);
 
 /**
  * @typedef ColumnDescriptor
@@ -127,7 +122,7 @@ export class Header {
      * @type {Object<string, MemoryLayout>}
      */
     static get memoryLayout() {
-        return kMemoryLayout;
+        return MemoryLayout;
     }
 
     /**
