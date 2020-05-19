@@ -229,10 +229,10 @@ class VectorBase {
         return {
             i: 0,
             n: this.mComponents,
+            vector: this,
             next() {
                 if (this.i < this.n) {
-                    ++this.i;
-                    return { value: this.getComponentAt(this.i), done: false };
+                    return { value: this.vector.getComponentAt(this.i++), done: false };
                 }
                 return { value: undefined, done: true };
             },
