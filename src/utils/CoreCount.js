@@ -39,9 +39,9 @@ let kCoreCount = null;
  * Returns the estimated physical core count in this system.
  * @return {Promise<number>}
  */
-export async function coreCount() {
+export function coreCount() {
     if (kCoreCount === null) {
-        kCoreCount = await getCoreCount();
+        kCoreCount = getCoreCount();
     }
     return kCoreCount;
 }
