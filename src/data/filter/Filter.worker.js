@@ -46,7 +46,7 @@ function sendError(reason) {
 /**
  * Sends a success signal to this worker's "owner"
  * @param {*=} data - Data to be sent with the message. Defaults to `null`
- * @param {Array<ArrayBuffer>=} transferable - Array of ArrayBuffers to transfer
+ * @param {Transferable[]?} transferable - Array of ArrayBuffers to transfer
  * @memberof FilterWorker
  * @private
  */

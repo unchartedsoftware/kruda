@@ -20,14 +20,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Heap} from '../../core/Heap';
-import {MemoryBlock} from '../../core/MemoryBlock';
-import {Table} from '../table/Table';
 import {ByteString} from '../types/ByteString';
 import {Atomize} from '../../core/Atomize';
 import {FilterOperation} from './FilterOperation';
 import {FilterExpressionMode} from './FilterExpressionMode';
-import * as Types from '../../core/Types';
+import {deserializeMemoryBlock, deserializeTable} from '../../utils/Serializer';
 
 /**
  * Class to process filters on Tables.
@@ -35,37 +32,11 @@ import * as Types from '../../core/Types';
  * Creates a new instance and reconstructs the Heap, Memory Object and Table specified in the config object.
  * NOTE: Heap, MemoryBlock and Table classes are thread safe.
  * @class FilterProcessor
- * @param {{
- * heapBuffer: ArrayBufferLike,
- * tableAddress: number,
- * tableSize: number
- * }|{}} config - Configuration object.
+ * @param {{table: TableSerialized}} config - Configuration object.
  */
 export class FilterProcessor {
     constructor(config) {
-        this.mHeap = null;
-        this.mTableMemory = null;
-        this.mTable = null;
-        this.mRow = null;
-
-        if (config.heapBuffer) {
-            this.setMemory(config);
-        }
-    }
-
-    /**
-     * Sets the memory this filter processor should use during processing. Useful when SharedArrayBuffer is not
-     * available.
-     * @param {{
-     * heapBuffer: ArrayBufferLike,
-     * tableAddress: number,
-     * tableSize: number
-     * }|{}} config - Configuration object.
-     */
-    setMemory(config) {
-        this.mHeap = new Heap(config.heapBuffer);
-        this.mTableMemory = new MemoryBlock(this.mHeap, config.tableAddress, config.tableSize);
-        this.mTable = new Table(this.mTableMemory);
+        this.mTable = deserializeTable(config.table);
         this.mRow = this.mTable.getBinaryRow(0);
     }
 
@@ -75,9 +46,7 @@ export class FilterProcessor {
      * @return {ArrayBuffer|SharedArrayBuffer}
      */
     fetchMemory() {
-        const buffer = this.mHeap.buffer;
-        this.mHeap = null;
-        this.mTableMemory = null;
+        const buffer = this.mTable.memory.buffer;
         this.mTable = null;
         this.mRow = null;
         return buffer;
@@ -87,22 +56,22 @@ export class FilterProcessor {
      * Processes the rules in batches the size configures in the config object
      * @param {{
      * rules: Array,
-     * indicesAddress: number,
-     * rowBatchSize: number,
-     * resultAddress: number,
-     * resultSize: number,
-     * resultDescription: Array
+     * mode: FilterExpressionMode,
+     * resultDescription: Array,
+     * resultTable: TableSerialized,
+     * indices: MemoryBlockSerialized,
+     * rowBatchSize: number
      * }} config - Configuration object.
      */
     process(config) {
-        const indices = new Uint32Array(this.mHeap.buffer, config.indicesAddress, 2);
+        const indicesMemory = deserializeMemoryBlock(config.indices);
+        const indices = new Uint32Array(indicesMemory.buffer, indicesMemory.address, 2);
         const batchSize = config.rowBatchSize;
-        const resultMemory = new MemoryBlock(this.mHeap, config.resultAddress, config.resultSize);
-        const resultView = resultMemory.dataView;
+        const resultTable = deserializeTable(config.resultTable);
         const rowCount = this.mTable.rowCount;
         const row = this.mRow;
         const filterTester = this._generateExpressionTester(config.rules, config.mode, row);
-        const resultWriter = this._generateResultWriter(config.resultDescription, indices, row);
+        const resultWriter = this._generateResultWriter(resultTable, config.resultDescription, row);
         let i;
         let n;
         let r;
@@ -111,49 +80,48 @@ export class FilterProcessor {
             for (r = i; r < n; ++r) {
                 row.index = r;
                 if (filterTester()) {
-                    resultWriter(row, resultView);
+                    resultWriter(r);
                 }
             }
         }
     }
 
     /**
-     * Generates a function that writes the row values, as specified in the `description` array, to the specified data view.
+     * Generates a function that writes the row values, as specified in the `description` array, to the specified
+     * result table.
      * NOTE: The same Row instance that will be used to iterate through the table must be passed to this method, Row
      * instances are simply pointers to a position in the table that are shifted as they change row. This function takes
      * advantage of such behaviour to improve performance.
+     * @param {Table} resultTable - The table to write to.
      * @param {Array} description - Result description object.
-     * @param {Uint32Array} indices - The indices array to count processed rows and results. Must be backed by a SharedArrayBuffer
      * @param {Row} baseRow - The base row that will be used to iterate through the table.
-     * @return {function(row:Row, view:DataView):void}
+     * @return {function(index:number):void}
      * @private
      */
-    _generateResultWriter(description, indices, baseRow) {
+    _generateResultWriter(resultTable, description, baseRow) {
+        const resultRow = resultTable.getRow(0);
         const writers = [];
-        let resultSize = 0;
         for (let i = 0; i < description.length; ++i) {
-            const type = Types.typeByName(description[i].type);
-            const fieldOffset = resultSize;
-            if (description[i].column) {
+            if (description[i].as) {
                 const getter = baseRow.accessors[baseRow.names[description[i].column]].getter;
-                writers.push(function resultWriterField(row, offset, view) {
-                    type.set(view, offset + fieldOffset, getter());
+                const setter = resultRow.accessors[resultRow.names[description[i].as]].setter;
+                writers.push(function resultWriterField() {
+                    setter(getter());
                 });
             } else {
-                writers.push(function resultWriterRowIndex(row, offset, view) {
-                    type.set(view, offset + fieldOffset, row.index);
+                const setter = resultRow.accessors[resultRow.names['']].setter;
+                writers.push(function resultWriterRowIndex(index) {
+                    setter(index);
                 });
             }
-            resultSize += description[i].size;
         }
 
         const writersLength = writers.length;
-        let offset;
         let i;
-        return function resultWriter(row, view) {
-            offset = Atomize.add(indices, 1, 1) * resultSize;
+        return function resultWriter(index) {
+            resultRow.index = resultTable.addRows(1);
             for (i = 0; i < writersLength; ++i) {
-                writers[i](row, offset, view);
+                writers[i](index);
             }
         };
     }

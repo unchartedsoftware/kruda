@@ -31,6 +31,7 @@ import {Header} from '../table/Header';
 import {kBinaryTypeMap} from '../types/TypeEnums';
 import {Table} from '../table/Table';
 import {ProxyTable} from '../proxy/ProxyTable';
+import {serializeMemoryBlock, serializeTable} from '../../utils/Serializer';
 
 /**
  * Default, immutable object, representing a result index with the row index in it.
@@ -41,6 +42,7 @@ const kRowIndexResult = {
     type: Types.Uint32.name,
     size: Types.Uint32.byteSize,
     column: null,
+    as: null,
 };
 Object.freeze(kRowIndexResult);
 
@@ -58,10 +60,7 @@ export class Filter {
         this.mHeap = heap;
         this.mResultDescription = [kRowIndexResult];
         this.mResultRowSize = kRowIndexResult.size;
-        this.mMemory = null;
         this.mWorkerPool = null;
-
-        this.mResultHeader = this._buildResultHeader(this.mResultDescription);
 
         this.mInitialized = new Promise(resolve => {
             if (workerCount < 1 || isNaN(workerCount)) {
@@ -105,8 +104,6 @@ export class Filter {
         for (let i = 0; i < this.mResultDescription.length; ++i) {
             this.mResultRowSize += this.mResultDescription[i].size;
         }
-
-        this.mResultHeader = this._buildResultHeader(this.mResultDescription);
     }
 
     /**
@@ -114,9 +111,10 @@ export class Filter {
      * If the `columnName` parameter is omitted or is set to `null`, an object that adds the index of the resulting row
      * will be returned.
      * @param {string|null=} columnName - The name of the column for which to create a result field object. Defaults to `null`.
+     * @param {string=} asName - The name of  the column in the resulting table
      * @return {Object}
      */
-    resultFieldForColumn(columnName = null) {
+    resultFieldForColumn(columnName = null, asName = columnName) {
         if (columnName === null) {
             return kRowIndexResult;
         }
@@ -127,6 +125,7 @@ export class Filter {
             type: columns[names[columnName]].type.name,
             size: columns[names[columnName]].size,
             column: columnName,
+            as: asName,
         };
     }
 
@@ -147,6 +146,7 @@ export class Filter {
             type: columns[columnIndex].type.name,
             size: columns[columnIndex].size,
             column: columns[columnIndex].name,
+            as: columns[columnIndex].name,
         };
     }
 
@@ -155,12 +155,13 @@ export class Filter {
      *
      * @param {FilterExpression} rules - The rules to run this filter with.
      * @param {FilterExpressionMode=} mode - The mode in which the specified rules should be interpreted.
+     * @param {Table=} table - A table where the results should be written
      * @return {Promise<Table|ProxyTable>}
      */
-    async run(rules, mode = FilterExpressionMode.DNF) {
+    async run(rules, mode = FilterExpressionMode.DNF, table = null) {
         await this.mInitialized;
         const promises = [];
-        const resultMemory = this._allocateResultMemory();
+        const resultTable = table || this._allocateResultTable();
         const indices = this.mHeap.calloc(8);
 
         for (let i = 0; i < this.mWorkerPool.workerCount; ++i) {
@@ -168,9 +169,8 @@ export class Filter {
                 rules,
                 mode,
                 resultDescription: this.mResultDescription,
-                resultAddress: resultMemory.address + this.mResultHeader.length,
-                resultSize: resultMemory.size,
-                indicesAddress: indices.address,
+                resultTable: serializeTable(resultTable),
+                indices: serializeMemoryBlock(indices),
                 rowBatchSize: 1024,
             }, []);
             promises.push(promise);
@@ -178,41 +178,39 @@ export class Filter {
 
         await Promise.all(promises);
 
-        const indicesPtr = new Pointer(indices, 0, Types.Uint32);
-        const resultCount = indicesPtr.getValueAt(1);
-        indices.free();
+        if (!table) {
+            const finalMemorySize = resultTable.header.length + resultTable.header.dataLength;
+            if (finalMemorySize < resultTable.memory.size) {
+                resultTable.memory.heap.shrink(resultTable.memory, finalMemorySize);
+            }
 
-        this.mResultHeader.rowCount = resultCount;
-        this.mResultHeader.dataLength = this.mResultRowSize * resultCount;
-
-        const binaryHeader = Header.buildBinaryHeader(this.mResultHeader);
-        const resultView = new Uint8Array(resultMemory.buffer);
-        const headerView = new Uint8Array(binaryHeader);
-        resultView.set(headerView, resultMemory.address);
-
-        const finalMemorySize = this.mResultHeader.length + this.mResultHeader.dataLength;
-        if (finalMemorySize < resultMemory.size) {
-            resultMemory.heap.shrink(resultMemory, finalMemorySize);
-        }
-
-        const resultTable = new Table(resultMemory);
-
-        if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
-            return new ProxyTable(this.mTable, resultTable);
+            if (this.mResultDescription.length === 1 && this.mResultDescription[0] === kRowIndexResult) {
+                return new ProxyTable(this.mTable, resultTable);
+            }
         }
 
         return resultTable;
     }
 
     /**
-     * Utility function to allocate the memory needed to store the maximum number of results.
-     * @return {MemoryBlock}
+     * Utility function to allocate and initialize a table to store the results of this filter.
+     * @returns {Table}
      * @private
      */
-    _allocateResultMemory() {
+    _allocateResultTable() {
         const maxDataLength = this.mResultRowSize * this.mTable.rowCount;
-        const headerLength = this.mResultHeader.length;
-        return this.mHeap.malloc(maxDataLength + headerLength);
+        const columns = [];
+        for (let i = 0; i < this.mResultDescription.length; ++i) {
+            columns.push({
+                name: this.mResultDescription[i].as || '',
+                type: this.mResultDescription[i].type,
+                length: this.mResultDescription[i].size,
+            });
+        }
+
+        const binaryHeader = Header.binaryFromColumns(columns);
+        const memory = this.mHeap.malloc(maxDataLength + binaryHeader.byteLength);
+        return Table.emptyFromBinaryHeader(binaryHeader, memory);
     }
 
     /**
@@ -227,18 +225,13 @@ export class Filter {
             this.mWorkerPool = new WorkerPool();
         }
 
-        const options = {};
-
-        options.heapBuffer = this.mTable.memory.heap.buffer;
-        options.tableAddress = this.mTable.memory.address;
-        options.tableSize = this.mTable.memory.size;
-
         const WorkerClass = this.mHeap.shared ? FilterWorker : FilterWorkerDummy;
-
         for (let i = 0; i < count; ++i) {
             this.mWorkerPool.addWorker(new WorkerClass(), {
                 type: 'initialize',
-                options,
+                options: {
+                    table: serializeTable(this.mTable),
+                },
             });
         }
     }
