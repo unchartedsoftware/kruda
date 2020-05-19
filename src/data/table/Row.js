@@ -133,7 +133,7 @@ export class Row {
     /**
      * An array, ordeed by the order in which each field appears in the table's header, containing accessor objects for
      * the fields in this row.
-     * @type {Array<{column:string, getter:function():*, setter:null}>}
+     * @type {Array<{column:string, getter:function():*, setter:function(value:any):void}>}
      */
     get accessors() {
         return this.mAccessors;
@@ -227,19 +227,17 @@ export class Row {
     _createPropertySetter(description, pointer) {
         const offset = description.offset;
         const type = description.type;
-        if (type === ByteString) {
-            let str;
-            return function setColumnString(value) {
-                if (value.length > description.size - 1) {
-                    str = value.substring(0, description.size);
-                    type.set(pointer.view, pointer.address + offset, str);
-                } else {
-                    type.set(pointer.view, pointer.address + offset, value);
-                }
-            };
-        }
 
         return function setColumnValue(value) {
+            /// #if !_DEBUG
+            /*
+            /// #endif
+            if (type === ByteString && value.length > description.size - 1) {
+                throw `ERROR: Value [${value}] is longer than the max length allowed (${description.size - 1}).`
+            }
+            /// #if !_DEBUG
+             */
+            /// #endif
             type.set(pointer.view, pointer.address + offset, value);
         };
     }
