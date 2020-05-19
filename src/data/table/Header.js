@@ -378,6 +378,28 @@ export class Header {
         return this.mNames;
     }
 
+    /**
+     * Modifies this header atomically the number of rows specified.
+     * NOTE: This function does not change the underlying data storage or its contents.
+     * @param {number} count - The new number of rows for this table.
+     * @returns {number}
+     */
+    setRowCount(count) {
+        /// #if !_DEBUG
+        /*
+        /// #endif
+        if (value * this.rowLength > this.mMemory.byteSize) {
+            throw `ERROR: New row count of ${count} exceed the bounds of the table's containing memory block`;
+        }
+        /// #if !_DEBUG
+         */
+        /// #endif
+        const memoryView = new Uint32Array(this.mMemory.buffer, this.mMemory.address);
+        // change the data length
+        Atomize.store(memoryView, this.mDataLengthOffset / 4, count * this.rowLength);
+        // change the row count and return the old value
+        return Atomize.exchange(memoryView, this.mRowCountOffset / 4, count);
+    }
 
     /**
      * Modifies this header atomically to add the number of rows specified.

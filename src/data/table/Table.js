@@ -127,11 +127,21 @@ export class Table {
     /**
      * Adds the specified number of rows to this table and returns the old row count.
      * NOTE: The memory in the new rows is NOT cleared before returning.
-     * @param {number} count - The number of rows to add
+     * @param {number=} count - The number of rows to add
      * @returns {number}
      */
     addRows(count = 1) {
         return this.mHeader.addRows(count);
+    }
+
+    /**
+     * Adds the specified number of rows to this table and returns the old row count.
+     * NOTE: The underlying memory store is not changed by this function.
+     * @param {number} count - The number of rows to add
+     * @returns {number}
+     */
+    setRowCount(count) {
+        return this.mHeader.setRowCount(count);
     }
 
     /**
