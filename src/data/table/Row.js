@@ -133,7 +133,7 @@ export class Row {
     /**
      * An array, ordeed by the order in which each field appears in the table's header, containing accessor objects for
      * the fields in this row.
-     * @type {Array<{column:string, getter:function():*, setter:function(value:any):void}>}
+     * @type {Array<{column:string, getter:function():*, setter:function(any):void}>}
      */
     get accessors() {
         return this.mAccessors;
