@@ -49,6 +49,7 @@ export const Types = _Types;
 export {Heap} from './core/Heap';
 export {MemoryBlock} from './core/MemoryBlock';
 export {Pointer} from './core/Pointer';
+export {Atomize} from './core/Atomize';
 
 export {ByteString} from './data/types/ByteString';
 
